@@ -22,7 +22,7 @@ class GenerateBlockAction extends Action
         parent::setUp();
 
         $this->label('Generate Block')
-            ->form([
+            ->schema([
                 TextInput::make('name')
                     ->required()
                     ->placeholder('MyAwesomeBlock')
@@ -31,7 +31,6 @@ class GenerateBlockAction extends Action
                     ->afterStateUpdated(function (string $state, Closure $set) {
                         // Always update the class name
                             $set('class_name', Str::studly($state) . 'Block');
-                        }
                     }),
 
                 TextInput::make('class_name')

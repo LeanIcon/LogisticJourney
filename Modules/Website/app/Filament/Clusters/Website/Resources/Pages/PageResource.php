@@ -46,6 +46,7 @@ class PageResource extends Resource
     {
         return [
             \Modules\Blocks\Filament\Actions\GenerateBlockAction::make(),
+            \Modules\Blocks\Filament\Actions\EditBlockClassAction::make(),
         ];
     }
 
