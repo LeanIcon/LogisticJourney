@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('articles', function (Blueprint $table) {
+        Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
             $table->foreignId('author_id')->nullable()->constrained('authors')->nullOnDelete();
             $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->foreignId('creator_id')->nullable();
+            $table->string('type')->default('article');
             $table->string('banner')->nullable();
             $table->string('featured_image')->nullable();
             $table->string('excerpt', 500)->nullable();

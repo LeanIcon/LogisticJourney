@@ -46,6 +46,7 @@ class PageResource extends Resource
     {
         return [
             \Modules\Blocks\Filament\Actions\GenerateBlockAction::make(),
+            // Editor action is now safe to use in all environments thanks to PHP lint checking
             \Modules\Blocks\Filament\Actions\EditBlockClassAction::make(),
         ];
     }

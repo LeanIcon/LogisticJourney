@@ -24,7 +24,7 @@ class EditBlockClassAction extends Action
 
         $this->label('Edit Block Class')
             ->modalWidth('6xl')
-            ->form([
+            ->schemas([
                 Select::make('block')
                     ->label('Block')
                     ->options($options)
@@ -84,6 +84,24 @@ class EditBlockClassAction extends Action
                 if ($source === null) {
                     Notification::make()
                         ->title('No source provided')
+                        ->danger()
+                        ->send();
+
+                    return;
+                }
+
+                // Check PHP syntax before saving
+                $tempFile = tempnam(sys_get_temp_dir(), 'block_lint_');
+                file_put_contents($tempFile, $source);
+
+                exec('php -l ' . escapeshellarg($tempFile) . ' 2>&1', $output, $return);
+                unlink($tempFile); // Clean up temp file
+
+                if ($return !== 0) {
+                    $error = implode("\n", $output);
+                    Notification::make()
+                        ->title('PHP Syntax Error')
+                        ->body($error)
                         ->danger()
                         ->send();
 
