@@ -4,6 +4,8 @@ namespace Modules\Website\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 // use Modules\Website\Database\Factories\FormFactory;
 
 class Form extends Model
@@ -26,6 +28,11 @@ class Form extends Model
         'fields' => 'array',
         'settings' => 'array',
     ];
+
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(FormSubmission::class);
+    }
 
     // protected static function newFactory(): FormFactory
     // {

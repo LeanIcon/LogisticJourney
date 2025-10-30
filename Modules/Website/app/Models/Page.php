@@ -1,13 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Website\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 // use Modules\Website\Database\Factories\PageFactory;
 
-class Page extends Model
+final class Page extends Model
 {
     use HasFactory;
 
@@ -34,14 +38,27 @@ class Page extends Model
     /**
      * Relations
      */
-    public function parent()
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id');
     }
 
-    public function children()
+    public function children(): HasMany
     {
         return $this->hasMany(self::class, 'parent_id');
+    }
+
+    /**
+     * Scopes
+     */
+    public function scopePublished($query)
+    {
+        return $query->where('status', 'published');
+    }
+
+    public function scopeOfType($query, string $type)
+    {
+        return $query->where('type', $type);
     }
 
     /**
@@ -49,7 +66,7 @@ class Page extends Model
      */
     public function getUrlAttribute(): string
     {
-        return url('/' . ltrim($this->slug, '/'));
+        return url('/'.mb_ltrim($this->slug, '/'));
     }
 
     // protected static function newFactory(): PageFactory

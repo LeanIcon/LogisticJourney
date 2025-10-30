@@ -1,36 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blog\Models;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Tags\HasTags;
 
 // use Modules\Blog\Database\Factories\CategoryFactory;
 
-class Category extends Model
+final class Category extends Model
 {
-    use HasFactory, HasTags;
+    use HasFactory, HasTags, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
         'name',
-        'sub_title',
         'slug',
-        'image',
-        'meta_title',
-        'meta_keywords',
-        'meta_description',
-        'creator_id',
+        'description',
+        'order',
+        'parent_id',
     ];
 
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function posts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, 'post_category');
     }
 
     // protected static function newFactory(): CategoryFactory

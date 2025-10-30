@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers\Filament;
 
 use Coolsam\Modules\ModulesPlugin;
@@ -20,8 +22,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-
-class AppPanelProvider extends PanelProvider
+final class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
@@ -44,7 +45,7 @@ class AppPanelProvider extends PanelProvider
                 FilamentInfoWidget::class,
             ])
             ->plugins([
-               ModulesPlugin::make(),
+                ModulesPlugin::make(),
             ])
             ->middleware([
                 EncryptCookies::class,

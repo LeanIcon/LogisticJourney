@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Website\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class WebsiteDatabaseSeeder extends Seeder
+final class WebsiteDatabaseSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Seed the application's database.
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call([
+            FormSeeder::class,
+        ]);
     }
 }

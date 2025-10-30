@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Website\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
 // use Modules\Website\Database\Factories\ReviewFactory;
 
-class Review extends Model
+final class Review extends Model
 {
     use HasFactory;
 
@@ -15,7 +18,7 @@ class Review extends Model
      */
     protected $fillable = [
         'name',
-        'other_details',
+        'image',
         'review',
         'rating',
         'status',

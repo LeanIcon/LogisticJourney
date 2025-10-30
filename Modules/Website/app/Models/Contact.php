@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Modules\Website\Database\Factories\LeadFactory;
 
-class Lead extends Model
+class Contact extends Model
 {
     use HasFactory;
 

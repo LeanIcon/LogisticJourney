@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blog\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 // use Modules\Blog\Database\Factories\AuthorFactory;
 
-class Author extends Model
+final class Author extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

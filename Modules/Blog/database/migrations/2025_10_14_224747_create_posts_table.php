@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,9 +18,8 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->foreignId('author_id')->nullable()->constrained('authors')->nullOnDelete();
-            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->foreignId('creator_id')->nullable();
-            $table->string('type')->default('article');
+            $table->string('type')->default('post');
             $table->string('banner')->nullable();
             $table->string('featured_image')->nullable();
             $table->string('excerpt', 500)->nullable();
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->boolean('is_featured')->default(false);
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['status', 'published_at']);
@@ -40,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('articles');
+        Schema::dropIfExists('posts');
     }
 };

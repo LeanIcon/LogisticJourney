@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +15,14 @@ return new class extends Migration
     {
         Schema::create('subscribers', function (Blueprint $table) {
             $table->id();
-            
+            $table->string('email')->nullable();
+            $table->string('name')->nullable();
+            $table->timestamp('subscribed_at')->nullable();
+            $table->boolean('is_verified')->default(false);
+            $table->timestamp('verified_at')->nullable();
+            $table->string('status')->default('active');
+            $table->timestamp('unsubscribed_at')->nullable();
+
             $table->timestamps();
         });
     }

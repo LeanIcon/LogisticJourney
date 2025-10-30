@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Website\Filament\Clusters\Website\Resources\Pages;
 
 use BackedEnum;
@@ -14,14 +16,17 @@ use Modules\Website\Filament\Clusters\Website\Resources\Pages\Schemas\PageForm;
 use Modules\Website\Filament\Clusters\Website\Resources\Pages\Tables\PagesTable;
 use Modules\Website\Filament\Clusters\Website\WebsiteCluster;
 use Modules\Website\Models\Page;
+use UnitEnum;
 
-class PageResource extends Resource
+final class PageResource extends Resource
 {
     protected static ?string $model = Page::class;
 
+    // protected static string|UnitEnum|null $navigationGroup = 'Content';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $cluster = WebsiteCluster::class;
+    // protected static ?string $cluster = WebsiteCluster::class;
 
     protected static ?string $recordTitleAttribute = 'title';
 
