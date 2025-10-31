@@ -1,0 +1,57 @@
+name: 🚀 Deploy Laravel 12 App to cPanel via FTP
+
+on:
+  push:
+    branches:
+      - main  # Deploy when you push to main branch
+
+jobs:
+  deploy:
+    name: Deploy via FTP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: mbstring, bcmath, gd, intl, zip, curl, mysql
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Build frontend (Filament / Vite)
+        run: |
+          npm ci
+          npm run build
+
+      - name: Cleanup before deployment
+        run: |
+          rm -rf node_modules
+          rm -rf tests
+          rm -rf .git .github
+          echo "Cleaned up unnecessary files."
+
+      - name: Deploy to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./
+          server-dir: ${{ secrets.FTP_PATH }}
+          exclude: |
+            **/.git*
+            **/.github*
+            **/node_modules/**
+            **/tests/**
+            **/storage/logs/**
+            **/storage/framework/cache/**
+            **/.env
+            deploy.sh
+
