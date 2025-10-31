@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blocks\Providers;
 
 use Illuminate\Support\Facades\Blade;
@@ -11,11 +13,12 @@ use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class BlocksServiceProvider extends ServiceProvider
+final class BlocksServiceProvider extends ServiceProvider
 {
     use PathNamespace;
 
     protected string $name = 'Blocks';
+
     protected string $nameLower = 'blocks';
 
     /**
@@ -60,32 +63,11 @@ class BlocksServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register CLI commands.
-     */
-    protected function registerCommands(): void
-    {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                MakeBlockCommand::class,
-                DiscoverBlocksCommand::class,
-            ]);
-        }
-    }
-
-    /**
-     * Register command schedules (optional).
-     */
-    protected function registerCommandSchedules(): void
-    {
-        // Example: $schedule->command('inspire')->hourly();
-    }
-
-    /**
      * Register translations.
      */
     public function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/' . $this->nameLower);
+        $langPath = resource_path('lang/modules/'.$this->nameLower);
         $moduleLangPath = module_path($this->name, 'lang');
 
         if (is_dir($langPath)) {
@@ -98,13 +80,65 @@ class BlocksServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register views.
+     */
+    public function registerViews(): void
+    {
+        $viewPath = resource_path('views/modules/'.$this->nameLower);
+        $sourcePath = module_path($this->name, 'resources/views');
+
+        $this->publishes(
+            [$sourcePath => $viewPath],
+            ['views', $this->nameLower.'-module-views']
+        );
+
+        $this->loadViewsFrom(
+            array_merge($this->getPublishableViewPaths(), [$sourcePath]),
+            $this->nameLower
+        );
+
+        // Use explicit Modules namespace for components
+        $moduleNamespace = 'Modules\\'.$this->name.'\\View\\Components';
+        Blade::componentNamespace($moduleNamespace, $this->nameLower);
+    }
+
+    /**
+     * Provided services.
+     */
+    public function provides(): array
+    {
+        return [];
+    }
+
+    /**
+     * Register CLI commands.
+     */
+    private function registerCommands(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                MakeBlockCommand::class,
+                DiscoverBlocksCommand::class,
+            ]);
+        }
+    }
+
+    /**
+     * Register command schedules (optional).
+     */
+    private function registerCommandSchedules(): void
+    {
+        // Example: $schedule->command('inspire')->hourly();
+    }
+
+    /**
      * Register config files recursively.
      */
-    protected function registerConfig(): void
+    private function registerConfig(): void
     {
         $configPath = module_path($this->name, 'config');
 
-        if (!is_dir($configPath)) {
+        if (! is_dir($configPath)) {
             return;
         }
 
@@ -112,9 +146,9 @@ class BlocksServiceProvider extends ServiceProvider
 
         foreach ($iterator as $file) {
             if ($file->isFile() && $file->getExtension() === 'php') {
-                $config = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
+                $config = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
                 $configKey = str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $config);
-                $segments = explode('.', $this->nameLower . '.' . $configKey);
+                $segments = explode('.', $this->nameLower.'.'.$configKey);
 
                 $normalized = [];
                 foreach ($segments as $segment) {
@@ -136,35 +170,12 @@ class BlocksServiceProvider extends ServiceProvider
     /**
      * Recursive config merging helper.
      */
-    protected function mergeConfigFromRecursive(string $path, string $key): void
+    private function mergeConfigFromRecursive(string $path, string $key): void
     {
         $existing = config($key, []);
         $moduleConfig = require $path;
 
         config([$key => array_replace_recursive($existing, $moduleConfig)]);
-    }
-
-    /**
-     * Register views.
-     */
-    public function registerViews(): void
-    {
-        $viewPath = resource_path('views/modules/' . $this->nameLower);
-        $sourcePath = module_path($this->name, 'resources/views');
-
-        $this->publishes(
-            [$sourcePath => $viewPath],
-            ['views', $this->nameLower . '-module-views']
-        );
-
-        $this->loadViewsFrom(
-            array_merge($this->getPublishableViewPaths(), [$sourcePath]),
-            $this->nameLower
-        );
-
-        // Use explicit Modules namespace for components
-        $moduleNamespace = 'Modules\\' . $this->name . '\\View\\Components';
-        Blade::componentNamespace($moduleNamespace, $this->nameLower);
     }
 
     /**
@@ -175,20 +186,12 @@ class BlocksServiceProvider extends ServiceProvider
         $paths = [];
 
         foreach (config('view.paths') as $path) {
-            $moduleViewPath = $path . '/modules/' . $this->nameLower;
+            $moduleViewPath = $path.'/modules/'.$this->nameLower;
             if (is_dir($moduleViewPath)) {
                 $paths[] = $moduleViewPath;
             }
         }
 
         return $paths;
-    }
-
-    /**
-     * Provided services.
-     */
-    public function provides(): array
-    {
-        return [];
     }
 }

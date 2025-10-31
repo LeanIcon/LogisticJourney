@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blocks\Console;
 
 use Illuminate\Console\Command;
@@ -7,7 +9,7 @@ use Modules\Blocks\Interfaces\BlockRegistry;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class DiscoverBlocksCommand extends Command
+final class DiscoverBlocksCommand extends Command
 {
     /**
      * The name and signature of the console command.

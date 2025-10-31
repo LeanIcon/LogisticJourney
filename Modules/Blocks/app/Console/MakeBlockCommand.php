@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blocks\Console;
 
 use Illuminate\Console\Command;
@@ -9,7 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Modules\Blocks\Interfaces\BlockRegistry;
 
-class MakeBlockCommand extends Command
+final class MakeBlockCommand extends Command
 {
     /**
      * The name and signature of the console command.

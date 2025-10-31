@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+
 namespace Modules\Blog\Filament\Resources\Categories;
 
 use BackedEnum;
@@ -14,7 +15,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Modules\Blog\Filament\Resources\Categories\Pages\CreateCategory;
 use Modules\Blog\Filament\Resources\Categories\Pages\EditCategory;
 use Modules\Blog\Filament\Resources\Categories\Pages\ListCategories;
+use Modules\Blog\Filament\Resources\Categories\Pages\ViewCategory;
 use Modules\Blog\Filament\Resources\Categories\Schemas\CategoryForm;
+use Modules\Blog\Filament\Resources\Categories\Schemas\CategoryInfolist;
 use Modules\Blog\Filament\Resources\Categories\Tables\CategoriesTable;
 use Modules\Blog\Models\Category;
 use UnitEnum;
@@ -36,6 +39,11 @@ final class CategoryResource extends Resource
         return CategoryForm::configure($schema);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return CategoryInfolist::configure($schema);
+    }
+
     public static function table(Table $table): Table
     {
         return CategoriesTable::configure($table);
@@ -53,6 +61,7 @@ final class CategoryResource extends Resource
         return [
             'index' => ListCategories::route('/'),
             'create' => CreateCategory::route('/create'),
+            'view' => ViewCategory::route('/{record}'),
             'edit' => EditCategory::route('/{record}/edit'),
         ];
     }

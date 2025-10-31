@@ -1,12 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Website\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 // use Modules\Website\Database\Factories\LeadFactory;
 
-class Contact extends Model
+final class Contact extends Model
 {
     use HasFactory;
 
@@ -22,6 +27,11 @@ class Contact extends Model
         'status',
         'assigned_to',
     ];
+
+    public function assignedUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
 
     // protected static function newFactory(): LeadFactory
     // {

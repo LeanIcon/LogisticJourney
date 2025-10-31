@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Pricing\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
-class PricingController extends Controller
+final class PricingController extends Controller
 {
     /**
      * Display a listing of the resource.

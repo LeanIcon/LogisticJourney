@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Website\Blocks;
 
+use Filament\Forms\Components\Builder\Block as BuilderBlock;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Builder\Block as BuilderBlock;
-use Modules\Blocks\Interfaces\Block;
+use Modules\Blocks\Interfaces\Block as BlockTrait;
 
-class NewsLetterSubscription extends Block
+final class NewsLetterSubscription
 {
+    use BlockTrait;
+
     /**
      * The block's unique identifier.
      */
@@ -31,7 +35,7 @@ class NewsLetterSubscription extends Block
      */
     public static function schema(): BuilderBlock
     {
-        return static::make()
+        return self::make()
             ->schema([
                 Section::make()
                     ->schema([

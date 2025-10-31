@@ -12,6 +12,7 @@ it('returns only published posts on the index endpoint', function () {
     $published = Post::create([
         'title' => 'Published Post',
         'slug' => 'published-post',
+        'body' => 'This is the published post content.',
         'status' => 'published',
         'published_at' => now(),
     ]);
@@ -19,6 +20,7 @@ it('returns only published posts on the index endpoint', function () {
     $draft = Post::create([
         'title' => 'Draft Post',
         'slug' => 'draft-post',
+        'body' => 'This is the draft post content.',
         'status' => 'draft',
     ]);
 

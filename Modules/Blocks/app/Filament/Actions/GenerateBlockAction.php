@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blocks\Filament\Actions;
 
 use Filament\Forms\Components\TextInput;
@@ -10,7 +12,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
-class GenerateBlockAction extends Action
+final class GenerateBlockAction extends Action
 {
     public static function getDefaultName(): ?string
     {

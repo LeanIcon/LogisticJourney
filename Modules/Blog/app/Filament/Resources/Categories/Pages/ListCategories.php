@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blog\Filament\Resources\Categories\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Modules\Blog\Filament\Resources\Categories\CategoryResource;
 
-class ListCategories extends ListRecords
+final class ListCategories extends ListRecords
 {
     protected static string $resource = CategoryResource::class;
 

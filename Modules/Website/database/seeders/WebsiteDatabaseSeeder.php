@@ -15,6 +15,10 @@ final class WebsiteDatabaseSeeder extends Seeder
     {
         $this->call([
             FormSeeder::class,
+            FaqSeeder::class,
+            PolicySeeder::class,
+            ContactSeeder::class,
+            SubscriberSeeder::class,
         ]);
     }
 }

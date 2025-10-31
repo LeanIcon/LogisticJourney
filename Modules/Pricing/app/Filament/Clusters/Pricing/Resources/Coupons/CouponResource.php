@@ -13,7 +13,9 @@ use Modules\Pricing\Filament\Clusters\Pricing\PricingCluster;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Coupons\Pages\CreateCoupon;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Coupons\Pages\EditCoupon;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Coupons\Pages\ListCoupons;
+use Modules\Pricing\Filament\Clusters\Pricing\Resources\Coupons\Pages\ViewCoupon;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Coupons\Schemas\CouponForm;
+use Modules\Pricing\Filament\Clusters\Pricing\Resources\Coupons\Schemas\CouponInfolist;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Coupons\Tables\CouponsTable;
 use Modules\Pricing\Models\Coupon;
 
@@ -30,6 +32,11 @@ final class CouponResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return CouponForm::configure($schema);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return CouponInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -49,6 +56,7 @@ final class CouponResource extends Resource
         return [
             'index' => ListCoupons::route('/'),
             'create' => CreateCoupon::route('/create'),
+            'view' => ViewCoupon::route('/{record}'),
             'edit' => EditCoupon::route('/{record}/edit'),
         ];
     }

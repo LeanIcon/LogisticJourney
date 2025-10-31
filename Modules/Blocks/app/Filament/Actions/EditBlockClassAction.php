@@ -1,26 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blocks\Filament\Actions;
 
 use Filament\Actions\Action;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\CodeEditor;
+use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Storage;
 use Modules\Blocks\Facades\Blocks;
+use ReflectionClass;
+use Throwable;
 
-class EditBlockClassAction extends Action
+final class EditBlockClassAction extends Action
 {
-    public static function getDefaultName(): ?string
-    {
-        return 'editBlockClass';
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
 
         $blocks = Blocks::all(); // name => class
-        $options = collect($blocks)->mapWithKeys(fn($class, $name) => [$name => $name])->toArray();
+        $options = collect($blocks)->mapWithKeys(fn ($class, $name) => [$name => $name])->toArray();
 
         $this->label('Edit Block Class')
             ->modalWidth('6xl')
@@ -35,14 +36,14 @@ class EditBlockClassAction extends Action
                         try {
                             $class = Blocks::all()[$state] ?? null;
                             if ($class && class_exists($class)) {
-                                $ref = new \ReflectionClass($class);
+                                $ref = new ReflectionClass($class);
                                 $path = $ref->getFileName();
                                 if ($path && file_exists($path)) {
                                     $source = file_get_contents($path);
                                     $set('source', $source);
                                 }
                             }
-                        } catch (\Throwable $e) {
+                        } catch (Throwable $e) {
                             // ignore
                         }
                     }),
@@ -68,7 +69,7 @@ class EditBlockClassAction extends Action
                     return;
                 }
 
-                $ref = new \ReflectionClass($class);
+                $ref = new ReflectionClass($class);
                 $path = $ref->getFileName();
 
                 if (! $path || ! is_writable($path)) {
@@ -90,15 +91,16 @@ class EditBlockClassAction extends Action
                     return;
                 }
 
-                // Check PHP syntax before saving
-                $tempFile = tempnam(sys_get_temp_dir(), 'block_lint_');
-                file_put_contents($tempFile, $source);
+                // Check PHP syntax before saving using Storage
+                $tempFilename = 'block_lint_'.bin2hex(random_bytes(8)).'.php';
+                Storage::disk('local')->put($tempFilename, $source);
+                $tempFilePath = Storage::disk('local')->path($tempFilename);
 
-                exec('php -l ' . escapeshellarg($tempFile) . ' 2>&1', $output, $return);
-                unlink($tempFile); // Clean up temp file
+                $result = Process::run(['php', '-l', $tempFilePath]);
+                Storage::disk('local')->delete($tempFilename); // Clean up temp file
 
-                if ($return !== 0) {
-                    $error = implode("\n", $output);
+                if ($result->failed()) {
+                    $error = $result->errorOutput() ?: $result->output();
                     Notification::make()
                         ->title('PHP Syntax Error')
                         ->body($error)
@@ -115,14 +117,14 @@ class EditBlockClassAction extends Action
                 }
 
                 $timestamp = now()->format('Ymd_His');
-                $backupPath = $backupDir . '/' . str_replace('\\', '_', $class) . '_' . $timestamp . '.php';
+                $backupPath = $backupDir.'/'.str_replace('\\', '_', $class).'_'.$timestamp.'.php';
                 copy($path, $backupPath);
 
                 // Write new contents
                 file_put_contents($path, $source);
 
                 // Cleanup backups older than 7 days (unless archived)
-                $files = glob($backupDir . '/*.php');
+                $files = glob($backupDir.'/*.php');
                 $cutoff = now()->subDays(7)->timestamp;
                 foreach ($files as $f) {
                     // archived files are named with .archived.php suffix if admin archived
@@ -151,16 +153,21 @@ class EditBlockClassAction extends Action
                 $class = $blocks[$firstName] ?? null;
                 if ($class && class_exists($class)) {
                     try {
-                        $ref = new \ReflectionClass($class);
+                        $ref = new ReflectionClass($class);
                         $path = $ref->getFileName();
                         if ($path && file_exists($path)) {
                             $source = file_get_contents($path);
                             $action->form->fill(['block' => $firstName, 'source' => $source]);
                         }
-                    } catch (\Throwable $e) {
+                    } catch (Throwable $e) {
                         // ignore
                     }
                 }
             });
+    }
+
+    public static function getDefaultName(): ?string
+    {
+        return 'editBlockClass';
     }
 }

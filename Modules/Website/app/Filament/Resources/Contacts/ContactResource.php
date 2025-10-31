@@ -12,7 +12,9 @@ use Filament\Tables\Table;
 use Modules\Website\Filament\Resources\Contacts\Pages\CreateContact;
 use Modules\Website\Filament\Resources\Contacts\Pages\EditContact;
 use Modules\Website\Filament\Resources\Contacts\Pages\ListContacts;
+use Modules\Website\Filament\Resources\Contacts\Pages\ViewContact;
 use Modules\Website\Filament\Resources\Contacts\Schemas\ContactForm;
+use Modules\Website\Filament\Resources\Contacts\Schemas\ContactInfolist;
 use Modules\Website\Filament\Resources\Contacts\Tables\ContactsTable;
 use Modules\Website\Models\Contact;
 
@@ -27,6 +29,11 @@ final class ContactResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return ContactForm::configure($schema);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return ContactInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -46,6 +53,7 @@ final class ContactResource extends Resource
         return [
             'index' => ListContacts::route('/'),
             'create' => CreateContact::route('/create'),
+            'view' => ViewContact::route('/{record}'),
             'edit' => EditContact::route('/{record}/edit'),
         ];
     }

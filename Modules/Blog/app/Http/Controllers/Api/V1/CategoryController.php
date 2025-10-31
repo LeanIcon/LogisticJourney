@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Modules\Blog\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Modules\Blog\Models\Category;
 
 final class CategoryController extends Controller

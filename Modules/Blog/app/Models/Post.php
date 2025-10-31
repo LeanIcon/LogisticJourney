@@ -39,6 +39,12 @@ final class Post extends Model
 
     ];
 
+    protected $casts = [
+        'scheduled_for' => 'datetime',
+        'published_at' => 'datetime',
+        'is_featured' => 'boolean',
+    ];
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'post_category');

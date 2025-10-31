@@ -1,26 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blocks\Blocks;
 
 use Filament\Forms\Components\Builder\Block as BuilderBlock;
-use Filament\Schemas\Components\Tabs;
-use Filament\Schemas\Components\Tabs\Tab;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\CodeEditor;
 use Filament\Forms\Components\CodeEditor\Enums\Language;
-use Modules\Blocks\Interfaces\Block;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
+use Modules\Blocks\Interfaces\Block as BlockTrait;
 
-class Faqs extends Block
+final class Faqs
 {
+    use BlockTrait;
+
     protected static string $name = 'Faqs';
+
     protected static ?string $view = null;
+
     protected static bool $apiOnly = true;
+
     protected static ?string $icon = 'heroicon-o-cube-transparent';
 
     public static function schema(): BuilderBlock
     {
-        return static::make()
+        return self::make()
             ->label('Faqs Block')
             ->schema([
                 Tabs::make('BlockTabs')

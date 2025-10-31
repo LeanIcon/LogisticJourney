@@ -17,6 +17,7 @@ it('returns posts for a given category', function () {
     $post = Post::create([
         'title' => 'Tech Post',
         'slug' => 'tech-post',
+        'body' => 'This is a tech post about Laravel.',
         'status' => 'published',
         'published_at' => now(),
     ]);

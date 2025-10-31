@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blog\Filament\Resources\Categories\Pages;
 
 use Filament\Actions\DeleteAction;
@@ -8,7 +10,7 @@ use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
 use Modules\Blog\Filament\Resources\Categories\CategoryResource;
 
-class EditCategory extends EditRecord
+final class EditCategory extends EditRecord
 {
     protected static string $resource = CategoryResource::class;
 

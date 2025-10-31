@@ -1,25 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blocks\Interfaces;
 
+use Filament\Forms\Components\Builder;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Filament\Forms\Components\Builder;
+use Throwable;
 
-
-class BlockRegistry
+final class BlockRegistry
 {
     /**
      * All discovered block classes.
      */
-    protected array $blocks = [];
+    private array $blocks = [];
 
     /**
      * Manually register a block class.
      */
     public function register(string $class): void
     {
-        if (is_subclass_of($class, Block::class)) {
+        if (self::usesBlockTrait($class)) {
             $name = $class::getName();
             $this->blocks[$name] = $class;
         }
@@ -62,6 +64,7 @@ class BlockRegistry
                 }
 
                 $block['data'] = $class::mutateData($block['data'] ?? []);
+
                 return $block;
             })
             ->all();
@@ -79,22 +82,22 @@ class BlockRegistry
 
             // Module blocks in standard location
             ...collect(File::directories(base_path('Modules')))
-                ->map(fn ($dir) => $dir . '/Blocks')
+                ->map(fn ($dir) => $dir.'/Blocks')
                 ->all(),
 
             // Module blocks in src/Blocks
             ...collect(File::directories(base_path('Modules')))
-                ->map(fn ($dir) => $dir . '/src/Blocks')
+                ->map(fn ($dir) => $dir.'/src/Blocks')
                 ->all(),
 
             // Module blocks in resources/blocks
             ...collect(File::directories(base_path('Modules')))
-                ->map(fn ($dir) => $dir . '/resources/blocks')
+                ->map(fn ($dir) => $dir.'/resources/blocks')
                 ->all(),
         ])
-        ->filter(fn ($dir) => is_dir($dir))
-        ->unique()
-        ->toArray();
+            ->filter(fn ($dir) => is_dir($dir))
+            ->unique()
+            ->toArray();
 
         $discovered = [];
 
@@ -110,13 +113,13 @@ class BlockRegistry
                 if (! class_exists($class)) {
                     try {
                         require_once $file->getPathname();
-                    } catch (\Throwable $e) {
+                    } catch (Throwable $e) {
                         // If including the file fails silently continue to next
                         continue;
                     }
                 }
 
-                if (is_subclass_of($class, Block::class)) {
+                if (self::usesBlockTrait($class)) {
                     // Register the block
                     $this->register($class);
 
@@ -135,7 +138,7 @@ class BlockRegistry
             }
         }
 
-        if ($writeManifest && !empty($discovered)) {
+        if ($writeManifest && ! empty($discovered)) {
             File::ensureDirectoryExists(storage_path('app'));
             File::put(
                 storage_path('app/blocks_manifest.json'),
@@ -167,20 +170,38 @@ class BlockRegistry
     /**
      * Derive class name from file contents.
      */
-    protected static function classFromPath(string $path): ?string
+    private static function classFromPath(string $path): ?string
     {
         $contents = file_get_contents($path);
 
-        if (!preg_match('/namespace\s+([^;]+);/', $contents, $ns)) return null;
-        if (!preg_match('/class\s+(\w+)/', $contents, $cls)) return null;
+        if (! preg_match('/namespace\s+([^;]+);/', $contents, $ns)) {
+            return null;
+        }
+        if (! preg_match('/class\s+(\w+)/', $contents, $cls)) {
+            return null;
+        }
 
-        return $ns[1] . '\\' . $cls[1];
+        return $ns[1].'\\'.$cls[1];
+    }
+
+    /**
+     * Check if a class uses the Block trait.
+     */
+    private static function usesBlockTrait(string $class): bool
+    {
+        if (! class_exists($class)) {
+            return false;
+        }
+
+        $traits = class_uses($class) ?: [];
+
+        return in_array(Block::class, $traits, true);
     }
 
     /**
      * Determine the module name from a path.
      */
-    protected static function determineModuleFromPath(string $path): string
+    private static function determineModuleFromPath(string $path): string
     {
         // Check if path is in app/Blocks
         if (str_starts_with($path, app_path('Blocks'))) {
@@ -190,7 +211,8 @@ class BlockRegistry
         // Extract module name from Modules directory path
         $modulesPath = base_path('Modules');
         if (str_starts_with($path, $modulesPath)) {
-            $relativePath = Str::after($path, $modulesPath . '/');
+            $relativePath = Str::after($path, $modulesPath.'/');
+
             return explode('/', $relativePath)[0];
         }
 

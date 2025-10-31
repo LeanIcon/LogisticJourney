@@ -13,7 +13,9 @@ use Modules\Pricing\Filament\Clusters\Pricing\PricingCluster;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Promotions\Pages\CreatePromotion;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Promotions\Pages\EditPromotion;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Promotions\Pages\ListPromotions;
+use Modules\Pricing\Filament\Clusters\Pricing\Resources\Promotions\Pages\ViewPromotion;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Promotions\Schemas\PromotionForm;
+use Modules\Pricing\Filament\Clusters\Pricing\Resources\Promotions\Schemas\PromotionInfolist;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Promotions\Tables\PromotionsTable;
 use Modules\Pricing\Models\Promotion;
 
@@ -30,6 +32,11 @@ final class PromotionResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return PromotionForm::configure($schema);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return PromotionInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -49,6 +56,7 @@ final class PromotionResource extends Resource
         return [
             'index' => ListPromotions::route('/'),
             'create' => CreatePromotion::route('/create'),
+            'view' => ViewPromotion::route('/{record}'),
             'edit' => EditPromotion::route('/{record}/edit'),
         ];
     }

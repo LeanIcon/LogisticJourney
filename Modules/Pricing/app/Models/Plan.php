@@ -25,6 +25,11 @@ final class Plan extends Model
         'status',
     ];
 
+    protected $casts = [
+        'price' => 'decimal:2',
+        'features' => 'array',
+    ];
+
     // protected static function newFactory(): PlanFactory
     // {
     //     // return PlanFactory::new();

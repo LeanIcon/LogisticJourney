@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+
 namespace Modules\Blog\Filament\Resources\Authors;
 
 use BackedEnum;
@@ -14,9 +15,13 @@ use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Infolists\Components\TextEntry;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -25,6 +30,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Modules\Blog\Filament\Resources\Authors\Pages\ManageAuthors;
+use Modules\Blog\Filament\Resources\Authors\Schemas\AuthorInfolist;
 use Modules\Blog\Models\Author;
 use UnitEnum;
 
@@ -44,28 +50,58 @@ final class AuthorResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('bio')
-                    ->maxLength(65535)
-                    ->nullable(),
-                // TextInput::make('website')
-                //     ->url()
-                //     ->maxLength(255)
-                //     ->nullable(),
-                // TextInput::make('social_handle')
-                //     ->maxLength(255)
-                //     ->nullable(),
+                Section::make('Author Information')
+                    ->schema([
+                        Select::make('user_id')
+                            ->relationship('user', 'name')
+                            ->label('Linked User Account')
+                            ->nullable()
+                            ->searchable()
+                            ->helperText('Link to an existing user account'),
+
+                        TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+
+                        TextInput::make('slug')
+                            ->required()
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true),
+
+                        TextInput::make('email')
+                            ->email()
+                            ->maxLength(255)
+                            ->nullable(),
+
+                        FileUpload::make('avatar')
+                            ->image()
+                            ->directory('authors/avatars')
+                            ->maxSize(1024)
+                            ->helperText('Profile picture'),
+
+                        Textarea::make('bio')
+                            ->rows(4)
+                            ->maxLength(1000)
+                            ->nullable()
+                            ->helperText('Author biography'),
+
+                        TextInput::make('website')
+                            ->url()
+                            ->maxLength(255)
+                            ->nullable()
+                            ->helperText('Personal or company website'),
+
+                        Toggle::make('is_guest')
+                            ->label('Guest Author')
+                            ->helperText('Mark as external/guest contributor'),
+                    ])
+                    ->columns(2),
             ]);
     }
 
     public static function infolist(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                TextEntry::make('name'),
-            ]);
+        return AuthorInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table

@@ -13,7 +13,9 @@ use Modules\Pricing\Filament\Clusters\Pricing\PricingCluster;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Plans\Pages\CreatePlan;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Plans\Pages\EditPlan;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Plans\Pages\ListPlans;
+use Modules\Pricing\Filament\Clusters\Pricing\Resources\Plans\Pages\ViewPlan;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Plans\Schemas\PlanForm;
+use Modules\Pricing\Filament\Clusters\Pricing\Resources\Plans\Schemas\PlanInfolist;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Plans\Tables\PlansTable;
 use Modules\Pricing\Models\Plan;
 
@@ -30,6 +32,11 @@ final class PlanResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return PlanForm::configure($schema);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return PlanInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -49,6 +56,7 @@ final class PlanResource extends Resource
         return [
             'index' => ListPlans::route('/'),
             'create' => CreatePlan::route('/create'),
+            'view' => ViewPlan::route('/{record}'),
             'edit' => EditPlan::route('/{record}/edit'),
         ];
     }

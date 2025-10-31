@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blocks\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Modules\Blocks\Models\Block;
 use Modules\Blocks\Interfaces\BlockRegistry;
+use Modules\Blocks\Models\Block;
 
 trait HasBlocks
 {

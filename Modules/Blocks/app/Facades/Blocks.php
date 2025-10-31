@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blocks\Facades;
 
 use Illuminate\Support\Facades\Facade;
@@ -15,7 +17,7 @@ use Modules\Blocks\Interfaces\BlockRegistry;
  *
  * @see \Modules\Blocks\Interfaces\BlockRegistry
  */
-class Blocks extends Facade
+final class Blocks extends Facade
 {
     protected static function getFacadeAccessor()
     {

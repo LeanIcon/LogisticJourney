@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blocks\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Modules\Blocks\Database\Factories\BlockFactory;
 
-class Block extends Model
+final class Block extends Model
 {
     use HasFactory;
 

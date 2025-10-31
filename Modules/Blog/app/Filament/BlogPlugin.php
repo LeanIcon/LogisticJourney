@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blog\Filament;
 
 use Coolsam\Modules\Concerns\ModuleFilamentPlugin;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
-class BlogPlugin implements Plugin
+final class BlogPlugin implements Plugin
 {
     use ModuleFilamentPlugin;
 

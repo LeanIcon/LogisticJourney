@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Blocks\Filament\Forms;
 
 use Filament\Forms\Components\Builder;
 use Modules\Blocks\Facades\Blocks;
 
-class BlockEditor
+final class BlockEditor
 {
     public static function make(string $field = 'blocks'): Builder
     {

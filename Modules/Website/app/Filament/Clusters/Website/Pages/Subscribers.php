@@ -43,7 +43,7 @@ final class Subscribers extends Page implements HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(self::query())
+            ->query(Subscriber::query())
             ->columns([
                 TextColumn::make('email')
                     ->searchable()

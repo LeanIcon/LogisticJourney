@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Pricing\Filament;
 
 use Coolsam\Modules\Concerns\ModuleFilamentPlugin;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
-class PricingPlugin implements Plugin
+final class PricingPlugin implements Plugin
 {
     use ModuleFilamentPlugin;
 

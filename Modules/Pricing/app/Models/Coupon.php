@@ -27,6 +27,12 @@ final class Coupon extends Model
         'status',
     ];
 
+    protected $casts = [
+        'expires_at' => 'datetime',
+        'usage_limit' => 'integer',
+        'used_count' => 'integer',
+    ];
+
     // protected static function newFactory(): CouponFactory
     // {
     //     // return CouponFactory::new();

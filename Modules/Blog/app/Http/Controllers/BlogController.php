@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Modules\Blog\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 final class BlogController extends Controller
 {

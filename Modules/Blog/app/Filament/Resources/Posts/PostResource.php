@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+
 namespace Modules\Blog\Filament\Resources\Posts;
 
 use BackedEnum;

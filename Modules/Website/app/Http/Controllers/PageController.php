@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Modules\Website\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Modules\Website\Http\Resources\PageResource;
 use Modules\Website\Models\Page;
 

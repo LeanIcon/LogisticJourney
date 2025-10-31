@@ -1,0 +1,249 @@
+# Terms and Conditions – Logistic Journey
+
+Terms of Service - Logistic Journey
+
+
+
+
+
+
+
+
+
+
+
+
+
+Terms of Service
+
+Back to Home
+
+
+
+
+
+Terms of Service
+The terms and conditions stated herein (collectively, the "Agreement") form a binding agreement between you
+            and Anylytical Technologies (PTY) LTD (the "Company"). In order to use the Service and the associated
+            Software you must agree to the terms and conditions that are set out below. By using or receiving any
+            services supplied to you by the Company (collectively, the "Service"), and downloading, installing or using
+            any associated software supplied by the Company which purpose is to enable you to use the Service
+            (collectively, the "Software"), you explicitly confirm your understanding and acceptance to be bound by the
+            terms and conditions of the Agreement, and any future amendments and additions to this Agreement.
+The Company reserves the right to modify the terms and conditions of this Agreement or its policies relating
+            to the Service or Software at any time, effective upon posting of an updated version of this Agreement on
+            the Service or Software. You are responsible for regularly reviewing this Agreement. Continued use of the
+            Service or Software after any such changes shall constitute your consent to such changes.
+LOGISTICJOURNEY DOES NOT PROVIDE LOGISTICS OR COURIER SERVICES, AND LOGISTICJOURNEY IS NOT A LOGISTICS
+            CARRIER. IT IS UP TO THE THIRD PARTY COURIER OR LOGISTICS PROVIDER, COURIER OR VEHICLE OPERATOR TO OFFER
+            COURIER SERVICES WHICH MAY BE SCHEDULED THROUGH USE OF THE SOFTWARE OR SERVICE. LOGISTICJOURNEY OFFERS
+            INFORMATION AND A METHOD TO OBTAIN SUCH THIRD PARTY COURIER SERVICES, BUT DOES NOT AND DOES NOT INTEND TO
+            PROVIDE COURIER SERVICES OR ACT IN ANY WAY AS A COURIER, AND HAS NO RESPONSIBILITY OR LIABILITY FOR ANY
+            COURIER OTHER THAN STATED HEREIN SERVICES PROVIDED TO YOU BY SUCH THIRD PARTIES.
+Representations and Warranties
+By using the Software or Service, you confirm and guarantee that you are legally entitled to enter this
+            Agreement. If you reside in a jurisdiction that restricts the use of the Service because of age, or
+            restricts the ability to enter into agreements such as this one due to age, you must abide by such age
+            limits and you must not use the Software and Service. Without limiting the foregoing, the Service and
+            Software is not available to children (persons under the age of 18). By using the Software or Service, you
+            represent and warrant that you are at least 18 years old. By using the Software or the Service, you
+            represent and warrant that you have the right, authority and capacity to enter into this Agreement and to
+            abide by the terms and conditions of this Agreement. Your participation in using the Service and/or Software
+            is for your individual use only. You may not authorize others to use your user status, and you may not
+            assign or otherwise transfer your user account to any other person or entity. When using the Software or
+            Service you agree to comply with all applicable laws from your home nation, the country, state and city in
+            which you are present while using the Software or Service.
+You may only access the Service using authorized means. It is your responsibility to check to ensure you
+            download the correct Software for your device. The Company is not liable if you do not have a compatible
+            handset or if you have downloaded the wrong version of the Software for your handset. The Company reserves
+            the right to terminate this Agreement should you be using the Service or Software with an incompatible or
+            unauthorized device.
+        
+By using the Software or the Service, you agree that:
+
+You will only use the Service or Software for lawful purposes; you will not use the Services for sending
+                or storing any unlawful material or for fraudulent purposes.
+            
+You will not use the Service or Software to cause nuisance, annoyance or inconvenience.
+You will not copy, or distribute the Software or other content unless prior written consent is obtained
+                from the Company.
+            
+You will provide us with whatever proof of identity we may reasonably request.
+You are aware that when requesting services by SMS, standard messaging charges will apply.
+You will keep secure and confidential your account password or any identification we provide you which
+                allows access to the Service.
+            
+You will only use the Software and Service for your own use and will not resell it to a third party.
+            
+You will not impair the proper operation of the network.
+You will not try to harm the Service or Software in any way whatsoever.
+You will report any errors, bugs, unauthorized access methodologies or any breach of our intellectual
+                property rights that you uncover in your use of the Service.
+            
+
+         
+
+        Intellectual Property Ownership
+The Company alone (and its licensors, where applicable) shall retain full ownership and rights,
+            including all related intellectual property rights, in and to the Software and the Service and any
+            suggestions, ideas, enhancement requests, feedback, recommendations or other information provided by
+            you or any other party relating to the Software or the Service. This Agreement is not a sale and
+            does not convey to you any rights of ownership in or related to the Software or the Service, or any
+            intellectual property rights owned by the Company. The Company name, the Company logo, and the
+            product names associated with the Software and Service are trademarks of the Company or third
+            parties, and no right or license is granted to use them.
+User Account
+You are the sole authorized User of any account you create with the Software or provided by the
+            company. You are responsible for safeguarding the privacy of any password or account number provided
+            by you or the Company for accessing the Software. You are solely and fully responsible for all
+            activities that occur under your password or account. The Company has no control over the use of any
+            User's account and explicitly denies any responsibility derived therefrom. Should you suspect that
+            any unauthorized party may be using your password or account, you will notify the Company
+            immediately.
+Third Party Interactions
+During use of the Software and Service, you may enter into correspondence with, purchase goods and/or
+            services from, or participate in promotions of third party service providers, advertisers or
+            sponsors showing their goods and/or services through the Software or Service. Any such activity, and
+            any terms, conditions, warranties or representations associated with such activity, is solely
+            between you and the applicable third-party. The Company and its licensors shall have no liability,
+            obligation or responsibility for any such correspondence, purchase, transaction or promotion between
+            you and any such third-party. The Company does not endorse any sites on the Internet that are linked
+            through the Service or Software, and in no event shall the Company or its licensors be responsible
+            for any content, products, services or other materials on or available from such sites or third
+            party providers. The Company provides the Software and Service to you pursuant to the terms and
+            conditions of this Agreement. You recognize, however, that certain third-party providers of goods
+            and/or services may require your agreement to additional or different terms and conditions prior to
+            your use of or access to such goods or services, and the Company disclaims any and all
+            responsibility or liability arising from such agreements between you and the third party
+            providers.
+The Company may rely on third party advertising and marketing supplied through the Software or
+            Service and other mechanisms to subsidize the Software or Service. By agreeing to these terms and
+            conditions you agree to receive such advertising and marketing. If you do not want to receive such
+            advertising you should notify us in writing. The Company reserves the right to charge you a higher
+            fee for the Service or Software should you choose not to receive these advertising services. The
+            Company may compile and release information regarding you and your use of the Software or Service on
+            an anonymous basis as part of a customer profile or similar report or analysis. You agree that it is
+            your responsibility to take reasonable precautions in all actions and interactions with any third
+            party you interact with through the Service.
+Transactions Involving Alcohol
+You may have the option to order delivery of alcohol products in some locations and from certain
+            retailers. By placing an order for alcohol products, you confirm that you are of legal drinking age
+            in the country where the delivery is made. You also agree that, upon delivery of alcohol products,
+            the recipient will provide valid government-issued identification proving their age to the driver
+            delivering the alcohol products and that the recipient will not be intoxicated when receiving
+            delivery of such products.
+Indemnification
+You agree to defend, indemnify and hold harmless the Company and its officers, directors, employees,
+            agents and affiliates (each, an "Indemnified Party"), from and against any losses, claims, actions,
+            costs, damages, penalties, fines and expenses, including without limitation attorneys' fees and
+            expenses, that may be incurred by an Indemnified Party arising out of, relating to or resulting from
+            your unauthorized use of the Software or from any breach by you of these Terms and Conditions,
+            including without limitation any actual or alleged violation of any federal, state or local statute,
+            ordinance, administrative order, rule or regulation. The Company shall provide notice to you
+            promptly of any such claim, suit or proceeding and shall have the right to control the defense of
+            such action, at your expense, in defending any such claim, suit or proceeding.
+        
+Disclaimer
+USE OF THE SOFTWARE IS ENTIRELY AT YOUR OWN RISK. CHANGES ARE PERIODICALLY MADE TO THE WEBSITE AND
+            MAY BE MADE AT ANY TIME WITHOUT NOTICE TO YOU. THE SOFTWARE IS PROVIDED ON AN "AS IS" BASIS WITHOUT
+            WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF
+            MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. Logistic Journey MAKES NO
+            WARRANTIES OR REPRESENTATIONS ABOUT THE ACCURACY OR COMPLETENESS OF THE CONTENT PROVIDED THROUGH THE
+            SOFTWARE OR THE CONTENT OF ANY WEBSITES LINKED TO THE SERVICE. Logistic Journey ASSUMES NO LIABILITY
+            OR RESPONSIBILITY FOR ANY (I) ERRORS, MISTAKES, OR INACCURACIES OF CONTENT; (II) PERSONAL INJURY OR
+            PROPERTY DAMAGE, OF ANY NATURE WHATSOEVER, RESULTING FROM YOUR ACCESS TO AND USE OF THE SERVICE OR
+            THE SOFTWARE; (III) ANY UNAUTHORIZED ACCESS TO OR USE OF LOGISTICJOURNEY’S SECURE SERVERS AND/OR ANY
+            AND ALL PERSONAL INFORMATION AND/OR FINANCIAL INFORMATION STORED THEREIN.
+Logistic Journey DOES NOT WARRANT THAT THE WEBSITE WILL OPERATE ERROR-FREE OR THAT THE WEBSITE AND ITS
+            SERVER ARE FREE OF COMPUTER VIRUSES AND OTHER HARMFUL GOODS. IF YOUR USE OF THE WEBSITE RESULTS IN
+            THE NEED FOR SERVICING OR REPLACING EQUIPMENT OR DATA, Logistic Journey SHALL NOT BE RESPONSIBLE FOR
+            THOSE COSTS. Logistic Journey, TO THE FULLEST EXTENT PERMITTED BY LAW, DISCLAIMS ALL WARRANTIES,
+            WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE WARRANTY OF MERCHANTABILITY,
+            NON-INFRINGEMENT OF THIRD PARTY RIGHTS AND THE WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE.
+            Logistic Journey MAKES NO WARRANTIES ABOUT THE ACCURACY, RELIABILITY, COMPLETENESS OR TIMELINESS OF
+            THE CONTENT, SERVICES, SOFTWARE, SOFTWARE, TEXT, GRAPHICS OR LINKS. Logistic Journey AND ITS
+            AFFILIATES AND LICENSORS CANNOT AND DO NOT GUARANTEE THAT ANY PERSONAL INFORMATION SUPPLIED BY YOU
+            WILL NOT BE MISAPPROPRIATED, INTERCEPTED, DELETED, DESTROYED OR USED BY OTHERS.
+Internet Delays
+LOGISTICJOURNEY'S SERVICE AND SOFTWARE MAY BE SUBJECT TO LIMITATIONS, DELAYS, AND OTHER PROBLEMS
+            INHERENT IN THE USE OF THE INTERNET AND ELECTRONIC COMMUNICATIONS. Logistic Journey IS NOT
+            RESPONSIBLE FOR ANY DELAYS, DELIVERY FAILURES, OR OTHER DAMAGE RESULTING FROM SUCH PROBLEMS.
+Limitation of Liability
+IN NO EVENT SHALL LOGISTICJOURNEY'S AGGREGATE LIABILITY EXCEED THE AMOUNTS ACTUALLY PAID BY AND/OR
+            DUE FROM YOU IN THE SIX (6) MONTH PERIOD IMMEDIATELY PRECEDING THE EVENT GIVING RISE TO SUCH CLAIM.
+            IN NO EVENT SHALL Logistic Journey AND/OR ITS LICENSORS BE LIABLE TO ANYONE FOR ANY INDIRECT,
+            PUNITIVE, SPECIAL, EXEMPLARY, INCIDENTAL, CONSEQUENTIAL OR OTHER DAMAGES OF ANY TYPE OR KIND
+            (INCLUDING PERSONAL INJURY, LOSS OF DATA, REVENUE, PROFITS, USE OR OTHER ECONOMIC ADVANTAGE).
+            Logistic Journey AND/OR ITS LICENSORS SHALL NOT BE LIABLE FOR ANY LOSS, DAMAGE OR INJURY WHICH MAY BE
+            INCURRED BY YOU, INCLUDING BY NOT LIMITED TO LOSS, DAMAGE OR INJURY ARISING OUT OF, OR IN ANY WAY
+            CONNECTED WITH THE SERVICE OR SOFTWARE, INCLUDING BUT NOT LIMITED TO THE USE OR INABILITY TO USE THE
+            SERVICE OR SOFTWARE, ANY RELIANCE PLACED BY YOU ON THE COMPLETENESS, ACCURACY OR EXISTENCE OF ANY
+            ADVERTISING, OR AS A RESULT OF ANY RELATIONSHIP OR TRANSACTION BETWEEN YOU AND ANY THIRD PARTY
+            SERVICE PROVIDER, ADVERTISER OR SPONSOR WHOSE ADVERTISING APPEARS ON THE WEBSITE OR IS REFERRED BY
+            THE SERVICE OR SOFTWARE, EVEN IF Logistic Journey AND/OR ITS LICENSORS HAVE BEEN PREVIOUSLY ADVISED
+            OF THE POSSIBILITY OF SUCH DAMAGES.
+Logistic Journey MAY INTRODUCE YOU TO THIRD PARTY COURIER PROVIDERS AND FOOD SERVICES FOR THE PURPOSES
+            OF PROVIDING COURIER AND FOOD SERVICES. WE WILL NOT ASSESS THE SUITABILITY, LEGALITY OR ABILITY OF
+            ANY THIRD PARTY COURIER OR FOOD SERVICES PROVIDERS AND YOU EXPRESSLY WAIVE AND RELEASE
+            Logistic Journey FROM ANY AND ALL ANY LIABILITY, CLAIMS OR DAMAGES ARISING FROM OR IN ANY WAY RELATED
+            TO THE THIRD PARTY COURIER OR FOOD SERVICES PROVIDERS. Logistic Journey WILL NOT BE A PARTY TO
+            DISPUTES, NEGOTIATIONS OF DISPUTES BETWEEN YOU AND SUCH THIRD PARTY PROVIDERS. WE CANNOT AND WILL
+            NOT PLAY ANY ROLE IN MANAGING PAYMENTS BETWEEN YOU AND THE THIRD PARTY PROVIDERS. RESPONSIBILITY FOR
+            THE DECISIONS YOU MAKE REGARDING SERVICES OFFERED VIA THE SOFTWARE OR SERVICE (WITH ALL ITS
+            IMPLICATIONS) RESTS SOLELY WITH YOU. WE WILL NOT ASSESS THE SUITABILITY, LEGALITY OR ABILITY OF ANY
+            SUCH THIRD PARTIES AND YOU EXPRESSLY WAIVE AND RELEASE Logistic Journey FROM ANY AND ALL LIABILITY,
+            CLAIMS, CAUSES OF ACTION, OR DAMAGES ARISING FROM YOUR USE OF THE SOFTWARE OR SERVICE, OR IN ANY WAY
+            RELATED TO THE THIRD PARTIES INTRODUCED TO YOU BY THE SOFTWARE OR SERVICE. THE QUALITY OF THE FOOD
+            AND COURIER SERVICES SCHEDULED THROUGH THE USE OF THE SERVICE OR SOFTWARE IS ENTIRELY THE
+            RESPONSIBILITY OF THE THIRD PARTY PROVIDER WHO ULTIMATELY PROVIDES SUCH FOOD AND COURIER SERVICES TO
+            YOU.YOU UNDERSTAND, THEREFORE, THAT BY USING THE SOFTWARE AND THE SERVICE, YOU MAY BE EXPOSED TO
+            COURIER AND FOOD THAT IS POTENTIALLY DANGEROUS, OFFENSIVE, HARMFUL TO MINORS, UNSAFE OR OTHERWISE
+            OBJECTIONABLE, AND THAT YOU USE THE SOFTWARE AND THE SERVICE AT YOUR OWN RISK.
+Dispute Resolution
+The parties shall first attempt to resolve any dispute related to this Agreement in an amicable
+            manner by mediation with a mutually acceptable mediator. If unable to agree upon an acceptable
+            mediator, either party may ask a mutually agreed upon mediation service to appoint a neutral
+            mediator, and the mediation shall be conducted under the Commercial Mediation Rules of the mutually
+            acceptable mediation service. Any disputes remaining unresolved after mediation shall be settled by
+            binding arbitration conducted in Johannesburg, Gauteng,South Africa utilizing a mutually agreed
+            arbitrator or arbitration service. The arbitration shall be conducted under the Commercial
+            Arbitration Rules of the mutually agreed arbitrator or arbitration service. Both parties shall be
+            entitled in any arbitration to conduct reasonable discovery, including document production and a
+            reasonable number of depositions not to exceed five per party. The prevailing party shall be
+            entitled to recover its costs and reasonable attorney's fees, as determined by the arbitrator. The
+            arbitrator shall be required to follow the law.
+        
+Termination
+At its sole discretion, the Company may modify or discontinue the Software, or may modify, suspend or
+            terminate your access to the Software or the Service, for any reason, with or without notice to you
+            and without liability to you or any third party. In addition to suspending or terminating your
+            access to the Software or the Service, The Company reserves the right to take appropriate legal
+            action, including without limitation pursuing civil, criminal or injunctive redress. Even after your
+            right to use the Software is terminated, this Agreement will remain enforceable against you. You may
+            terminate this Agreement at any time by ceasing all use of the Software. All provisions which by
+            their nature should survive to give effect to those provisions shall survive the termination of this
+            Agreement.
+General
+No joint venture, partnership, employment, or agency relationship exists between you, the Company or
+            any third party provider as a result of this Agreement or use of the Service or Software. This
+            Agreement is governed by the laws of the Republic ofSouth Africa, without regards to its conflict of
+            laws principles. If any provision of this Agreement is found to be invalid in any court having
+            competent jurisdiction, the invalidity of such provision shall not affect the validity of the
+            remaining provisions of this Agreement, which shall remain in full force and effect. Any offer for
+            any product, feature, service or software made on this Website is void where prohibited.
+Country of Domicile Clause
+Anylytical Technologies (Pty) Ltd is a company registered and operating in the Republic of South
+            Africa. As such, these Terms of Service and any services provided through this website are governed
+            by the laws of South Africa.
+            By accessing or using our services, you acknowledge and agree that South Africa is the country of
+            domicile for Anylytical Technologies and that any legal matters arising from your use of the website
+            or our services will be subject to the jurisdiction of South African courts.
+Governing Laws and Jurisdiction
+This Agreement shall be governed by and construed in accordance with the laws of the Republic of South Africa. By accessing or using our services, you consent to the exclusive jurisdiction of the courts of South Africa for any legal action or dispute that may arise from or relate to these Terms and Conditions, our services, or your use of the Logistic Journey platform.
+If any provision of this Agreement is found to be invalid or unenforceable by a court of law, such provision shall be severed, and the remaining provisions shall remain in full force and effect.
+Transaction Currency
+All transactions on the Logistic Journey platform are processed in South African Rands (ZAR). Prices displayed on the website or within the platform are quoted in ZAR, unless otherwise stated. By using our services, you acknowledge and accept that all payments and billing will be conducted in the official currency of South Africa.
+
+
+
+© 2025 Anylytical Technologies. Based in South Africa. All rights reserved.
