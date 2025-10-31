@@ -4,21 +4,16 @@ declare(strict_types=1);
 
 namespace Modules\Blocks\Filament\Actions;
 
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
 use Closure;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
 final class GenerateBlockAction extends Action
 {
-    public static function getDefaultName(): ?string
-    {
-        return 'generateBlock';
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,7 +27,7 @@ final class GenerateBlockAction extends Action
                     ->live()
                     ->afterStateUpdated(function (string $state, Closure $set) {
                         // Always update the class name
-                            $set('class_name', Str::studly($state) . 'Block');
+                        $set('class_name', Str::studly($state).'Block');
                     }),
 
                 TextInput::make('class_name')
@@ -76,5 +71,10 @@ final class GenerateBlockAction extends Action
             ->modalWidth('md')
             ->modalHeading('Generate New Block')
             ->modalDescription('Create a new block class with optional view file.');
+    }
+
+    public static function getDefaultName(): ?string
+    {
+        return 'generateBlock';
     }
 }

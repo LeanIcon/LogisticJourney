@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Website\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 // use Modules\Website\Database\Factories\FormSubmissionFactory;
 
-class FormSubmission extends Model
+final class FormSubmission extends Model
 {
     use HasFactory;
 

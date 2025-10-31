@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Website\Filament\Resources\Contacts\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Modules\Website\Filament\Resources\Contacts\ContactResource;
 
-class EditContact extends EditRecord
+final class EditContact extends EditRecord
 {
     protected static string $resource = ContactResource::class;
 

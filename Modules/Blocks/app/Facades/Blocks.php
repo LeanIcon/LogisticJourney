@@ -15,7 +15,7 @@ use Modules\Blocks\Interfaces\BlockRegistry;
  * @method static void autoDiscover(bool $writeManifest = false)
  * @method static void loadManifest()
  *
- * @see \Modules\Blocks\Interfaces\BlockRegistry
+ * @see BlockRegistry
  */
 final class Blocks extends Facade
 {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Website\Filament\Clusters\Website\Resources\FormSubmissions\Pages;
 
 use Filament\Actions\DeleteAction;
@@ -7,7 +9,7 @@ use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 use Modules\Website\Filament\Clusters\Website\Resources\FormSubmissions\FormSubmissionResource;
 
-class EditFormSubmission extends EditRecord
+final class EditFormSubmission extends EditRecord
 {
     protected static string $resource = FormSubmissionResource::class;
 

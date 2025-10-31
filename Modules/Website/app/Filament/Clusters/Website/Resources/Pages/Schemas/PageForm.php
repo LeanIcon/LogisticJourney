@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Website\Filament\Clusters\Website\Resources\Pages\Schemas;
 
-use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -11,42 +12,42 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
-class PageForm
+final class PageForm
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
                 Grid::make()
-            ->columnSpanFull()
-            ->columns(3)
-            ->schema([
-                Section::make('Blocks & Content')
-                ->schema([
-                    \Modules\Blocks\Filament\Forms\BlockEditor::make('blocks')
-                        ->label('Page Blocks')
-                    ->collapsed(),
-                    RichEditor::make('content')->label('Legacy Content')->nullable(),
-                ])->columnSpan(2),
-                Section::make('Page Details')
-                ->schema([
-                    TextInput::make('title')->required(),
-                    TextInput::make('slug')->required()->unique(ignoreRecord: true),
-                    TextInput::make('meta_title'),
-                    Textarea::make('meta_description')->rows(2),
-                    Select::make('status')
-                    ->options([
-                        'draft' => 'Draft',
-                        'published' => 'Published',
-                    ])
-                    ->default('draft'),
-                    Select::make('parent_id')
-                    ->relationship('parent', 'title')
-                    ->label('Parent Page')
-                    ->nullable(),
-                ])->columnSpan(1),
-            ]),
-        ]);
+                    ->columnSpanFull()
+                    ->columns(3)
+                    ->schema([
+                        Section::make('Blocks & Content')
+                            ->schema([
+                                \Modules\Blocks\Filament\Forms\BlockEditor::make('blocks')
+                                    ->label('Page Blocks')
+                                    ->collapsed(),
+                                RichEditor::make('content')->label('Legacy Content')->nullable(),
+                            ])->columnSpan(2),
+                        Section::make('Page Details')
+                            ->schema([
+                                TextInput::make('title')->required(),
+                                TextInput::make('slug')->required()->unique(ignoreRecord: true),
+                                TextInput::make('meta_title'),
+                                Textarea::make('meta_description')->rows(2),
+                                Select::make('status')
+                                    ->options([
+                                        'draft' => 'Draft',
+                                        'published' => 'Published',
+                                    ])
+                                    ->default('draft'),
+                                Select::make('parent_id')
+                                    ->relationship('parent', 'title')
+                                    ->label('Parent Page')
+                                    ->nullable(),
+                            ])->columnSpan(1),
+                    ]),
+            ]);
 
     }
 }

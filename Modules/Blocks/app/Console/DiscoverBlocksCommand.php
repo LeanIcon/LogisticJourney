@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Modules\Blocks\Console;
 
 use Illuminate\Console\Command;
-use Modules\Blocks\Interfaces\BlockRegistry;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
 final class DiscoverBlocksCommand extends Command
 {
@@ -15,6 +12,7 @@ final class DiscoverBlocksCommand extends Command
      * The name and signature of the console command.
      */
     protected $signature = 'blocks:discover';
+
     /**
      * The console command description.
      */
@@ -31,12 +29,14 @@ final class DiscoverBlocksCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int {
+    public function handle(): int
+    {
         $this->info('🔍 Discovering all blocks...');
-    $registry = app('blocks');
-    $registry->autoDiscover(true);
-    $count = count($registry->all());
+        $registry = app('blocks');
+        $registry->autoDiscover(true);
+        $count = count($registry->all());
         $this->info("✅ Discovered {$count} blocks. Manifest updated at: storage/app/blocks_manifest.json");
+
         return self::SUCCESS;
     }
 

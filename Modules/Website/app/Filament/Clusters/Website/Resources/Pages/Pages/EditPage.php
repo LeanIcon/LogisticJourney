@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Website\Filament\Clusters\Website\Resources\Pages\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Modules\Website\Filament\Clusters\Website\Resources\Pages\PageResource;
 
-class EditPage extends EditRecord
+final class EditPage extends EditRecord
 {
     protected static string $resource = PageResource::class;
 

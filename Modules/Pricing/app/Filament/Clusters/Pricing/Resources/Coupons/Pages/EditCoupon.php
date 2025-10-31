@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Pricing\Filament\Clusters\Pricing\Resources\Coupons\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Coupons\CouponResource;
 
-class EditCoupon extends EditRecord
+final class EditCoupon extends EditRecord
 {
     protected static string $resource = CouponResource::class;
 

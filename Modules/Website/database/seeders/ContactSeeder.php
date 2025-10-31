@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Modules\Website\Database\Seeders;
 
 use App\Models\User;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Website\Filament\Clusters\Website\Resources\FormSubmissions\Tables;
 
 use Filament\Actions\BulkActionGroup;
@@ -8,7 +10,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Table;
 
-class FormSubmissionsTable
+final class FormSubmissionsTable
 {
     public static function configure(Table $table): Table
     {

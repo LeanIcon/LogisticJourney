@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Modules\Blocks\Console;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
-use Modules\Blocks\Interfaces\BlockRegistry;
+use Illuminate\Support\Str;
 
 final class MakeBlockCommand extends Command
 {
@@ -36,7 +33,8 @@ final class MakeBlockCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int {
+    public function handle(): int
+    {
         $name = Str::studly($this->argument('name'));
         $module = $this->option('module');
         $createView = $this->option('view');
@@ -48,12 +46,12 @@ final class MakeBlockCommand extends Command
 
         $namespace = $module
             ? "Modules\\{$module}\\Blocks"
-            : "App\\Blocks";
+            : 'App\\Blocks';
 
         File::ensureDirectoryExists($basePath);
 
         // Choose correct stub
-        $stubPath = module_path('Blocks', 'Stubs/' . ($createView ? 'block-with-view.stub' : 'block.stub'));
+        $stubPath = module_path('Blocks', 'Stubs/'.($createView ? 'block-with-view.stub' : 'block.stub'));
         $stub = File::get($stubPath);
 
         // Prepare replacements
@@ -69,6 +67,7 @@ final class MakeBlockCommand extends Command
 
         if (File::exists($filePath)) {
             $this->error("❌ Block {$name} already exists!");
+
             return self::FAILURE;
         }
 
@@ -83,18 +82,17 @@ final class MakeBlockCommand extends Command
 
             File::ensureDirectoryExists($viewDir);
 
-            $viewPath = "{$viewDir}/" . Str::kebab($name) . ".blade.php";
+            $viewPath = "{$viewDir}/".Str::kebab($name).'.blade.php';
             File::put($viewPath, '<div>{{ $data["title"] ?? "Default Title" }}</div>');
             $this->info("🖼️ View created: {$viewPath}");
         }
 
         // Always refresh manifest after block creation
         app('blocks')->autoDiscover(true);
-        $this->info("📦 Blocks manifest refreshed.");
+        $this->info('📦 Blocks manifest refreshed.');
 
         return self::SUCCESS;
     }
-
 
     /**
      * Get the console command arguments.
