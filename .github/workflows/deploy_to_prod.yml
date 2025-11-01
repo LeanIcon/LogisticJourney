@@ -30,10 +30,57 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-dev --optimize-autoloader
 
-      - name: Build frontend (Filament / Vite)
+      - name: Create .env from secrets (optional)
+        shell: bash
         run: |
-          npm ci
-          npm run build
+          set -euo pipefail
+          if [ -n "${{ secrets.APP_KEY }}" ] || [ -n "${{ secrets.APP_URL }}" ]; then
+            echo "Creating .env from provided secrets"
+            : > .env
+            echo "APP_ENV=production" >> .env
+            echo "APP_DEBUG=false" >> .env
+            [ -n "${{ secrets.APP_URL }}" ] && echo "APP_URL=${{ secrets.APP_URL }}" >> .env
+            [ -n "${{ secrets.APP_KEY }}" ] && echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
+            # Database (optional)
+            [ -n "${{ secrets.DB_CONNECTION }}" ] && echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env || echo "DB_CONNECTION=mysql" >> .env
+            [ -n "${{ secrets.DB_HOST }}" ] && echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+            [ -n "${{ secrets.DB_PORT }}" ] && echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+            [ -n "${{ secrets.DB_DATABASE }}" ] && echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+            [ -n "${{ secrets.DB_USERNAME }}" ] && echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+            [ -n "${{ secrets.DB_PASSWORD }}" ] && echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          else
+            echo "No env secrets provided; skipping .env creation";
+          fi
+
+      - name: Laravel production caches
+        shell: bash
+        run: |
+          set -e
+          php artisan config:clear || true
+          php artisan route:clear || true
+          php artisan view:clear || true
+          php artisan event:clear || true
+          php artisan config:cache || true
+          php artisan route:cache || true
+          php artisan view:cache || true
+          php artisan event:cache || true
+
+      - name: Install Node dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "Using npm ci (lockfile present)";
+            npm ci;
+          else
+            echo "No package-lock.json found, falling back to npm install";
+            npm install;
+          fi
+
+      - name: Build frontend (Filament / Vite)
+        run: npm run build
+
+      - name: Remove .env before deployment (safety)
+        run: |
+          if [ -f .env ]; then rm .env; fi
 
       - name: Show deploy directory summary
         run: |
