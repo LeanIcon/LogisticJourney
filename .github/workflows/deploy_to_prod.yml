@@ -20,6 +20,12 @@ jobs:
           php-version: 8.3
           extensions: mbstring, bcmath, gd, intl, zip, curl, mysql
           tools: composer:v2
+          coverage: xdebug
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
       - name: Install Composer dependencies
         run: composer install --no-dev --optimize-autoloader
