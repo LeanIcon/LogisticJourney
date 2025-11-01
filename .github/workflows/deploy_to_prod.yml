@@ -35,6 +35,12 @@ jobs:
           npm ci
           npm run build
 
+      - name: Show deploy directory summary
+        run: |
+          echo "Top-level files before deploy:"
+          ls -la | sed -n '1,100p'
+          echo "Total size:" && du -sh .
+
       - name: Cleanup before deployment
         run: |
           rm -rf node_modules
@@ -51,6 +57,10 @@ jobs:
           protocol: ftps
           local-dir: ./
           server-dir: ${{ secrets.FTP_PATH }}
+          log-level: verbose
+          dry-run: false
+          # Set FTP_CLEAN_SLATE secret to 'true' to force a full sync (removes extraneous files on server)
+          dangerous-clean-slate: ${{ secrets.FTP_CLEAN_SLATE == 'true' }}
           exclude: |
             **/.git*
             **/.github*
