@@ -24,7 +24,7 @@ final class PageResource extends JsonResource
 
             // Content fields
             'content' => $this->content, // Legacy text content
-            'blocks' => $this->blocks, // Block-based content (JSON)
+            'blocks' => $this->resolvedBlocks(), // Block-based content with mutations applied
 
             // Hierarchy
             'parent_id' => $this->parent_id,

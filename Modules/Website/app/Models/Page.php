@@ -69,6 +69,18 @@ final class Page extends Model
         return url('/'.mb_ltrim($this->slug, '/'));
     }
 
+    /**
+     * Get blocks with mutations applied via BlockRegistry.
+     */
+    public function resolvedBlocks(): array
+    {
+        if (empty($this->blocks)) {
+            return [];
+        }
+
+        return app('blocks')->resolveBlocks($this->blocks);
+    }
+
     // protected static function newFactory(): PageFactory
     // {
     //     // return PageFactory::new();

@@ -2,45 +2,35 @@
 
 declare(strict_types=1);
 
-namespace {{ namespace }};
+namespace Modules\Website\Blocks;
 
+use Filament\Forms\Components\Builder\Block as BuilderBlock;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Builder\Block as BuilderBlock;
 use Modules\Blocks\Interfaces\Block as BlockTrait;
 
-final class {{ class }}
+final class TestBlock
 {
     use BlockTrait;
+
     /**
      * The block's unique identifier.
      */
-    protected static string $name = '{{ name }}';
-
-    /**
-     * The Blade view to render this block.
-     */
-    protected static ?string $view = 'blocks.{{ view }}';
-
-    /**
-     * Icon to display in the block picker.
-     */
-    protected static ?string $icon = 'heroicon-o-cube-transparent';
+    protected static string $name = 'TestBlock';
 
     /**
      * Whether this block is API-only (no Blade view).
      */
-    protected static bool $apiOnly = false;
+    protected static bool $apiOnly = true;
 
     /**
      * Get the block's schema for Filament's form builder.
      */
     public static function schema(): BuilderBlock
     {
-        return static::make()
+        return self::make()
             ->schema([
                 Section::make()
                     ->schema([
@@ -56,12 +46,6 @@ final class {{ class }}
                                     ->helperText('Optional subtitle'),
                             ]),
 
-                        FileUpload::make('image')
-                            ->image()
-                            ->directory('blocks/{{ name }}')
-                            ->helperText('Optional block image')
-                            ->columnSpanFull(),
-
                         RichEditor::make('content')
                             ->required()
                             ->helperText('Main content for this block')
@@ -71,14 +55,13 @@ final class {{ class }}
     }
 
     /**
-     * Transform block data before view rendering or API response.
+     * Transform block data before API response.
      */
     public static function mutateData(array $data): array
     {
         return [
             'title' => $data['title'] ?? null,
             'subtitle' => $data['subtitle'] ?? null,
-            'image' => $data['image'] ?? null,
             'content' => $data['content'] ?? null,
         ];
     }

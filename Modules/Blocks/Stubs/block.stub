@@ -9,7 +9,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Builder\Block as BuilderBlock;
-use {{ blockInterfaceNamespace }}\Block as BlockTrait;
+use Modules\Blocks\Interfaces\Block as BlockTrait;
 
 final class {{ class }}
 {
