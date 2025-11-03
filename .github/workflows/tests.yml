@@ -66,8 +66,10 @@ jobs:
         run: composer test
 
       - name: Store Artifacts
+        if: ${{ hashFiles('tests/Browser/Screenshots/**') != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: browser-screenshots
           path: |
             tests/Browser/Screenshots
+          if-no-files-found: ignore
