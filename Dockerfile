@@ -48,27 +48,39 @@ RUN docker-php-ext-configure gd \
         --with-webp \
         --with-xpm && \
     docker-php-ext-configure zip --with-libzip && \
-    docker-php-ext-install -j"$(nproc)" gd pdo_mysql pdo_pgsql pdo_sqlite sqlite3 intl soap zip exif bcmath || true
+    docker-php-ext-install -j"$(nproc)" gd pdo_mysql pdo_pgsql pdo_sqlite sqlite3 intl soap zip exif bcmath
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /var/www
 
+# Copy composer files first for better layer caching
+COPY composer.json composer.lock* ./
+
+# Install PHP dependencies (production build) - MUST succeed
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+
 # Copy application files
 COPY . .
 
-# Install PHP dependencies (production build)
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress || true
-
-# Build frontend assets if present
-RUN if [ -f package.json ]; then rm -rf node_modules package-lock.json || true; npm install --no-optional && npm run build || true; fi
+# Build frontend assets if present (can fail gracefully)
+RUN if [ -f package.json ]; then \
+        rm -rf node_modules package-lock.json || true; \
+        npm install --no-optional && npm run build || true; \
+    fi
 
 # Ensure storage and cache dirs exist and are owned by www-data (UID 33)
-RUN mkdir -p /var/www/storage/app /var/www/storage/framework /var/www/storage/logs /var/www/bootstrap/cache && \
+RUN mkdir -p /var/www/storage/app/public \
+             /var/www/storage/framework/cache \
+             /var/www/storage/framework/sessions \
+             /var/www/storage/framework/views \
+             /var/www/storage/logs \
+             /var/www/bootstrap/cache && \
     chown -R 33:33 /var/www/storage /var/www/bootstrap/cache && \
     chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
+# Create storage link (allow to fail if already exists)
 RUN php artisan storage:link || true
 
 # PHP settings
@@ -80,4 +92,4 @@ RUN echo "upload_max_filesize=1024M" >> /usr/local/etc/php/conf.d/uploads.ini \
 EXPOSE 8080
 
 # Start command: don't run destructive migrations by default
-CMD ["sh", "-c", "cp .env.example .env || true && php artisan key:generate --force && php artisan config:cache || true && exec php artisan serve --host=0.0.0.0 --port=8080"]
+CMD ["sh", "-c", "php artisan config:cache && php artisan route:cache && php artisan view:cache && exec php artisan serve --host=0.0.0.0 --port=8080"]
