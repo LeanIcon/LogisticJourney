@@ -65,9 +65,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progre
 RUN if [ -f package.json ]; then rm -rf node_modules package-lock.json || true; npm install --no-optional && npm run build || true; fi
 
 # Ensure storage and cache dirs exist and are owned by www-data (UID 33)
-RUN mkdir -p /var/www/storage/app /var/www/storage/framework /var/www/storage/logs /var/www/bootstrap/cache /var/www/public/certificates && \
-    chown -R 33:33 /var/www/storage /var/www/bootstrap/cache /var/www/public/certificates && \
-    chmod -R 775 /var/www/storage /var/www/bootstrap/cache /var/www/public/certificates
+RUN mkdir -p /var/www/storage/app /var/www/storage/framework /var/www/storage/logs /var/www/bootstrap/cache && \
+    chown -R 33:33 /var/www/storage /var/www/bootstrap/cache && \
+    chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 RUN php artisan storage:link || true
 

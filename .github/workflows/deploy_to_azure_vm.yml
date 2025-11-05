@@ -52,7 +52,10 @@ jobs:
           ACR_USER: ${{ secrets.ACR_USERNAME }}
           ACR_PASS: ${{ secrets.ACR_PASSWORD }}
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << 'EOF'
+          export ACR_URL=${{ secrets.AZURE_URL }}
+          export ACR_USER=${{ secrets.ACR_USERNAME }}
+          export ACR_PASS=${{ secrets.ACR_PASSWORD }}
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "ACR_URL=$ACR_URL ACR_USER=$ACR_USER ACR_PASS=$ACR_PASS bash -s" << 'EOF'
             set -euo pipefail
 
             echo "➤ Ensure host staging dirs"
