@@ -15,12 +15,15 @@ RUN set -eux; \
         libmemcached-dev \
         libz-dev \
         libpq-dev \
+        libjpeg-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
         libfreetype6-dev \
+        libfreetype-dev \
         libssl-dev \
         libwebp-dev \
         libxpm-dev \
+        libxpm4 \
         git \
         zip \
         unzip \
@@ -32,7 +35,9 @@ RUN set -eux; \
         libxml2-dev \
         libzip-dev \
         pkg-config \
-        libsqlite3-dev && \
+        libsqlite3-dev \
+        libonig-dev \
+        libcurl4-openssl-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Node.js and npm
@@ -43,12 +48,21 @@ RUN curl -sL https://deb.nodesource.com/setup_23.x | bash - && \
 
 # Install PHP extensions (include pdo_sqlite & sqlite3)
 RUN docker-php-ext-configure gd \
-        --with-freetype \
-        --with-jpeg \
-        --with-webp \
-        --with-xpm && \
-    docker-php-ext-configure zip --with-libzip && \
-    docker-php-ext-install -j"$(nproc)" gd pdo_mysql pdo_pgsql pdo_sqlite sqlite3 intl soap zip exif bcmath
+        --with-freetype=/usr/include/ \
+        --with-jpeg=/usr/include/ \
+        --with-webp=/usr/include/ \
+        --with-xpm=/usr/include/ && \
+    docker-php-ext-install -j"$(nproc)" \
+        gd \
+        pdo_mysql \
+        pdo_pgsql \
+        pdo_sqlite \
+        sqlite3 \
+        intl \
+        soap \
+        zip \
+        exif \
+        bcmath
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
