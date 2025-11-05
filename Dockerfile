@@ -15,7 +15,7 @@ RUN set -eux; \
         libmemcached-dev \
         libz-dev \
         libpq-dev \
-        libjpeg-dev \
+        libjpeg62-turbo-dev \
         libpng-dev \
         libfreetype6-dev \
         libssl-dev \
@@ -26,7 +26,9 @@ RUN set -eux; \
         unzip \
         zlib1g-dev \
         libicu-dev \
+        build-essential \
         g++ \
+        autoconf \
         libxml2-dev \
         libzip-dev \
         pkg-config \
@@ -41,12 +43,12 @@ RUN curl -sL https://deb.nodesource.com/setup_23.x | bash - && \
 
 # Install PHP extensions (include pdo_sqlite & sqlite3)
 RUN docker-php-ext-configure gd \
+        --with-freetype \
         --with-jpeg \
         --with-webp \
-        --with-xpm \
-        --with-freetype && \
-    docker-php-ext-configure zip && \
-    docker-php-ext-install gd pdo_mysql pdo_pgsql pdo_sqlite sqlite3 intl soap zip exif bcmath
+        --with-xpm && \
+    docker-php-ext-configure zip --with-libzip && \
+    docker-php-ext-install -j"$(nproc)" gd pdo_mysql pdo_pgsql pdo_sqlite sqlite3 intl soap zip exif bcmath || true
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
