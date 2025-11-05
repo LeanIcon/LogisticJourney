@@ -68,36 +68,36 @@ jobs:
             if [ ! -f /var/www/logistics/staging/env/.env ]; then
               echo "Creating .env from repository .env.example..."
               cat > /var/www/logistics/staging/env/.env << 'ENVFILE'
-APP_NAME=Laravel
-APP_ENV=production
-APP_KEY=base64:RFM7JkSiIe1JMcnriou0ikQAZ+NO/rww9b8DqB1HLSI=
-APP_DEBUG=false
-APP_URL=http://20.84.41.64:8084
+              APP_NAME=Laravel
+              APP_ENV=production
+              APP_KEY=base64:RFM7JkSiIe1JMcnriou0ikQAZ+NO/rww9b8DqB1HLSI=
+              APP_DEBUG=false
+              APP_URL=http://20.84.41.64:8084
 
-APP_LOCALE=en
-APP_FALLBACK_LOCALE=en
-APP_FAKER_LOCALE=en_US
+              APP_LOCALE=en
+              APP_FALLBACK_LOCALE=en
+              APP_FAKER_LOCALE=en_US
 
-LOG_CHANNEL=stack
-LOG_STACK=single
-LOG_DEPRECATIONS_CHANNEL=null
-LOG_LEVEL=debug
+              LOG_CHANNEL=stack
+              LOG_STACK=single
+              LOG_DEPRECATIONS_CHANNEL=null
+              LOG_LEVEL=debug
 
-DB_CONNECTION=sqlite
-DB_DATABASE=/var/www/database/database.sqlite
+              DB_CONNECTION=sqlite
+              DB_DATABASE=/var/www/database/database.sqlite
 
-SESSION_DRIVER=database
-SESSION_LIFETIME=120
-SESSION_ENCRYPT=false
-SESSION_PATH=/
-SESSION_DOMAIN=null
+              SESSION_DRIVER=database
+              SESSION_LIFETIME=120
+              SESSION_ENCRYPT=false
+              SESSION_PATH=/
+              SESSION_DOMAIN=null
 
-BROADCAST_CONNECTION=log
-FILESYSTEM_DISK=local
-QUEUE_CONNECTION=database
+              BROADCAST_CONNECTION=log
+              FILESYSTEM_DISK=local
+              QUEUE_CONNECTION=database
 
-CACHE_STORE=database
-ENVFILE
+              CACHE_STORE=database
+              ENVFILE
               sudo chown 33:33 /var/staging-env/.env
               sudo chmod 640 /var/staging-env/.env
               echo "Created production .env file"
