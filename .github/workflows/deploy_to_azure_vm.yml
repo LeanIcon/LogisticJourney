@@ -59,19 +59,48 @@ jobs:
             set -euo pipefail
 
             echo "➤ Ensure host staging dirs"
-            sudo mkdir -p /var/staging-storage /var/staging-cache /var/staging-db /var/staging-env
-            sudo chown -R 33:33 /var/staging-storage /var/staging-cache /var/staging-db
-            sudo chmod -R 775 /var/staging-storage /var/staging-cache /var/staging-db
+            # Use app-specific directory to avoid conflicts
+            sudo mkdir -p /var/www/logistics/staging/{storage,cache,database,env}
+            sudo chown -R 33:33 /var/www/logistics/staging
+            sudo chmod -R 775 /var/www/logistics/staging
 
             # ensure .env is present (this is mounted read-only into container)
-            if [ ! -f /var/staging-env/.env ]; then
-              echo "Warning: /var/staging-env/.env not found; copying example if present"
-              if [ -f /var/www/.env.example ]; then
-                sudo cp /var/www/.env.example /var/staging-env/.env
-              else
-                sudo bash -c 'echo "DB_CONNECTION=sqlite" > /var/staging-env/.env'
-                sudo bash -c 'echo "DB_DATABASE=/var/www/database/database.sqlite" >> /var/staging-env/.env'
-              fi
+            if [ ! -f /var/www/logistics/staging/env/.env ]; then
+              echo "Creating .env from repository .env.example..."
+              cat > /var/www/logistics/staging/env/.env << 'ENVFILE'
+APP_NAME=Laravel
+APP_ENV=production
+APP_KEY=base64:RFM7JkSiIe1JMcnriou0ikQAZ+NO/rww9b8DqB1HLSI=
+APP_DEBUG=false
+APP_URL=http://20.84.41.64:8084
+
+APP_LOCALE=en
+APP_FALLBACK_LOCALE=en
+APP_FAKER_LOCALE=en_US
+
+LOG_CHANNEL=stack
+LOG_STACK=single
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=debug
+
+DB_CONNECTION=sqlite
+DB_DATABASE=/var/www/database/database.sqlite
+
+SESSION_DRIVER=database
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=false
+SESSION_PATH=/
+SESSION_DOMAIN=null
+
+BROADCAST_CONNECTION=log
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=database
+
+CACHE_STORE=database
+ENVFILE
+              sudo chown 33:33 /var/staging-env/.env
+              sudo chmod 640 /var/staging-env/.env
+              echo "Created production .env file"
             fi
 
             # ensure sqlite file exists on host (create empty file if missing)
@@ -96,12 +125,12 @@ jobs:
             docker run -d \
               --name staging-laravel \
               --user 33:33 \
-              -p 8081:8080 \
+              -p 8084:8080 \
               --restart unless-stopped \
-              -v /var/staging-storage:/var/www/storage \
-              -v /var/staging-cache:/var/www/bootstrap/cache \
-              -v /var/staging-env/.env:/var/www/.env:ro \
-              -v /var/staging-db/database.sqlite:/var/www/database/database.sqlite:rw \
+              -v /var/www/logistics/staging/storage:/var/www/storage \
+              -v /var/www/logistics/staging/cache:/var/www/bootstrap/cache \
+              -v /var/www/logistics/staging/env/.env:/var/www/.env:ro \
+              -v /var/www/logistics/staging/database/database.sqlite:/var/www/database/database.sqlite:rw \
               --entrypoint /bin/sh \
               $ACR_URL/staging-admin:latest \
               -c "cd /var/www && php artisan config:cache || true && php artisan route:cache || true && php artisan view:cache || true && php artisan storage:link || true && exec php artisan serve --host=0.0.0.0 --port=8080"
