@@ -16,6 +16,7 @@ final class DatabaseSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => 'Taher Mosa',
             'email' => 'info@logisticjourney.com',
+            'password' => bcrypt('password'),
         ]);
     }
 }

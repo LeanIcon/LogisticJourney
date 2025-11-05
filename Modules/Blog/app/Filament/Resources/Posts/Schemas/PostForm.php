@@ -90,16 +90,14 @@ final class PostForm
 
                                 Select::make('type')
                                     ->options([
-                                        'post' => 'Post',
-                                        'article' => 'Article',
-                                        'tutorial' => 'Tutorial',
-                                        'news' => 'News',
+                                        'blog' => 'Blog',
+                                        'case study' => 'Case Study'
                                     ])
-                                    ->default('post')
+                                    ->default('blog')
                                     ->required(),
 
                                 Toggle::make('is_featured')
-                                    ->label('Featured Post')
+                                    ->label('Featured Blog')
                                     ->helperText('Show on homepage/featured section'),
 
                                 Select::make('author_id')
