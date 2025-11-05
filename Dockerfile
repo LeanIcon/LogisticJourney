@@ -42,14 +42,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Copy composer files first for better layer caching
-COPY composer.json composer.lock* ./
+# Copy application files first
+COPY . .
 
 # Install PHP dependencies (production build)
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
-
-# Copy application files
-COPY . .
 
 # Build frontend assets if present (can fail gracefully)
 RUN if [ -f package.json ]; then \
