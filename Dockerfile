@@ -63,9 +63,10 @@ RUN rm -f config/scribe.php
 # Install PHP dependencies (production build)
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
 
-# Build frontend assets if present (can fail gracefully)
+# Install and build frontend assets if present
 RUN if [ -f package.json ]; then \
-        npm ci --no-optional && npm run build || true; \
+        npm install --no-optional && \
+        npm run build; \
     fi
 
 # Ensure storage and cache dirs exist and are owned by www-data (UID 33)
