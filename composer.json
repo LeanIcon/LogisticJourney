@@ -10,13 +10,13 @@
         "coolsam/modules": ">=5.0.8",
         "filament/filament": "^4.2.0",
         "filament/spatie-laravel-tags-plugin": "^4.2.0",
-        "knuckleswtf/scribe": "^5.5",
         "laravel/framework": "^12.37.0",
         "nunomaduro/essentials": "^1.0.1"
     },
     "require-dev": {
         "driftingly/rector-laravel": "^2.1.3",
         "fakerphp/faker": "^1.24.1",
+        "knuckleswtf/scribe": "^5.5",
         "larastan/larastan": "^3.8.0",
         "laravel/boost": "^1.7.1",
         "laravel/pail": "^1.2.3",
