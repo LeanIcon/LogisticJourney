@@ -1,0 +1,48 @@
+name: Deploy to cPanel
+
+on:
+  push:
+    branches:
+      - main  # Trigger only when changes are pushed to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Using a stable Long-Term Support (LTS) version
+
+      - name: Cache Node Modules
+        # Speeds up subsequent runs by caching the dependency install
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies (ci)
+        # Use 'ci' for reliable, lockfile-based installs in CI environments
+        run: npm ci
+
+      - name: Build project
+        # This command generates your production-ready files
+        run: npm run generate
+
+      - name: Deploy built files to cPanel via SFTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp # FIX 1: using FTP/FTPS since SFTP did not work
+          port: 21      # Recommended port for SFTP
+          local-dir: ./.output/public/ # Source: Updated for Nuxt 4 (Nitro) static output
+          server-dir: /public_html/    # Destination: Adjust to your specific cPanel path
+          # Removed: ftp-args: --no-perms (FIX 2: This input is no longer supported by v4.3.4 and caused a warning)
