@@ -22,7 +22,15 @@ final class TrustProxies extends Middleware
     /**
      * The headers that should be used to detect proxies.
      *
+     * Use the explicit X-Forwarded_* flags so Cloudflare / Render forwarded
+     * headers are honored for scheme and client IP detection.
+     *
      * @var int|null
      */
-    protected $headers = Request::HEADER_X_FORWARDED_ALL;
+    protected $headers =
+        Request::HEADER_X_FORWARDED_FOR |
+        Request::HEADER_X_FORWARDED_HOST |
+        Request::HEADER_X_FORWARDED_PORT |
+        Request::HEADER_X_FORWARDED_PROTO |
+        Request::HEADER_X_FORWARDED_PREFIX;
 }
