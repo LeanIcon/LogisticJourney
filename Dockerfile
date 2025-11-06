@@ -55,7 +55,8 @@ RUN composer install --optimize-autoloader --no-interaction --no-progress --pref
                  bootstrap/cache \
     && chown -R 33:33 storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache \
-    && php artisan storage:link || true
+    && php artisan storage:link || true \
+    && php artisan blocks:discover || true
 
 # PHP config
 RUN echo "upload_max_filesize=1024M" > /usr/local/etc/php/conf.d/uploads.ini \
@@ -65,4 +66,4 @@ RUN echo "upload_max_filesize=1024M" > /usr/local/etc/php/conf.d/uploads.ini \
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan view:clear && php artisan cache:clear && php artisan filament:clear-cache && chown -R www-data:www-data storage bootstrap/cache && php artisan optimize && php artisan filament:optimize && exec php artisan serve --host=0.0.0.0 --port=8080"]
+CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan view:clear && php artisan cache:clear && php artisan blocks:discover && chown -R www-data:www-data storage bootstrap/cache && php artisan optimize && exec php artisan serve --host=0.0.0.0 --port=8080"]

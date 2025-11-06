@@ -34,20 +34,10 @@ final class BlocksServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
 
-        // 🧩 Auto-discover all blocks on boot. In production we prefer the
-        // manifest for speed, but fallback to auto-discovery (and write the
-        // manifest) if the manifest hasn't been generated on deploy.
+        // 🧩 Auto-discover all blocks on boot
         $registry = app('blocks');
-        $manifest = storage_path('app/blocks_manifest.json');
-
         if (app()->environment('production')) {
-            if (file_exists($manifest)) {
-                $registry->loadManifest();
-            } else {
-                // Manifest missing on production — do a one-time discover and
-                // persist the manifest so subsequent boots use the cached file.
-                $registry->autoDiscover(true);
-            }
+            $registry->loadManifest();
         } else {
             $registry->autoDiscover();
         }
