@@ -31,8 +31,6 @@ final class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->login()
-            // Ensure Filament uses the web guard so authentication matches app sessions
-            ->authGuard('web')
             ->colors([
                 'primary' => Color::Amber,
             ])
