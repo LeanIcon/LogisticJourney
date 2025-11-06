@@ -20,10 +20,10 @@ RUN apt-get update && apt-get install -y \
         unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js and npm
-RUN curl -sL https://deb.nodesource.com/setup_23.x | bash - && \
+# Install Node.js LTS and npm
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && \
-    npm install -g npm@11.4.2 && \
+    npm install -g npm@latest && \
     rm -rf /var/lib/apt/lists/*
 
 # Install core PHP extensions required by Laravel
@@ -64,8 +64,23 @@ RUN rm -f config/scribe.php
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
 
 # Install and build frontend assets if present
+COPY package*.json ./
 RUN if [ -f package.json ]; then \
-        npm install --no-optional && \
+        npm install && \
+        # Clear npm cache and remove any existing node_modules
+        npm cache clean --force && \
+        rm -rf node_modules && \
+        # Reinstall with platform specific binaries
+        npm install && \
+        # Install platform specific rollup
+        npm install @rollup/rollup-linux-x64-gnu; \
+    fi
+
+# Copy remaining source files
+COPY . .
+
+# Build assets if package.json exists
+RUN if [ -f package.json ]; then \
         npm run build; \
     fi
 
