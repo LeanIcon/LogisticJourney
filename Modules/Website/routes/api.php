@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Website\Http\Controllers\PageController;
 use Modules\Website\Http\Controllers\WebsiteController;
 use Modules\Website\Http\Controllers\FormSubmissionController;
+use Modules\Website\Http\Controllers\FormController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,9 @@ Route::prefix('v1')->group(function () {
     Route::get('pages/{identifier}', [PageController::class, 'show'])->name('pages.show');
     // Form submissions for pages (e.g. demo-request)
     Route::post('pages/{identifier}/submit', [FormSubmissionController::class, 'submit'])->name('pages.submit');
+    // Forms API - frontend can fetch available forms and their fields
+    Route::get('forms', [FormController::class, 'index'])->name('forms.index');
+    Route::get('forms/{identifier}', [FormController::class, 'show'])->name('forms.show');
 });
 
 /*

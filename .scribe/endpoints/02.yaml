@@ -1,0 +1,185 @@
+name: 'Blog Categories'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/categories
+    metadata:
+      custom: []
+      groupName: 'Blog Categories'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List all blog categories.'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "name": "Technology",
+                "slug": "tech",
+                "description": "Latest in technology and innovation",
+                "post_count": 25,
+                "featured_image": {
+                  "url": "https://example.com/images/tech.jpg",
+                  "alt": "Technology Category"
+                }
+              },
+              {
+                "id": 2,
+                "name": "Business",
+                "slug": "business",
+                "description": "Business insights and trends",
+                "post_count": 18,
+                "featured_image": {
+                  "url": "https://example.com/images/business.jpg",
+                  "alt": "Business Category"
+                }
+              }
+            ]
+          }
+        headers: []
+        description: success
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/categories/{category_slug}/posts'
+    metadata:
+      custom: []
+      groupName: 'Blog Categories'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List posts in a category.'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      category_slug:
+        custom: []
+        name: category_slug
+        description: 'The slug of the category.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      category:
+        custom: []
+        name: category
+        description: 'The category ID or slug.'
+        required: true
+        example: tech
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      category_slug: architecto
+      category: tech
+    queryParameters:
+      q:
+        custom: []
+        name: q
+        description: 'Search in post titles.'
+        required: false
+        example: cloud
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      per_page:
+        custom: []
+        name: per_page
+        description: 'Number of posts per page. Default: 15'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      q: cloud
+      per_page: 16
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "title": "Introduction to Cloud Computing",
+                "slug": "intro-to-cloud-computing",
+                "excerpt": "Learn the basics of cloud computing...",
+                "type": "article",
+                "featured_image": {
+                  "url": "https://example.com/images/cloud.jpg",
+                  "alt": "Cloud Computing"
+                },
+                "author": {
+                  "id": 1,
+                  "name": "John Doe"
+                },
+                "published_at": "2023-01-01T00:00:00Z"
+              }
+            ],
+            "meta": {
+              "current_page": 1,
+              "total": 10,
+              "per_page": 15
+            }
+          }
+        headers: []
+        description: success
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+            "message": "Category not found"
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

@@ -13,7 +13,43 @@ final class PageController extends Controller
 {
     /**
      * Display a listing of pages.
-     * Supports filtering by type (home, about, contact, etc.)
+     *
+     * @group Pages
+     * @authenticated false
+     *
+     * Retrieves a list of published pages with optional filtering and search capabilities.
+     * 
+     * @queryParam type string Filter pages by type (e.g. 'home', 'about', 'contact'). Example: about
+     * @queryParam q string Search in title, slug and content. Example: services
+     * @queryParam include_hierarchy boolean Include parent and children relationships. Example: true
+     * @queryParam per_page integer Number of items per page. Default: 15
+     *
+     * @response scenario=success {
+     *  "data": [
+     *    {
+     *      "id": 1,
+     *      "title": "About Us",
+     *      "slug": "about",
+     *      "type": "page",
+     *      "blocks": [
+     *        {
+     *          "type": "hero",
+     *          "title": "Our Story",
+     *          "content": "Learn about our journey..."
+     *        }
+     *      ],
+     *      "meta": {
+     *        "description": "About our company",
+     *        "keywords": "about,company,history"
+     *      }
+     *    }
+     *  ],
+     *  "meta": {
+     *    "current_page": 1,
+     *    "total": 10,
+     *    "per_page": 15
+     *  }
+     * }
      */
     public function index(Request $request)
     {
@@ -46,7 +82,46 @@ final class PageController extends Controller
 
     /**
      * Show a single page by slug or ID.
-     * Supports slug-based routing for SEO-friendly URLs.
+     *
+     * @group Pages
+     * @authenticated false
+     *
+     * Retrieves a specific page by its slug or ID. Only published pages are returned.
+     * 
+     * @urlParam identifier string required The page identifier - can be either a slug (e.g. 'about-us') or numeric ID. Example: about-us
+     * @queryParam include_hierarchy boolean Include parent and children relationships. Example: true
+     * 
+     * @response scenario=success {
+     *   "data": {
+     *     "id": 1,
+     *     "title": "About Us",
+     *     "slug": "about-us",
+     *     "type": "page",
+     *     "status": "published",
+     *     "blocks": [
+     *       {
+     *         "type": "hero",
+     *         "title": "Our Story",
+     *         "content": "Learn about our journey..."
+     *       },
+     *       {
+     *         "type": "contact-form",
+     *         "title": "Get in Touch",
+     *         "form_slug": "contact",
+     *         "submit_url": "/api/v1/pages/contact/submit"
+     *       }
+     *     ],
+     *     "meta": {
+     *       "description": "About our company and mission",
+     *       "keywords": "about,company,history"
+     *     },
+     *     "created_at": "2023-01-01T00:00:00Z",
+     *     "updated_at": "2023-01-01T00:00:00Z"
+     *   }
+     * }
+     * @response status=404 {
+     *   "message": "Page not found"
+     * }
      */
     public function show(Request $request, string $identifier)
     {
