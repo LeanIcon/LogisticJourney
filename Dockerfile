@@ -82,19 +82,16 @@ EXPOSE 8080
 # ----------------------------------------------
 # Startup script: Wait for DB, migrate, seed, run
 # ----------------------------------------------
-CMD sh -c '
-    echo "Waiting for MySQL at $DB_HOST:$DB_PORT...";
-    until nc -z -v -w30 $DB_HOST $DB_PORT
-    do
-        echo "Waiting for database connection..."
-        sleep 5
-    done
-
-    echo "✅ Database is up! Running migrations and seeders..."
-    php artisan migrate --force || true
-    php artisan db:seed --force || true
-
-    echo "🚀 Starting Laravel..."
-    php artisan config:cache && php artisan route:cache && php artisan view:cache
-    exec php artisan serve --host=0.0.0.0 --port=8080
-'
+CMD ["sh", "-c", "\
+echo 'Waiting for MySQL at '$DB_HOST:$DB_PORT'...'; \
+until nc -z -v -w30 $DB_HOST $DB_PORT; do \
+  echo 'Waiting for database connection...'; \
+  sleep 5; \
+done; \
+echo '✅ Database is up! Running migrations and seeders...'; \
+php artisan migrate --force || true; \
+php artisan db:seed --force || true; \
+echo '🚀 Starting Laravel...'; \
+php artisan config:cache && php artisan route:cache && php artisan view:cache; \
+exec php artisan serve --host=0.0.0.0 --port=8080 \
+"]
