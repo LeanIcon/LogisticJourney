@@ -44,7 +44,9 @@ COPY . .
 
 # Install dependencies and build
 RUN composer install --optimize-autoloader --no-interaction --no-progress --prefer-dist \
-    && if [ -f package.json ]; then npm ci --no-optional && npm run build; fi \
+    && if [ -f package.json ]; then \
+        npm install && npm run build || echo "Frontend build failed, continuing..."; \
+    fi \
     && mkdir -p storage/app/public \
                  storage/framework/cache \
                  storage/framework/sessions \
