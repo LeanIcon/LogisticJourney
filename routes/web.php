@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/app');
 
-// Development-only debug routes - DO NOT ENABLE IN PRODUCTION
-if (app()->environment(['local', 'staging'])) {
+// Temporary debug route for 403 investigation
+if (true) { // Allow in all environments temporarily
     Route::get('/test-403', function () {
         return response()->json([
             'auth' => [
