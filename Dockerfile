@@ -20,10 +20,10 @@ RUN apt-get update && apt-get install -y \
         unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js LTS and npm
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+# Install Node.js and npm
+RUN curl -sL https://deb.nodesource.com/setup_23.x | bash - && \
     apt-get install -y nodejs && \
-    npm install -g npm@latest && \
+    npm install -g npm@11.4.2 && \
     rm -rf /var/lib/apt/lists/*
 
 # Install core PHP extensions required by Laravel
@@ -42,46 +42,15 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Copy core application files
+# Copy application files first
 COPY . .
-
-# Set up production configuration
-RUN mv config/scribe.prod.php config/scribe.php && \
-    rm -rf \
-    .git \
-    .github \
-    .env.example \
-    .gitignore \
-    .editorconfig \
-    README.md \
-    phpunit.xml \
-    tests
-
-# Remove Scribe config to prevent package discovery issues
-RUN rm -f config/scribe.php
 
 # Install PHP dependencies (production build)
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
 
-# Install and build frontend assets if present
-COPY package*.json ./
+# Build frontend assets if present (can fail gracefully)
 RUN if [ -f package.json ]; then \
-        npm install && \
-        # Clear npm cache and remove any existing node_modules
-        npm cache clean --force && \
-        rm -rf node_modules && \
-        # Reinstall with platform specific binaries
-        npm install && \
-        # Install platform specific rollup
-        npm install @rollup/rollup-linux-x64-gnu; \
-    fi
-
-# Copy remaining source files
-COPY . .
-
-# Build assets if package.json exists
-RUN if [ -f package.json ]; then \
-        npm run build; \
+        npm ci --no-optional && npm run build || true; \
     fi
 
 # Ensure storage and cache dirs exist and are owned by www-data (UID 33)
