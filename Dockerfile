@@ -69,13 +69,13 @@ FROM php:8.3-fpm
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH="/var/www/vendor/bin:$PATH"
 
-# Install runtime dependencies only (smaller footprint)
+# Install runtime dependencies and build dependencies
 RUN apt-get update && apt-get install -y \
         libpng-dev \
         libonig-dev \
-        libxml2 \
+        libxml2-dev \
         libzip-dev \
-        libsqlite3-0 \
+        libsqlite3-dev \
         libicu-dev \
     && rm -rf /var/lib/apt/lists/*
 
