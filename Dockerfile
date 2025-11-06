@@ -45,8 +45,11 @@ WORKDIR /var/www
 # Copy application files first
 COPY . .
 
+# Move Scribe to regular dependencies before install
+RUN composer require knuckleswtf/scribe --no-interaction --no-progress --prefer-dist
+
 # Install PHP dependencies (production build)
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
+RUN composer install --optimize-autoloader --no-interaction --no-progress --prefer-dist
 
 # Build frontend assets if present (can fail gracefully)
 RUN if [ -f package.json ]; then \
