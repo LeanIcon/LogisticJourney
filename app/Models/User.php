@@ -50,4 +50,13 @@ final class User extends Authenticatable implements MustVerifyEmail
             'updated_at' => 'datetime',
         ];
     }
+
+    /**
+     * Allow Filament to determine whether the user can access the panel.
+     * Temporary: return true for all authenticated users while debugging.
+     */
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        return true;
+    }
 }
