@@ -29,11 +29,13 @@ final class FormForm
                             ->afterStateUpdated(fn (string $operation, $state, callable $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null
                             ),
 
-                        TextInput::make('slug')
+                        Select::make('slug')
                             ->required()
-                            ->maxLength(255)
-                            ->unique(ignoreRecord: true)
-                            ->helperText('Used in API/URL paths'),
+                            ->options([
+                                'demo-request' => 'Request Demo (demo-request)',
+                                'contact-form' => 'Contact Form (contact-form)',
+                            ])
+                            ->helperText('Used in API/URL paths. Choose one of the canonical form slugs.'),
 
                         Textarea::make('description')
                             ->rows(2)

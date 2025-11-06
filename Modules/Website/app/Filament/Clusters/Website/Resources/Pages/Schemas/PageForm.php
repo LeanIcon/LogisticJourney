@@ -32,7 +32,13 @@ final class PageForm
                         Section::make('Page Details')
                             ->schema([
                                 TextInput::make('title')->required(),
-                                TextInput::make('slug')->required()->unique(ignoreRecord: true),
+                                Select::make('slug')
+                                    ->required()
+                                    ->options([
+                                        'demo-request' => 'Request Demo (demo-request)',
+                                        'contact-form' => 'Contact Form (contact-form)',
+                                    ])
+                                    ->helperText('Used in API/URL paths. Choose one of the canonical slugs.'),
                                 TextInput::make('meta_title'),
                                 Textarea::make('meta_description')->rows(2),
                                 Select::make('status')
