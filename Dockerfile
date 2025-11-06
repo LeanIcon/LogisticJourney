@@ -42,20 +42,20 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Copy only production files first (excluding dev configs)
-COPY composer.json composer.lock ./
-COPY app app/
-COPY bootstrap bootstrap/
-COPY config config/
-COPY database database/
-COPY lang lang/
-COPY modules modules/
-COPY public public/
-COPY resources resources/
-COPY routes routes/
-COPY storage storage/
-COPY artisan .
-COPY package.json package-lock.json ./
+# Copy core application files
+COPY . .
+
+# Remove development files and configs
+RUN rm -rf \
+    .git \
+    .github \
+    .env.example \
+    .gitignore \
+    .editorconfig \
+    README.md \
+    phpunit.xml \
+    tests \
+    config/scribe.php
 
 # Remove Scribe config to prevent package discovery issues
 RUN rm -f config/scribe.php
