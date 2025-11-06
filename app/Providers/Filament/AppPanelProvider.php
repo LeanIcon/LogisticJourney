@@ -61,8 +61,6 @@ final class AppPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                \App\Http\Middleware\ClearStaleFilamentSessions::class,
-            ])
-            ->requiresAuthentication();
+            ]);
     }
 }
