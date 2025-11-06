@@ -1,4 +1,4 @@
-## Minimal Laravel Dockerfile with SQLite support
+## Minimal Laravel Dockerfile with MySQL (IONOS) support
 FROM php:8.3-fpm
 
 # Set environment variables
@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
         libicu-dev \
         zip \
         unzip \
+        netcat-traditional \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js and npm
@@ -26,7 +27,7 @@ RUN curl -sL https://deb.nodesource.com/setup_23.x | bash - && \
     npm install -g npm@11.4.2 && \
     rm -rf /var/lib/apt/lists/*
 
-# Install core PHP extensions required by Laravel
+# Install PHP extensions
 RUN docker-php-ext-install \
         pdo_mysql \
         pdo_sqlite \
@@ -42,31 +43,31 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Copy application files first
+# Copy application files
 COPY . .
 
-# Install PHP dependencies (production build)
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
 
-# Build frontend assets if present (can fail gracefully)
+# Build frontend assets (optional)
 RUN if [ -f package.json ]; then \
         npm ci --no-optional && npm run build || true; \
     fi
 
-# Ensure storage and cache dirs exist and are owned by www-data (UID 33)
+# Ensure storage and cache directories exist
 RUN mkdir -p /var/www/storage/app/public \
              /var/www/storage/framework/cache \
              /var/www/storage/framework/sessions \
              /var/www/storage/framework/views \
              /var/www/storage/logs \
              /var/www/bootstrap/cache && \
-    chown -R 33:33 /var/www/storage /var/www/bootstrap/cache && \
+    chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && \
     chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Create storage link (allow to fail if already exists)
+# Create storage link
 RUN php artisan storage:link || true
 
-# PHP configuration
+# PHP upload/memory settings
 RUN echo "upload_max_filesize=1024M" > /usr/local/etc/php/conf.d/uploads.ini \
  && echo "post_max_size=1024M" >> /usr/local/etc/php/conf.d/uploads.ini \
  && echo "memory_limit=1024M" >> /usr/local/etc/php/conf.d/uploads.ini \
@@ -74,5 +75,17 @@ RUN echo "upload_max_filesize=1024M" > /usr/local/etc/php/conf.d/uploads.ini \
 
 EXPOSE 8080
 
-# Start command
-CMD ["sh", "-c", "php artisan config:cache && php artisan route:cache && php artisan view:cache && exec php artisan serve --host=0.0.0.0 --port=8080"]
+# Wait for MySQL, run migrations and seeders, then start Laravel
+CMD sh -c '\
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache && \
+    echo "Waiting for database connection..." && \
+    until nc -z -v -w30 $DB_HOST $DB_PORT; do \
+      echo "Waiting for MySQL at $DB_HOST:$DB_PORT..."; \
+      sleep 5; \
+    done && \
+    echo "Database is up! Running migrations and seeders..." && \
+    php artisan migrate --force && \
+    php artisan db:seed --force && \
+    exec php artisan serve --host=0.0.0.0 --port=8080'
