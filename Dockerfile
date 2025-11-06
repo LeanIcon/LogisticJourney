@@ -45,8 +45,9 @@ WORKDIR /var/www
 # Copy core application files
 COPY . .
 
-# Remove development files and configs
-RUN rm -rf \
+# Set up production configuration
+RUN mv config/scribe.prod.php config/scribe.php && \
+    rm -rf \
     .git \
     .github \
     .env.example \
@@ -54,8 +55,7 @@ RUN rm -rf \
     .editorconfig \
     README.md \
     phpunit.xml \
-    tests \
-    config/scribe.php
+    tests
 
 # Remove Scribe config to prevent package discovery issues
 RUN rm -f config/scribe.php
