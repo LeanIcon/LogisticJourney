@@ -31,12 +31,23 @@ final class DiscoverBlocksCommand extends Command
      */
     public function handle(): int
     {
-        $this->info('🔍 Discovering all blocks...');
         $registry = app('blocks');
-        $registry->autoDiscover(true);
-        $count = count($registry->all());
-        $this->info("✅ Discovered {$count} blocks. Manifest updated at: storage/app/blocks_manifest.json");
-
+        
+        $this->info('Discovering blocks...');
+        
+        // Pass true to write the manifest
+        $registry->autoDiscover(writeManifest: true);
+        
+        $blocks = $registry->all();
+        
+        $this->info('Discovered ' . count($blocks) . ' blocks:');
+        
+        foreach ($blocks as $name => $class) {
+            $this->line("  - {$name} ({$class})");
+        }
+        
+        $this->info('Manifest written to: ' . storage_path('app/blocks_manifest.json'));
+        
         return self::SUCCESS;
     }
 

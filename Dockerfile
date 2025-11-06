@@ -55,8 +55,7 @@ RUN composer install --optimize-autoloader --no-interaction --no-progress --pref
                  bootstrap/cache \
     && chown -R 33:33 storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache \
-    && php artisan storage:link || true \
-    && php artisan blocks:discover || true
+    && php artisan storage:link || true
 
 # PHP config
 RUN echo "upload_max_filesize=1024M" > /usr/local/etc/php/conf.d/uploads.ini \

@@ -36,8 +36,15 @@ final class BlocksServiceProvider extends ServiceProvider
 
         // 🧩 Auto-discover all blocks on boot
         $registry = app('blocks');
+        
         if (app()->environment('production')) {
             $registry->loadManifest();
+            
+            // If manifest didn't load any blocks, fall back to auto-discovery
+            if (empty($registry->all())) {
+                \Log::warning('Block manifest was empty or missing, running auto-discovery');
+                $registry->autoDiscover();
+            }
         } else {
             $registry->autoDiscover();
         }
