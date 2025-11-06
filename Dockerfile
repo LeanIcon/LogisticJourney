@@ -71,12 +71,12 @@ ENV PATH="/var/www/vendor/bin:$PATH"
 
 # Install runtime dependencies only (smaller footprint)
 RUN apt-get update && apt-get install -y \
-        libpng16-16 \
-        libonig5 \
+        libpng-dev \
+        libonig-dev \
         libxml2 \
-        libzip4 \
+        libzip-dev \
         libsqlite3-0 \
-        libicu72 \
+        libicu-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
