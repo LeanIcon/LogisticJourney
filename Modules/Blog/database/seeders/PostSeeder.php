@@ -37,7 +37,7 @@ final class PostSeeder extends Seeder
                 'published_at' => now()->subDays(2),
                 'meta_title' => '10 Ways to Optimize Your Supply Chain in 2025 | Logistics Blog',
                 'meta_description' => 'Learn 10 proven strategies to streamline supply chain operations, reduce costs, and improve efficiency in 2025.',
-                'categories' => ['supply-chain', 'procurement'],
+                'categories' => ['supply-chain'],
             ],
             [
                 'title' => 'The Future of Warehouse Automation: AI and Robotics',
@@ -50,7 +50,7 @@ final class PostSeeder extends Seeder
                 'published_at' => now()->subDays(5),
                 'meta_title' => 'Warehouse Automation with AI & Robotics | Future of Logistics',
                 'meta_description' => 'Explore how AI and robotics are revolutionizing warehouse automation and improving operational efficiency.',
-                'categories' => ['warehouse-management', 'automation', 'technology'],
+                'categories' => ['warehouse-management'],
             ],
             [
                 'title' => 'Last-Mile Delivery Challenges and Solutions',
@@ -63,7 +63,7 @@ final class PostSeeder extends Seeder
                 'published_at' => now()->subDays(7),
                 'meta_title' => 'Last-Mile Delivery Challenges & Solutions for 2025',
                 'meta_description' => 'Discover effective solutions to overcome last-mile delivery challenges and improve customer satisfaction.',
-                'categories' => ['transportation', 'last-mile-delivery'],
+                'categories' => ['transportation'],
             ],
             [
                 'title' => 'Implementing a Transportation Management System (TMS)',
@@ -72,11 +72,11 @@ final class PostSeeder extends Seeder
                 'body' => $this->generateBody('tms-implementation'),
                 'type' => 'case study',
                 'status' => 'published',
-                'is_featured' => false,
+                'is_featured' => true,
                 'published_at' => now()->subDays(10),
                 'meta_title' => 'How to Implement a TMS | Step-by-Step Guide',
                 'meta_description' => 'Complete guide to selecting and implementing a Transportation Management System (TMS) for your logistics operations.',
-                'categories' => ['technology', 'software-solutions', 'transportation'],
+                'categories' => ['technology'],
             ],
             [
                 'title' => 'Sustainable Logistics: Reducing Carbon Footprint',
@@ -85,11 +85,11 @@ final class PostSeeder extends Seeder
                 'body' => $this->generateBody('sustainable-logistics'),
                 'type' => 'blog',
                 'status' => 'published',
-                'is_featured' => false,
+                'is_featured' => true,
                 'published_at' => now()->subDays(12),
                 'meta_title' => 'Sustainable Logistics & Carbon Footprint Reduction',
                 'meta_description' => 'Learn how to implement sustainable logistics practices and reduce your carbon footprint.',
-                'categories' => ['supply-chain', 'industry-news'],
+                'categories' => ['supply-chain'],
             ],
             [
                 'title' => 'Inventory Management Best Practices for E-commerce',
@@ -98,11 +98,11 @@ final class PostSeeder extends Seeder
                 'body' => $this->generateBody('inventory-management'),
                 'type' => 'blog',
                 'status' => 'published',
-                'is_featured' => false,
+                'is_featured' => true,
                 'published_at' => now()->subDays(15),
                 'meta_title' => 'E-commerce Inventory Management Best Practices',
                 'meta_description' => 'Master inventory management with proven strategies designed for e-commerce businesses.',
-                'categories' => ['warehouse-management', 'inventory-optimization'],
+                'categories' => ['warehouse-management'],
             ],
             [
                 'title' => 'IoT in Logistics: Real-Time Tracking and Visibility',
@@ -115,7 +115,7 @@ final class PostSeeder extends Seeder
                 'published_at' => now()->subDays(18),
                 'meta_title' => 'IoT in Logistics: Real-Time Tracking Solutions',
                 'meta_description' => 'Discover how IoT technology enables real-time tracking and improves supply chain visibility.',
-                'categories' => ['technology', 'iot-tracking'],
+                'categories' => ['technology'],
             ],
             [
                 'title' => 'Managing Supply Chain Disruptions in 2025',
@@ -128,7 +128,7 @@ final class PostSeeder extends Seeder
                 'published_at' => now()->subDays(20),
                 'meta_title' => 'Managing Supply Chain Disruptions | Risk Mitigation',
                 'meta_description' => 'Learn effective strategies to manage supply chain disruptions and build operational resilience.',
-                'categories' => ['supply-chain', 'risk-management'],
+                'categories' => ['supply-chain'],
             ],
             [
                 'title' => 'Fleet Management Software: A Complete Buyer\'s Guide',
@@ -141,7 +141,7 @@ final class PostSeeder extends Seeder
                 'published_at' => now()->subDays(23),
                 'meta_title' => 'Fleet Management Software Buyer\'s Guide 2025',
                 'meta_description' => 'Complete guide to choosing the right fleet management software for your transportation needs.',
-                'categories' => ['transportation', 'fleet-management', 'software-solutions'],
+                'categories' => ['transportation'],
             ],
             [
                 'title' => 'Demand Forecasting Techniques for Accurate Planning',
@@ -154,7 +154,7 @@ final class PostSeeder extends Seeder
                 'published_at' => now()->subDays(25),
                 'meta_title' => 'Demand Forecasting Techniques | Inventory Planning',
                 'meta_description' => 'Master demand forecasting techniques to improve inventory planning and reduce stockouts.',
-                'categories' => ['supply-chain', 'demand-planning'],
+                'categories' => ['supply-chain'],
             ],
             [
                 'title' => 'Cross-Border Logistics: Navigating Customs and Compliance',
@@ -167,7 +167,7 @@ final class PostSeeder extends Seeder
                 'published_at' => now()->subDays(28),
                 'meta_title' => 'Cross-Border Logistics: Customs & Compliance Guide',
                 'meta_description' => 'Navigate international shipping with our comprehensive guide to customs and compliance.',
-                'categories' => ['transportation', 'industry-news'],
+                'categories' => ['transportation'],
             ],
             [
                 'title' => 'Optimizing Order Fulfillment Speed and Accuracy',
@@ -180,7 +180,7 @@ final class PostSeeder extends Seeder
                 'published_at' => now()->subDays(30),
                 'meta_title' => 'Order Fulfillment Optimization | Speed & Accuracy',
                 'meta_description' => 'Learn strategies to optimize order fulfillment speed and accuracy in your warehouse.',
-                'categories' => ['warehouse-management', 'order-fulfillment'],
+                'categories' => ['warehouse-management'],
             ],
             [
                 'title' => 'Upcoming Trends in Logistics Technology',
@@ -194,7 +194,7 @@ final class PostSeeder extends Seeder
                 'published_at' => null,
                 'meta_title' => 'Upcoming Trends in Logistics Technology 2025',
                 'meta_description' => 'Explore the latest technology trends shaping the future of logistics and supply chain.',
-                'categories' => ['technology', 'industry-news'],
+                'categories' => ['technology'],
             ],
             [
                 'title' => 'Building a Resilient Supply Chain Network',
@@ -207,7 +207,7 @@ final class PostSeeder extends Seeder
                 'published_at' => null,
                 'meta_title' => 'Building a Resilient Supply Chain Network',
                 'meta_description' => 'Design supply chains that can withstand disruptions with these resilience strategies.',
-                'categories' => ['supply-chain', 'risk-management'],
+                'categories' => ['supply-chain'],
             ],
         ];
 
