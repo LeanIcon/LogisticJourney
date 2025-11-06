@@ -42,8 +42,23 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Copy application files first
-COPY . .
+# Copy only production files first (excluding dev configs)
+COPY composer.json composer.lock ./
+COPY app app/
+COPY bootstrap bootstrap/
+COPY config config/
+COPY database database/
+COPY lang lang/
+COPY modules modules/
+COPY public public/
+COPY resources resources/
+COPY routes routes/
+COPY storage storage/
+COPY artisan .
+COPY package.json package-lock.json ./
+
+# Remove Scribe config to prevent package discovery issues
+RUN rm -f config/scribe.php
 
 # Install PHP dependencies (production build)
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
