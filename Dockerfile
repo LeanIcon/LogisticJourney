@@ -65,4 +65,4 @@ RUN echo "upload_max_filesize=1024M" > /usr/local/etc/php/conf.d/uploads.ini \
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan view:clear && chown -R www-data:www-data storage bootstrap/cache && php artisan optimize && exec php artisan serve --host=0.0.0.0 --port=8080"]
+CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan view:clear && php artisan cache:clear && php artisan filament:clear-cache && chown -R www-data:www-data storage bootstrap/cache && php artisan optimize && php artisan filament:optimize && exec php artisan serve --host=0.0.0.0 --port=8080"]
