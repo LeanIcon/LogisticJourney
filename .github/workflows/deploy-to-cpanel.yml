@@ -1,9 +1,9 @@
-name: Deploy to cPanel
+name: Laravel Build and Deploy to cPanel
 
 on:
   push:
     branches:
-      - main  # Trigger only when changes are pushed to the main branch
+      - main # Trigger only when changes are pushed to the main branch
 
 jobs:
   build-and-deploy:
@@ -13,13 +13,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # --- 1. Setup PHP and Composer ---
+      - name: Setup PHP (8.x)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.x'
+          extensions: mbstring, pdo_mysql, bcmath
+          tools: composer:v2
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install PHP dependencies
+        # Install without development dependencies to minimize files
+        run: composer install --prefer-dist --no-interaction --no-dev
+
+      # --- 2. Setup Node and Build Assets ---
       - name: Setup Node.js (LTS)
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Using a stable Long-Term Support (LTS) version
+          node-version: '20'
 
       - name: Cache Node Modules
-        # Speeds up subsequent runs by caching the dependency install
         uses: actions/cache@v4
         with:
           path: ~/.npm
@@ -27,22 +47,28 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install dependencies (ci)
-        # Use 'ci' for reliable, lockfile-based installs in CI environments
+      - name: Install NPM dependencies (ci)
         run: npm ci
 
-      - name: Build project
-        # This command generates your production-ready files
-        run: npm run generate
+      - name: Build production assets (npm run build)
+        # Use 'build' for production assets (e.g., Mix/Vite output)
+        run: npm run build
 
-      - name: Deploy built files to cPanel via SFTP
+      # --- 3. Deploy to cPanel via FTP ---
+      - name: Deploy entire project to /cms/ via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp # FIX 1: using FTP/FTPS since SFTP did not work
-          port: 21      # Recommended port for SFTP
-          local-dir: ./.output/public/ # Source: Updated for Nuxt 4 (Nitro) static output
-          server-dir: /public_html/    # Destination: Adjust to your specific cPanel path
-          # Removed: ftp-args: --no-perms (FIX 2: This input is no longer supported by v4.3.4 and caused a warning)
+          server: ${{ secrets.CP_SERVER }}
+          username: ${{ secrets.CPANEL_USER }}
+          password: ${{ secrets.CPANEL_FTP_PASSWORD }}
+          protocol: ftp       # Using FTP/FTPS as per your preference (Port 21 is default for FTP)
+          port: 21
+          local-dir: ./       # Source: Deploy ALL contents of the current workspace
+          server-dir: /cms/   # Destination: Target directory as requested
+          # IMPORTANT: Exclude sensitive files and temporary directories
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .env              # Prevents overwriting your server's existing .env file
+            .github
+            .github/**
