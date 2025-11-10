@@ -18,8 +18,11 @@ final class PostResource extends JsonResource
             'title' => $this->title,
             // 'sub_title' => $this->sub_title,
             'slug' => $this->slug,
+            'type' => $this->type,
             'excerpt' => $this->excerpt,
             'content' => $this->body ?? $this->content,
+            'featured_image' => $this->featured_image,
+            'banner' => $this->banner,
             'published_at' => optional($this->published_at)->toDateTimeString(),
             'is_published' => $this->status === 'published',
             'categories' => $this->whenLoaded('categories', function () {
