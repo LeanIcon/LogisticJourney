@@ -37,6 +37,7 @@ final class PageForm
                                     ->options([
                                         'demo-request' => 'Request Demo (demo-request)',
                                         'contact-form' => 'Contact Form (contact-form)',
+                                        'about-us' => 'About Page (about)',
                                     ])
                                     ->helperText('Used in API/URL paths. Choose one of the canonical slugs.'),
                                 TextInput::make('meta_title'),

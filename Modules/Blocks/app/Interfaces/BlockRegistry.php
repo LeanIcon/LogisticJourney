@@ -40,11 +40,12 @@ final class BlockRegistry
     }
 
     /**
-     * Return Filament Builder-compatible schemas.
+     * Return Filament Builder-compatible schemas, sorted by sortIndex.
      */
     public function getSchemas(): array
     {
         return collect($this->blocks)
+            ->sortBy(fn ($class) => $class::getSortIndex())
             ->map(fn ($class) => $class::schema())
             ->values()
             ->toArray();
