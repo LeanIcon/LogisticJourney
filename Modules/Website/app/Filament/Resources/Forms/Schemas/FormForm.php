@@ -34,6 +34,7 @@ final class FormForm
                             ->options([
                                 'demo-request' => 'Request Demo (demo-request)',
                                 'contact-form' => 'Contact Form (contact-form)',
+                                'newsletter-signup' => 'Newsletter Signup (newsletter-signup)',
                             ])
                             ->helperText('Used in API/URL paths. Choose one of the canonical form slugs.'),
 
