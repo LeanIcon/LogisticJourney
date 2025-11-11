@@ -147,6 +147,19 @@
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-faqs" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="faqs">
+                    <a href="#faqs">FAQs</a>
+                </li>
+                                    <ul id="tocify-subheader-faqs" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="faqs-GETapi-v1-faqs">
+                                <a href="#faqs-GETapi-v1-faqs">List all FAQs</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="faqs-GETapi-v1-faqs--id-">
+                                <a href="#faqs-GETapi-v1-faqs--id-">Get a specific FAQ</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
                     <ul id="tocify-header-form-submissions" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="form-submissions">
                     <a href="#form-submissions">Form Submissions</a>
@@ -183,6 +196,19 @@
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-policies" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="policies">
+                    <a href="#policies">Policies</a>
+                </li>
+                                    <ul id="tocify-subheader-policies" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="policies-GETapi-v1-policies">
+                                <a href="#policies-GETapi-v1-policies">List all policies</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="policies-GETapi-v1-policies--slug-">
+                                <a href="#policies-GETapi-v1-policies--slug-">Get a policy by slug</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
             </div>
 
     <ul class="toc-footer" id="toc-footer">
@@ -192,7 +218,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: November 6, 2025</li>
+        <li>Last updated: November 11, 2025</li>
     </ul>
 </div>
 
@@ -3007,6 +3033,299 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                <h1 id="faqs">FAQs</h1>
+
+    <p>APIs for managing frequently asked questions. Retrieve all FAQs or a specific FAQ by ID.</p>
+<p>FAQs help users find answers to common questions about products and services.</p>
+
+                                <h2 id="faqs-GETapi-v1-faqs">List all FAQs</h2>
+
+<p>
+</p>
+
+<p>Retrieve a list of all FAQs sorted by most recently updated first.</p>
+
+<span id="example-requests-GETapi-v1-faqs">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/v1/faqs" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/v1/faqs"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-faqs">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;question&quot;: &quot;What is your return policy?&quot;,
+            &quot;answer&quot;: &quot;We offer 30-day returns on all products...&quot;,
+            &quot;status&quot;: &quot;published&quot;,
+            &quot;created_at&quot;: &quot;2025-11-10T10:30:00Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-11-11T15:45:00Z&quot;
+        }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-faqs" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-faqs"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-faqs"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-faqs" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-faqs">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-faqs" data-method="GET"
+      data-path="api/v1/faqs"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-faqs', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-faqs"
+                    onclick="tryItOut('GETapi-v1-faqs');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-faqs"
+                    onclick="cancelTryOut('GETapi-v1-faqs');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-faqs"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/faqs</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-faqs"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-faqs"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="faqs-GETapi-v1-faqs--id-">Get a specific FAQ</h2>
+
+<p>
+</p>
+
+<p>Retrieve a single FAQ by its ID.</p>
+
+<span id="example-requests-GETapi-v1-faqs--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/v1/faqs/1" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/v1/faqs/1"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-faqs--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 1,
+        &quot;question&quot;: &quot;What is your return policy?&quot;,
+        &quot;answer&quot;: &quot;We offer 30-day returns on all products...&quot;,
+        &quot;status&quot;: &quot;published&quot;,
+        &quot;created_at&quot;: &quot;2025-11-10T10:30:00Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-11-11T15:45:00Z&quot;
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Not found&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-faqs--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-faqs--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-faqs--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-faqs--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-faqs--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-faqs--id-" data-method="GET"
+      data-path="api/v1/faqs/{id}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-faqs--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-faqs--id-"
+                    onclick="tryItOut('GETapi-v1-faqs--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-faqs--id-"
+                    onclick="cancelTryOut('GETapi-v1-faqs--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-faqs--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/faqs/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-faqs--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-faqs--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-v1-faqs--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the faq. Example: <code>1</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>faq</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="faq"                data-endpoint="GETapi-v1-faqs--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The FAQ ID. Example: <code>1</code></p>
+            </div>
+                    </form>
+
                 <h1 id="form-submissions">Form Submissions</h1>
 
     
@@ -4021,6 +4340,306 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Include parent and children relationships. Example: <code>true</code></p>
             </div>
                 </form>
+
+                <h1 id="policies">Policies</h1>
+
+    <p>APIs for managing public policies. Retrieve all policies or a specific policy by slug.</p>
+<p>Policies are typically legal documents like terms of service or privacy policy.</p>
+
+                                <h2 id="policies-GETapi-v1-policies">List all policies</h2>
+
+<p>
+</p>
+
+<p>Retrieve a list of all published and draft policies.
+Results are sorted by most recently updated first.</p>
+
+<span id="example-requests-GETapi-v1-policies">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/v1/policies" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/v1/policies"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-policies">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;title&quot;: &quot;Privacy Policy&quot;,
+            &quot;slug&quot;: &quot;privacy-policy&quot;,
+            &quot;status&quot;: &quot;published&quot;,
+            &quot;content&quot;: &quot;# Privacy Policy\n\nYour privacy is important to us...&quot;,
+            &quot;meta_title&quot;: &quot;Privacy Policy&quot;,
+            &quot;meta_description&quot;: &quot;Read our privacy policy&quot;,
+            &quot;created_at&quot;: &quot;2025-11-10T10:30:00Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-11-11T15:45:00Z&quot;
+        }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-policies" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-policies"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-policies"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-policies" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-policies">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-policies" data-method="GET"
+      data-path="api/v1/policies"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-policies', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-policies"
+                    onclick="tryItOut('GETapi-v1-policies');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-policies"
+                    onclick="cancelTryOut('GETapi-v1-policies');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-policies"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/policies</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-policies"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-policies"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="policies-GETapi-v1-policies--slug-">Get a policy by slug</h2>
+
+<p>
+</p>
+
+<p>Retrieve a single policy using its URL-friendly slug.</p>
+
+<span id="example-requests-GETapi-v1-policies--slug-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/v1/policies/architecto" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/v1/policies/architecto"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-policies--slug-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 1,
+        &quot;title&quot;: &quot;Privacy Policy&quot;,
+        &quot;slug&quot;: &quot;privacy-policy&quot;,
+        &quot;status&quot;: &quot;published&quot;,
+        &quot;content&quot;: &quot;# Privacy Policy\n\nYour privacy is important to us...&quot;,
+        &quot;meta_title&quot;: &quot;Privacy Policy&quot;,
+        &quot;meta_description&quot;: &quot;Read our privacy policy&quot;,
+        &quot;created_at&quot;: &quot;2025-11-10T10:30:00Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-11-11T15:45:00Z&quot;
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Not found&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-policies--slug-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-policies--slug-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-policies--slug-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-policies--slug-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-policies--slug-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-policies--slug-" data-method="GET"
+      data-path="api/v1/policies/{slug}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-policies--slug-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-policies--slug-"
+                    onclick="tryItOut('GETapi-v1-policies--slug-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-policies--slug-"
+                    onclick="cancelTryOut('GETapi-v1-policies--slug-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-policies--slug-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/policies/{slug}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-policies--slug-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-policies--slug-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="slug"                data-endpoint="GETapi-v1-policies--slug-"
+               value="architecto"
+               data-component="url">
+    <br>
+<p>The slug of the policy. Example: <code>architecto</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>policy</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="policy"                data-endpoint="GETapi-v1-policies--slug-"
+               value="privacy-policy"
+               data-component="url">
+    <br>
+<p>The policy slug (e.g., &quot;privacy-policy&quot;). Example: <code>privacy-policy</code></p>
+            </div>
+                    </form>
 
             
 

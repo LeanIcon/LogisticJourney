@@ -7,6 +7,8 @@ use Modules\Website\Http\Controllers\PageController;
 use Modules\Website\Http\Controllers\WebsiteController;
 use Modules\Website\Http\Controllers\FormSubmissionController;
 use Modules\Website\Http\Controllers\FormController;
+use Modules\Website\Http\Controllers\PolicyController;
+use Modules\Website\Http\Controllers\FaqController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,8 +28,12 @@ Route::prefix('v1')->group(function () {
     Route::get('forms/{identifier}', [FormController::class, 'show'])->name('forms.show');
 
     // Policies API - public index and show
-    Route::get('policies', [\Modules\Website\Http\Controllers\PolicyController::class, 'index'])->name('policies.index');
-    Route::get('policies/{policy}', [\Modules\Website\Http\Controllers\PolicyController::class, 'show'])->name('policies.show');
+    Route::get('policies', [PolicyController::class, 'index'])->name('policies.index');
+    Route::get('policies/{policy:slug}', [PolicyController::class, 'show'])->name('policies.show');
+
+    // FAQs API - public index and show
+    Route::get('faqs', [FaqController::class, 'index'])->name('faqs.index');
+    Route::get('faqs/{faq}', [FaqController::class, 'show'])->name('faqs.show');
 });
 
 /*

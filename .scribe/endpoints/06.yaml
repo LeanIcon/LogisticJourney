@@ -1,0 +1,152 @@
+name: Policies
+description: |-
+
+  APIs for managing public policies. Retrieve all policies or a specific policy by slug.
+
+  Policies are typically legal documents like terms of service or privacy policy.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/policies
+    metadata:
+      custom: []
+      groupName: Policies
+      groupDescription: |-
+
+        APIs for managing public policies. Retrieve all policies or a specific policy by slug.
+
+        Policies are typically legal documents like terms of service or privacy policy.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List all policies'
+      description: |-
+        Retrieve a list of all published and draft policies.
+        Results are sorted by most recently updated first.
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "title": "Privacy Policy",
+                "slug": "privacy-policy",
+                "status": "published",
+                "content": "# Privacy Policy\n\nYour privacy is important to us...",
+                "meta_title": "Privacy Policy",
+                "meta_description": "Read our privacy policy",
+                "created_at": "2025-11-10T10:30:00Z",
+                "updated_at": "2025-11-11T15:45:00Z"
+              }
+            ]
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/policies/{slug}'
+    metadata:
+      custom: []
+      groupName: Policies
+      groupDescription: |-
+
+        APIs for managing public policies. Retrieve all policies or a specific policy by slug.
+
+        Policies are typically legal documents like terms of service or privacy policy.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get a policy by slug'
+      description: 'Retrieve a single policy using its URL-friendly slug.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      slug:
+        custom: []
+        name: slug
+        description: 'The slug of the policy.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      policy:
+        custom: []
+        name: policy
+        description: 'The policy slug (e.g., "privacy-policy").'
+        required: true
+        example: privacy-policy
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      slug: architecto
+      policy: privacy-policy
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": {
+              "id": 1,
+              "title": "Privacy Policy",
+              "slug": "privacy-policy",
+              "status": "published",
+              "content": "# Privacy Policy\n\nYour privacy is important to us...",
+              "meta_title": "Privacy Policy",
+              "meta_description": "Read our privacy policy",
+              "created_at": "2025-11-10T10:30:00Z",
+              "updated_at": "2025-11-11T15:45:00Z"
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+            "message": "Not found"
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
