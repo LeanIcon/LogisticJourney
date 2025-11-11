@@ -24,6 +24,10 @@ Route::prefix('v1')->group(function () {
     // Forms API - frontend can fetch available forms and their fields
     Route::get('forms', [FormController::class, 'index'])->name('forms.index');
     Route::get('forms/{identifier}', [FormController::class, 'show'])->name('forms.show');
+
+    // Policies API - public index and show
+    Route::get('policies', [\Modules\Website\Http\Controllers\PolicyController::class, 'index'])->name('policies.index');
+    Route::get('policies/{policy}', [\Modules\Website\Http\Controllers\PolicyController::class, 'show'])->name('policies.show');
 });
 
 /*
