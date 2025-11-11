@@ -8,6 +8,8 @@ use Filament\Forms\Components\Builder\Block as BuilderBlock;
 use Filament\Forms\Components\CodeEditor;
 use Filament\Forms\Components\CodeEditor\Enums\Language;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -34,14 +36,28 @@ final class Faqs
                     ->tabs([
                         Tab::make('Content')
                             ->schema([
-                                TextInput::make('title')
-                                    ->label('Title')
-                                    ->required()
-                                    ->reactive(),
-                                Textarea::make('content')
-                                    ->label('Content')
-                                    ->required()
-                                    ->reactive(),
+                                        TextInput::make('title')
+                                            ->label('Title')
+                                            ->required()
+                                            ->reactive(),
+
+                                        Repeater::make('faqs')
+                                            ->label('FAQ items')
+                                            ->schema([
+                                                TextInput::make('question')
+                                                    ->label('Question')
+                                                    ->required()
+                                                    ->maxLength(300),
+
+                                                RichEditor::make('answer')
+                                                    ->label('Answer')
+                                                    ->required()
+                                                    ->toolbarButtons(['bold', 'italic', 'link'])
+                                                    ->disableToolbarButtons(['attachFiles']),
+                                            ])
+                                            ->minItems(1)
+                                            ->defaultItems(3)
+                                            ->columnSpanFull(),
                             ]),
                         Tab::make('Preview')
                             ->schema([
@@ -53,8 +69,9 @@ final class Faqs
                                     ->reactive()
                                     ->afterStateHydrated(function (CodeEditor $component, $state, callable $set, callable $get) {
                                         $title = $get('title') ?? 'Example Title';
-                                        $content = $get('content') ?? 'Example Content';
-                                        $code = "<?php\n\nreturn [\n    'type' => 'Faqs',\n    'data' => [\n        'title' => '{$title}',\n        'content' => '{$content}'\n    ]\n];";
+                                        $faqs = $get('faqs') ?? [['question' => 'What is X?', 'answer' => 'X is ...']];
+                                        $faqsExport = var_export($faqs, true);
+                                        $code = "<?php\n\nreturn [\n    'type' => 'Faqs',\n    'data' => [\n        'title' => '{$title}',\n        'faqs' => {$faqsExport},\n    ]\n];";
                                         $set('code_preview', $code);
                                     }),
                             ]),
@@ -64,7 +81,16 @@ final class Faqs
 
     public static function mutateData(array $data): array
     {
-        // Manipulate block data before it's returned via API
-        return $data;
+        $faqs = collect($data['faqs'] ?? [])->map(function ($faq) {
+            return [
+                'question' => $faq['question'] ?? null,
+                'answer' => $faq['answer'] ?? null,
+            ];
+        })->toArray();
+
+        return [
+            'title' => $data['title'] ?? null,
+            'faqs' => $faqs,
+        ];
     }
 }

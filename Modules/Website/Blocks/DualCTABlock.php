@@ -32,16 +32,6 @@ final class DualCTABlock
      */
     protected static bool $apiOnly = true;
 
-    /**
-     * Optional group label to organize blocks in the builder UI.
-     */
-    protected static string $group = 'About Us';
-
-    /**
-     * Sort index for dashboard ordering (lower appears first).
-     */
-    protected static int $sortIndex = 7;
-
     public static function schema(): BuilderBlock
     {
         return self::make()

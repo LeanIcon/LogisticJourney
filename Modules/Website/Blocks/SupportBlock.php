@@ -18,11 +18,22 @@ final class SupportBlock
 {
     use BlockTrait;
 
-    protected static string $name = 'SupportBlock';
+    protected static string $name = 'Support';
 
     protected static ?string $icon = 'heroicon-o-phone';
 
     protected static bool $apiOnly = true;
+
+        
+    /**
+     * Group label shown in the block builder UI.
+     */
+    protected static string $group = 'Contact Us';
+
+    /**
+     * Sort index for dashboard ordering (lower appears first).
+     */
+    protected static int $sortIndex = 10;
 
     public static function schema(): BuilderBlock
     {

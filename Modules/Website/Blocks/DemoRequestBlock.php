@@ -20,11 +20,21 @@ final class DemoRequestBlock
     /**
      * Unique block name used in the block registry and in page `blocks`.
      */
-    protected static string $name = 'DemoRequest';
+    protected static string $name = 'ContactsInfo';
 
     protected static ?string $icon = 'heroicon-o-phone';
 
     protected static bool $apiOnly = true;
+
+    /**
+     * Group label shown in the block builder UI.
+     */
+    protected static string $group = 'Request a demo';
+
+    /**
+     * Sort index for dashboard ordering (lower appears first).
+     */
+    protected static int $sortIndex = 8;
 
     public static function schema(): BuilderBlock
     {

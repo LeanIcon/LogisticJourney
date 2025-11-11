@@ -35,9 +35,9 @@ final class PageForm
                                 Select::make('slug')
                                     ->required()
                                     ->options([
-                                        'demo-request' => 'Request Demo (demo-request)',
-                                        'contact-form' => 'Contact Form (contact-form)',
-                                        'about-us' => 'About Page (about)',
+                                        'demo-request' => 'Request Demo Page (demo-request)',
+                                        'contact-us' => 'Contact Us Page (contact-us)',
+                                        'about-us' => 'About Page (about-us)',
                                     ])
                                     ->helperText('Used in API/URL paths. Choose one of the canonical slugs.'),
                                 TextInput::make('meta_title'),
