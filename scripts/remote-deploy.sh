@@ -65,13 +65,26 @@ else
     $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
 fi
 
+# Ensure composer files are owned by www-data for writes
+if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
+    sudo chown www-data:www-data composer.json composer.lock || true
+fi
+
 # Install/ensure Scribe as prod dep for /docs
-if ! $COMPOSER_CMD show knuckleswtf/scribe >/dev/null 2>&1; then
-    echo "--- Installing Scribe as production dependency for /docs ---"
-    if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
+if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
+    if ! sudo -u www-data $COMPOSER_CMD show knuckleswtf/scribe >/dev/null 2>&1; then
+        echo "--- Installing Scribe as production dependency for /docs ---"
+        export COMPOSER_ALLOW_SUPERUSER=1
         sudo -u www-data $COMPOSER_CMD require knuckleswtf/scribe --no-interaction --no-scripts
     else
+        echo "--- Scribe already installed ---"
+    fi
+else
+    if ! $COMPOSER_CMD show knuckleswtf/scribe >/dev/null 2>&1; then
+        echo "--- Installing Scribe as production dependency for /docs ---"
         $COMPOSER_CMD require knuckleswtf/scribe --no-interaction --no-scripts
+    else
+        echo "--- Scribe already installed ---"
     fi
 fi
 
