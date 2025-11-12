@@ -13,14 +13,32 @@ cd "$APP_DIR"
 
 echo "Current directory: $(pwd)"
 
-# Ensure composer is available
-if ! command -v composer >/dev/null 2>&1; then
-  echo "composer not found in PATH. Exiting. Install composer on server or add it to PATH." >&2
-  exit 1
+# Try to find composer in common locations
+COMPOSER_CMD=""
+if command -v composer >/dev/null 2>&1; then
+  COMPOSER_CMD="composer"
+elif [ -f "/usr/local/bin/composer" ]; then
+  COMPOSER_CMD="/usr/local/bin/composer"
+elif [ -f "$HOME/.composer/composer" ]; then
+  COMPOSER_CMD="$HOME/.composer/composer"
+elif [ -f "$HOME/composer.phar" ]; then
+  COMPOSER_CMD="php $HOME/composer.phar"
+elif [ -f "./composer.phar" ]; then
+  COMPOSER_CMD="php ./composer.phar"
+elif [ -f "/usr/bin/composer" ]; then
+  COMPOSER_CMD="/usr/bin/composer"
+else
+  echo "WARNING: composer not found in PATH or common locations." >&2
+  echo "Skipping composer install. Please install composer or add it to PATH." >&2
+  COMPOSER_CMD=""
 fi
 
-echo "Installing composer dependencies (no-dev)..."
-composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader || true
+if [ -n "$COMPOSER_CMD" ]; then
+  echo "Installing composer dependencies (no-dev)..."
+  $COMPOSER_CMD install --no-dev --prefer-dist --no-interaction --optimize-autoloader || true
+else
+  echo "Skipping composer install - composer not available"
+fi
 
 echo "Running artisan migrations (forced)..."
 if command -v php >/dev/null 2>&1 && [ -f artisan ]; then
