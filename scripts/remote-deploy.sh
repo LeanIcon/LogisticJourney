@@ -57,6 +57,11 @@ fi
 
 echo "Using composer: $COMPOSER_CMD"
 
+# Ensure composer files writable by www-data
+if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
+    sudo chown www-data:www-data composer.json composer.lock || true
+fi
+
 # Install prod deps first (run as www-data if possible for ownership)
 if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
     export COMPOSER_ALLOW_SUPERUSER=1
@@ -65,27 +70,20 @@ else
     $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
 fi
 
-# Ensure composer files are owned by www-data for writes
-if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
-    sudo chown www-data:www-data composer.json composer.lock || true
-fi
-
-# Install/ensure Scribe as prod dep for /docs
-if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
-    if ! sudo -u www-data $COMPOSER_CMD show knuckleswtf/scribe >/dev/null 2>&1; then
-        echo "--- Installing Scribe as production dependency for /docs ---"
+# Install/ensure Scribe as prod dep for /docs (without pulling dev deps)
+SCRIBE_CHECK=$(grep -c '"knuckleswtf/scribe"' composer.json || true)
+if [ "$SCRIBE_CHECK" -eq 0 ] || ! grep -q '"require":' composer.json -A 20 | grep -q "knuckleswtf/scribe"; then
+    echo "--- Adding Scribe to production dependencies for /docs ---"
+    if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
         export COMPOSER_ALLOW_SUPERUSER=1
-        sudo -u www-data $COMPOSER_CMD require knuckleswtf/scribe --no-interaction --no-scripts
+        sudo -u www-data $COMPOSER_CMD require knuckleswtf/scribe --no-dev --no-update --no-scripts --no-interaction
+        sudo -u www-data $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
     else
-        echo "--- Scribe already installed ---"
+        $COMPOSER_CMD require knuckleswtf/scribe --no-dev --no-update --no-scripts --no-interaction
+        $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
     fi
 else
-    if ! $COMPOSER_CMD show knuckleswtf/scribe >/dev/null 2>&1; then
-        echo "--- Installing Scribe as production dependency for /docs ---"
-        $COMPOSER_CMD require knuckleswtf/scribe --no-interaction --no-scripts
-    else
-        echo "--- Scribe already installed ---"
-    fi
+    echo "--- Scribe already in production dependencies ---"
 fi
 
 # Publish Scribe config/routes if needed
@@ -141,8 +139,8 @@ php artisan optimize
 # ============================================
 echo "--- Setting permissions ---"
 mkdir -p storage/framework/sessions  # Ensure sessions dir exists
-sudo chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || echo "Warning: Could not set ownership"
-sudo chmod -R 775 storage bootstrap/cache 2>/dev/null || chmod -R 775 storage bootstrap/cache 2>/dev/null || echo "Warning: Could not set permissions"
+sudo chown -R www-data:www-data storage bootstrap/cache vendor 2>/dev/null || chown -R www-data:www-data storage bootstrap/cache vendor 2>/dev/null || echo "Warning: Could not set ownership"
+sudo chmod -R 775 storage bootstrap/cache vendor 2>/dev/null || chmod -R 775 storage bootstrap/cache vendor 2>/dev/null || echo "Warning: Could not set permissions"
 
 # ============================================
 # Step 8: Restart PHP-FPM
