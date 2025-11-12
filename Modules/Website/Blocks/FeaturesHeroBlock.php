@@ -18,7 +18,7 @@ final class FeaturesHeroBlock
     /**
      * Unique identifier for the block.
      */
-    protected static string $name = 'FeaturesHero';
+    protected static string $name = 'Hero';
 
     /**
      * Icon for the builder palette.
