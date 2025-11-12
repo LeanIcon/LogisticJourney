@@ -1,5 +1,9 @@
 <?php
 
+if (app()->environment('production')) {
+    return [];
+}
+
 use Knuckles\Scribe\Extracting\Strategies;
 use Knuckles\Scribe\Config\Defaults;
 use Knuckles\Scribe\Config\AuthIn;
