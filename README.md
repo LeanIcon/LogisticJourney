@@ -349,3 +349,48 @@ npm run build
 ---
 
 **Built with ❤️ using Laravel 12, PHP 8.4, and modern development practices.**
+
+## 🔁 Deployment to a VM via GitHub Actions
+
+This repository includes a deploy workflow and a small remote script so you can deploy automatically to a VM (the workflow lives at `.github/workflows/deploy.yml` and the remote helper script is `scripts/remote-deploy.sh`).
+
+Important: never commit credentials into the repository. Store all sensitive values as GitHub repository secrets (Settings → Security → Secrets and variables → Actions).
+
+Required repository secrets (recommended names):
+
+- `SSH_HOST` — VM IP or hostname (e.g. `158.175.167.56`)
+- `SSH_USERNAME` — SSH user (e.g. `root`)
+- `SSH_PRIVATE_KEY` — Preferred: the private SSH key (multiline). The workflow uses this if set.
+- `SSH_PASSWORD` — Fallback: password-based authentication (only if you cannot use keys). Do NOT commit the password.
+- `SSH_PORT` — Optional, default `22`.
+- `REMOTE_DIR` — Remote path where the app should be deployed (e.g. `/var/www/logisticjourney`)
+
+Recommended flow (SSH key, more secure):
+
+1. On your machine (PowerShell example) generate an SSH key pair for GitHub Actions:
+
+```powershell
+ssh-keygen -t ed25519 -C "github-actions" -f .\github_action_deploy_key
+```
+
+2. Copy the public key to the VM's authorized_keys (example using PowerShell):
+
+```powershell
+type .\github_action_deploy_key.pub | ssh root@158.175.167.56 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+```
+
+3. Add the private key (the contents of `github_action_deploy_key`) to your repository Secrets as `SSH_PRIVATE_KEY`.
+
+4. Set `SSH_HOST`, `SSH_USERNAME`, `REMOTE_DIR` and optionally `SSH_PORT` in Secrets.
+
+5. Push to the `staging` branch or trigger the workflow using `workflow_dispatch` in the Actions tab.
+
+Notes and security:
+- The workflow tries to use `SSH_PRIVATE_KEY` (recommended). If it's empty and `SSH_PASSWORD` is set the workflow will fall back to password-based upload and execution — this is less secure and not recommended for production.
+- Rotate or revoke credentials after giving access for CI if they were temporary. Do not leave plain passwords in commit history.
+- Ensure the target VM has `php`, `composer`, and necessary system packages installed. The remote script (`scripts/remote-deploy.sh`) runs `composer install` and artisan commands — customize it if your target environment differs.
+
+If you want, I can also:
+
+- Add a small check-run job to validate the workflow YAML syntax
+- Create a short `Makefile` or GH Action matrix to deploy to multiple environments (staging/production) with different secrets
