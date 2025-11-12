@@ -8,6 +8,13 @@ APP_DIR="${APP_DIR:-$(pwd)}"
 cd "$APP_DIR"
 echo "Working directory: $(pwd)"
 
+# Early Scribe config backup to prevent loading errors (before any artisan)
+echo "--- Early Scribe config handling to avoid errors ---"
+if [ -f "config/scribe.php" ]; then
+    mv config/scribe.php config/scribe.php.bak
+    echo "✓ scribe.php backed up (restore after adding Scribe locally)"
+fi
+
 # Pre-Step: Early full permissions fix (like workflow)
 echo "--- Fixing early permissions ---"
 sudo chown -R www-data:www-data . 2>/dev/null || true
@@ -15,18 +22,15 @@ sudo find . -type d -exec chmod 775 {} \; 2>/dev/null || true
 sudo find . -type f -exec chmod 664 {} \; 2>/dev/null || true
 
 # ============================================
-# Step 1: Setup .env file
+# Step 1: Setup .env file (always copy from .env.example)
 # ============================================
-echo "--- Checking .env file ---"
-if [ ! -f .env ]; then
-    echo ".env not found, creating from .env.example..."
-    if [ -f .env.example ]; then
-        sudo cp .env.example .env
-        echo ".env created from .env.example"
-    else
-        echo "ERROR: .env.example not found!" >&2
-        exit 1
-    fi
+echo "--- Setting up .env from .env.example ---"
+if [ -f .env.example ]; then
+    sudo cp .env.example .env
+    echo ".env overwritten from .env.example"
+else
+    echo "ERROR: .env.example not found!" >&2
+    exit 1
 fi
 
 # Ensure key env vars for prod (add defaults if missing)
@@ -77,17 +81,12 @@ if sudo -u www-data $COMPOSER_CMD show knuckleswtf/scribe --no-dev >/dev/null 2>
     HAS_SCRIBE=true
     sudo -u www-data php artisan vendor:publish --tag=scribe-config --force || true
     sudo -u www-data php artisan vendor:publish --tag=scribe-routes || true
-    # Restore if backed up from prior deploys
+    # Restore config if backed up
     if [ -f "config/scribe.php.bak" ]; then
         mv config/scribe.php.bak config/scribe.php
     fi
 else
-    echo "✗ Scribe not in prod deps—backing up config to avoid errors"
-    if [ -f "config/scribe.php" ]; then
-        mv config/scribe.php config/scribe.php.bak
-        echo "✓ scribe.php backed up (restore after adding Scribe locally)"
-    fi
-    echo "Run 'composer require knuckleswtf/scribe' locally, commit, and re-deploy for /docs"
+    echo "✗ Scribe not in prod deps—/docs unavailable until 'composer require knuckleswtf/scribe' locally, commit, re-deploy"
 fi
 
 # ============================================
