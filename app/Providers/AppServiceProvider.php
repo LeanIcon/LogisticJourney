@@ -23,11 +23,11 @@ final class AppServiceProvider extends ServiceProvider
         // This makes Laravel treat requests as secure (so secure cookies are sent)
         // even when behind Cloudflare / Render which terminate TLS externally.
         if ($this->app->environment('production') || env('FORCE_HTTPS', false)) {
-            //URL::forceScheme('https');
+            URL::forceScheme('https');
             // Ensure the request object reports HTTPS so other code checks work.
-            // if ($this->app->bound('request')) {
-            //    $this->app['request']->server->set('HTTPS', 'on');
-            //}
+            if ($this->app->bound('request')) {
+               $this->app['request']->server->set('HTTPS', 'on');
+            }
         }
     }
 
