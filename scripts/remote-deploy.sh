@@ -46,7 +46,20 @@ else
 fi
 
 echo "Using composer: $COMPOSER_CMD"
-$COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
+
+# Install prod deps first (run as www-data if possible for ownership)
+if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
+    export COMPOSER_ALLOW_SUPERUSER=1
+    sudo -u www-data $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
+else
+    $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
+fi
+
+# If Scribe is causing issues (dev-only), skip its config in prod
+if [ -f "config/scribe.php" ]; then
+    echo "--- Skipping Scribe config for production ---"
+    mv config/scribe.php config/scribe.php.bak || true
+fi
 
 # ============================================
 # Step 3: Generate APP_KEY if missing

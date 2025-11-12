@@ -1,10 +1,5 @@
 <?php
 
-if (($_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? null) === 'production') {
-    return [];
-}
-
-
 use Knuckles\Scribe\Extracting\Strategies;
 use Knuckles\Scribe\Config\Defaults;
 use Knuckles\Scribe\Config\AuthIn;
