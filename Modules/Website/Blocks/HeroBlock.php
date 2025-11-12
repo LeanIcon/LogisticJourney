@@ -7,6 +7,7 @@ namespace Modules\Website\Blocks;
 use Filament\Forms\Components\Builder\Block as BuilderBlock;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
@@ -20,7 +21,17 @@ final class HeroBlock
     /**
      * The block's unique identifier.
      */
-    protected static string $name = 'HeroBlock';
+    protected static string $name = 'Hero';
+
+    /**
+     * The block's group.
+     */
+    protected static string $group = 'Homepage';
+
+    /**
+     * The block's sort index.
+     */
+    protected static int $sortIndex = 16;
 
     /**
      * Whether this block is API-only (no Blade view).
@@ -43,25 +54,27 @@ final class HeroBlock
                 Section::make('Hero Content')
                     ->description('Configure the main hero section')
                     ->schema([
-                        TextInput::make('headline')
+                        Textarea::make('headline')
                             ->required()
                             ->maxLength(120)
+                            ->default("Smarter Deliveries.\nHappier Customers.")
                             ->helperText('Main headline (max 120 chars)')
+                            ->columnSpanFull()
+                            ->rows(3),
+
+                        TextInput::make('highlight_text')
+                            ->label('Highlighted Text')
+                            ->maxLength(100)
+                            ->default('Lower Costs!')
+                            ->helperText('Text to highlight in blue (e.g., "Lower Costs!")')
                             ->columnSpanFull(),
 
                         Grid::make(2)
                             ->schema([
                                 TextInput::make('subheadline')
-                                    ->maxLength(200)
-                                    ->helperText('Supporting text'),
-
-                                Select::make('text_alignment')
-                                    ->options([
-                                        'left' => 'Left',
-                                        'center' => 'Center',
-                                        'right' => 'Right',
-                                    ])
-                                    ->default('center'),
+                                    ->maxLength(250)
+                                    ->default('Logistic Journey gives you full control, real-time visibility, and reliable deliveries–without the chaos of paper and spreadsheets.')
+                                    ->helperText('Supporting description text'),
                             ]),
                     ]),
 
@@ -72,64 +85,82 @@ final class HeroBlock
                             ->directory('hero-backgrounds')
                             ->imageEditor()
                             ->maxSize(2048)
-                            ->helperText('Background image (max 2MB)'),
-
-                        Grid::make(3)
-                            ->schema([
-                                Select::make('background_overlay')
-                                    ->options([
-                                        'none' => 'None',
-                                        'dark' => 'Dark Overlay',
-                                        'light' => 'Light Overlay',
-                                        'gradient' => 'Gradient',
-                                    ])
-                                    ->default('dark'),
-
-                                TextInput::make('background_color')
-                                    ->type('color')
-                                    ->helperText('Fallback color'),
-
-                                Select::make('height')
-                                    ->options([
-                                        'small' => 'Small (400px)',
-                                        'medium' => 'Medium (600px)',
-                                        'large' => 'Large (800px)',
-                                        'fullscreen' => 'Full Screen',
-                                    ])
-                                    ->default('large'),
-                            ]),
+                            ->helperText('Background/hero image (max 2MB)'),
                     ]),
 
-                Section::make('Call to Action')
+                Section::make('Call to Action Buttons')
                     ->schema([
-                        Toggle::make('show_cta')
-                            ->label('Show Call to Action Button')
+                        Toggle::make('show_buttons')
+                            ->label('Show CTA Buttons')
                             ->default(true)
                             ->live(),
 
                         Grid::make(2)
                             ->schema([
-                                TextInput::make('cta_text')
-                                    ->label('Button Text')
+                                TextInput::make('primary_button_text')
+                                    ->label('Primary Button Text')
                                     ->maxLength(50)
-                                    ->default('Get Started')
-                                    ->visible(fn ($get) => $get('show_cta')),
+                                    ->default('Book a Demo')
+                                    ->visible(fn ($get) => $get('show_buttons')),
 
-                                TextInput::make('cta_url')
-                                    ->label('Button URL')
-                                    ->url()
-                                    ->visible(fn ($get) => $get('show_cta')),
+                                TextInput::make('secondary_button_text')
+                                    ->label('Secondary Button Text')
+                                    ->maxLength(50)
+                                    ->default('Talk to Our Team')
+                                    ->visible(fn ($get) => $get('show_buttons')),
                             ]),
+                    ]),
 
-                        Select::make('cta_style')
-                            ->label('Button Style')
-                            ->options([
-                                'primary' => 'Primary',
-                                'secondary' => 'Secondary',
-                                'outline' => 'Outline',
-                            ])
-                            ->default('primary')
-                            ->visible(fn ($get) => $get('show_cta')),
+                Section::make('Statistics Display')
+                    ->description('Show statistics badges below the headline')
+                    ->schema([
+                        Toggle::make('show_stats')
+                            ->label('Show Statistics')
+                            ->default(true)
+                            ->live(),
+
+                        Grid::make(4)
+                            ->schema([
+                                TextInput::make('stat_1_value')
+                                    ->label('Stat 1 Value')
+                                    ->placeholder('20')
+                                    ->visible(fn ($get) => $get('show_stats')),
+
+                                TextInput::make('stat_1_label')
+                                    ->label('Stat 1 Label')
+                                    ->placeholder('Cities')
+                                    ->visible(fn ($get) => $get('show_stats')),
+
+                                TextInput::make('stat_2_value')
+                                    ->label('Stat 2 Value')
+                                    ->placeholder('12 Packages')
+                                    ->visible(fn ($get) => $get('show_stats')),
+
+                                TextInput::make('stat_2_label')
+                                    ->label('Stat 2 Label')
+                                    ->placeholder('Daily')
+                                    ->visible(fn ($get) => $get('show_stats')),
+
+                                TextInput::make('stat_3_value')
+                                    ->label('Stat 3 Value')
+                                    ->placeholder('56 min')
+                                    ->visible(fn ($get) => $get('show_stats')),
+
+                                TextInput::make('stat_3_label')
+                                    ->label('Stat 3 Label')
+                                    ->placeholder('Avg Delivery')
+                                    ->visible(fn ($get) => $get('show_stats')),
+
+                                TextInput::make('stat_4_value')
+                                    ->label('Stat 4 Value')
+                                    ->placeholder('83%')
+                                    ->visible(fn ($get) => $get('show_stats')),
+
+                                TextInput::make('stat_4_label')
+                                    ->label('Stat 4 Label')
+                                    ->placeholder('Success Rate')
+                                    ->visible(fn ($get) => $get('show_stats')),
+                            ]),
                     ]),
             ]);
     }
@@ -140,23 +171,44 @@ final class HeroBlock
      */
     public static function mutateData(array $data): array
     {
+        $stats = [];
+        if ($data['show_stats'] ?? true) {
+            $stats = [
+                [
+                    'value' => $data['stat_1_value'] ?? '20',
+                    'label' => $data['stat_1_label'] ?? 'Cities',
+                ],
+                [
+                    'value' => $data['stat_2_value'] ?? '12 Packages',
+                    'label' => $data['stat_2_label'] ?? 'Daily',
+                ],
+                [
+                    'value' => $data['stat_3_value'] ?? '56 min',
+                    'label' => $data['stat_3_label'] ?? 'Avg Delivery',
+                ],
+                [
+                    'value' => $data['stat_4_value'] ?? '83%',
+                    'label' => $data['stat_4_label'] ?? 'Success Rate',
+                ],
+            ];
+        }
+
         return [
             'headline' => $data['headline'] ?? null,
+            'highlight_text' => $data['highlight_text'] ?? null,
             'subheadline' => $data['subheadline'] ?? null,
-            'text_alignment' => $data['text_alignment'] ?? 'center',
             'background' => [
                 'image' => $data['background_image'] ?? null,
-                'overlay' => $data['background_overlay'] ?? 'dark',
-                'color' => $data['background_color'] ?? '#000000',
             ],
-            'dimensions' => [
-                'height' => $data['height'] ?? 'large',
-            ],
-            'cta' => $data['show_cta'] ? [
-                'text' => $data['cta_text'] ?? 'Get Started',
-                'url' => $data['cta_url'] ?? '#',
-                'style' => $data['cta_style'] ?? 'primary',
-            ] : null,
+            'buttons' => ($data['show_buttons'] ?? true) ? [
+                [
+                    'text' => $data['primary_button_text'] ?? 'Book a Demo',
+                ],
+                [
+                    'text' => $data['secondary_button_text'] ?? 'Talk to Our Team',
+                ],
+            ] : [],
+            'stats' => $stats,
         ];
     }
 }

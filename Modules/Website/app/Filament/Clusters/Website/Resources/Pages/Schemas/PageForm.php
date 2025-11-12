@@ -35,6 +35,7 @@ final class PageForm
                                 Select::make('slug')
                                     ->required()
                                     ->options([
+                                        'home' => 'Home Page (home)',
                                         'features' => 'Features Page (features)',
                                         'demo-request' => 'Request Demo Page (demo-request)',
                                         'contact-us' => 'Contact Us Page (contact-us)',
