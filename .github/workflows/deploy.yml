@@ -23,19 +23,20 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Create remote directory if it doesn't exist
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT || '22' }}
-          script: |
-            mkdir -p ${{ secrets.REMOTE_DIR }}
-
       - name: Rsync files to server
         run: |
-          rsync -avz --delete --exclude='.git' --exclude='vendor' --exclude='node_modules' --exclude='public/build' -e "ssh -p ${SSH_PORT:-22} -o StrictHostKeyChecking=no" . ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${REMOTE_DIR}
+          rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='vendor' \
+            --exclude='node_modules' \
+            --exclude='public/build' \
+            --exclude='.env' \
+            --exclude='storage/logs/*.log' \
+            --exclude='storage/framework/sessions/*' \
+            --exclude='storage/framework/cache/*' \
+            --exclude='storage/framework/views/*' \
+            -e "ssh -p ${SSH_PORT:-22} -o StrictHostKeyChecking=no" \
+            . ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${REMOTE_DIR}
 
       - name: Run remote deploy script
         uses: appleboy/ssh-action@v0.1.8
@@ -44,7 +45,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || '22' }}
+          envs: REMOTE_DIR
           script: |
             cd ${{ secrets.REMOTE_DIR }}
-            chmod +x scripts/remote-deploy.sh || true
+            chmod +x scripts/remote-deploy.sh
             ./scripts/remote-deploy.sh

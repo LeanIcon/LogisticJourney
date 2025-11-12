@@ -1,19 +1,32 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Remote deploy script for Laravel app. This script is uploaded to the server
-# and executed there by the GitHub Actions workflow. It assumes the repo has
-# already been copied into the REMOTE_DIR and that composer & php are available.
+# Remote deploy script for Laravel app
+echo "=== Starting deployment: $(date) ==="
 
-echo "Running remote deploy script: $(date)"
-
-# If $RELEASE_DIR or other env var passed from action use it. Otherwise use pwd
 APP_DIR="${APP_DIR:-$(pwd)}"
 cd "$APP_DIR"
+echo "Working directory: $(pwd)"
 
-echo "Current directory: $(pwd)"
+# ============================================
+# Step 1: Setup .env file
+# ============================================
+echo "--- Checking .env file ---"
+if [ ! -f .env ]; then
+    echo ".env not found, creating from .env.example..."
+    if [ -f .env.example ]; then
+        cp .env.example .env
+        echo ".env created from .env.example"
+    else
+        echo "ERROR: .env.example not found!" >&2
+        exit 1
+    fi
+fi
 
-# Try to find composer in common locations
+# ============================================
+# Step 2: Find and use Composer
+# ============================================
+echo "--- Installing Composer dependencies ---"
 COMPOSER_CMD=""
 if command -v composer >/dev/null 2>&1; then
   COMPOSER_CMD="composer"
@@ -28,36 +41,61 @@ elif [ -f "./composer.phar" ]; then
 elif [ -f "/usr/bin/composer" ]; then
   COMPOSER_CMD="/usr/bin/composer"
 else
-  echo "WARNING: composer not found in PATH or common locations." >&2
-  echo "Skipping composer install. Please install composer or add it to PATH." >&2
-  COMPOSER_CMD=""
+  echo "ERROR: composer not found!" >&2
+  exit 1
 fi
 
-if [ -n "$COMPOSER_CMD" ]; then
-  echo "Installing composer dependencies (no-dev)..."
-  $COMPOSER_CMD install --no-dev --prefer-dist --no-interaction --optimize-autoloader || true
+echo "Using composer: $COMPOSER_CMD"
+$COMPOSER_CMD install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+
+# ============================================
+# Step 3: Generate APP_KEY if missing
+# ============================================
+echo "--- Checking APP_KEY ---"
+if ! grep -q "APP_KEY=base64:" .env; then
+    echo "APP_KEY not set, generating..."
+    php artisan key:generate --force
+    echo "APP_KEY generated"
 else
-  echo "Skipping composer install - composer not available"
+    echo "APP_KEY already set"
 fi
 
-echo "Running artisan migrations (forced)..."
-if command -v php >/dev/null 2>&1 && [ -f artisan ]; then
-  php artisan migrate --force || true
-  php artisan config:cache || true
-  php artisan route:cache || true
-  php artisan view:cache || true
-  php artisan optimize || true
-else
-  echo "artisan not found or php not installed; skipping artisan tasks." >&2
-fi
+# ============================================
+# Step 4: Clear all caches
+# ============================================
+echo "--- Clearing caches ---"
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
+php artisan optimize:clear || true
 
-echo "Setting permissions for storage and bootstrap/cache if possible..."
-if id -u www-data >/dev/null 2>&1; then
-  sudo chown -R www-data:www-data storage bootstrap/cache || true
-elif id -u www >/dev/null 2>&1; then
-  sudo chown -R www:www storage bootstrap/cache || true
-else
-  echo "Could not find typical web user (www-data/www). Skipping chown." >&2
-fi
+# ============================================
+# Step 5: Run migrations
+# ============================================
+echo "--- Running migrations ---"
+php artisan migrate --force || echo "Warning: Migrations failed or not needed"
 
-echo "Remote deploy finished: $(date)"
+# ============================================
+# Step 6: Optimize for production
+# ============================================
+echo "--- Optimizing for production ---"
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan optimize
+
+# ============================================
+# Step 7: Set permissions
+# ============================================
+echo "--- Setting permissions ---"
+sudo chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || echo "Warning: Could not set ownership"
+sudo chmod -R 775 storage bootstrap/cache 2>/dev/null || chmod -R 775 storage bootstrap/cache 2>/dev/null || echo "Warning: Could not set permissions"
+
+# ============================================
+# Step 8: Restart PHP-FPM
+# ============================================
+echo "--- Restarting PHP-FPM ---"
+sudo systemctl restart php8.3-fpm 2>/dev/null || echo "Warning: Could not restart PHP-FPM (may need manual restart)"
+
+echo "=== Deployment completed successfully: $(date) ==="
