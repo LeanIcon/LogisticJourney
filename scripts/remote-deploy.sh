@@ -8,6 +8,12 @@ APP_DIR="${APP_DIR:-$(pwd)}"
 cd "$APP_DIR"
 echo "Working directory: $(pwd)"
 
+# Pre-Step: Early full permissions fix (like workflow)
+echo "--- Fixing early permissions ---"
+sudo chown -R www-data:www-data . 2>/dev/null || true
+sudo find . -type d -exec chmod 775 {} \; 2>/dev/null || true
+sudo find . -type f -exec chmod 664 {} \; 2>/dev/null || true
+
 # ============================================
 # Step 1: Setup .env file
 # ============================================
@@ -15,7 +21,7 @@ echo "--- Checking .env file ---"
 if [ ! -f .env ]; then
     echo ".env not found, creating from .env.example..."
     if [ -f .env.example ]; then
-        cp .env.example .env
+        sudo cp .env.example .env
         echo ".env created from .env.example"
     else
         echo "ERROR: .env.example not found!" >&2
@@ -57,44 +63,24 @@ fi
 
 echo "Using composer: $COMPOSER_CMD"
 
-# Ensure composer files writable by www-data
-if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
-    sudo chown www-data:www-data composer.json composer.lock || true
-fi
+# Install prod deps (run as www-data; assumes Scribe in composer.json "require" locally)
+export COMPOSER_ALLOW_SUPERUSER=1
+sudo -u www-data $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
 
-# Install prod deps first (run as www-data if possible for ownership)
-if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
-    export COMPOSER_ALLOW_SUPERUSER=1
-    sudo -u www-data $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
-else
-    $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
-fi
-
-# Install/ensure Scribe as prod dep for /docs (without pulling dev deps)
-SCRIBE_CHECK=$(grep -c '"knuckleswtf/scribe"' composer.json || true)
-if [ "$SCRIBE_CHECK" -eq 0 ] || ! grep -q '"require":' composer.json -A 20 | grep -q "knuckleswtf/scribe"; then
-    echo "--- Adding Scribe to production dependencies for /docs ---"
-    if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
-        export COMPOSER_ALLOW_SUPERUSER=1
-        sudo -u www-data $COMPOSER_CMD require knuckleswtf/scribe --no-dev --no-update --no-scripts --no-interaction
-        sudo -u www-data $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
-    else
-        $COMPOSER_CMD require knuckleswtf/scribe --no-dev --no-update --no-scripts --no-interaction
-        $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
+# ============================================
+# Scribe Handling (post-install; assumes pre-committed as prod dep)
+# ============================================
+echo "--- Handling Scribe for /docs ---"
+if sudo -u www-data $COMPOSER_CMD show knuckleswtf/scribe --no-dev >/dev/null 2>&1; then
+    echo "✓ Scribe detected in prod deps"
+    sudo -u www-data php artisan vendor:publish --tag=scribe-config --force || true
+    sudo -u www-data php artisan vendor:publish --tag=scribe-routes || true
+    # Restore if backed up from prior deploys
+    if [ -f "config/scribe.php.bak" ]; then
+        mv config/scribe.php.bak config/scribe.php
     fi
 else
-    echo "--- Scribe already in production dependencies ---"
-fi
-
-# Publish Scribe config/routes if needed
-echo "--- Publishing Scribe config and routes ---"
-php artisan vendor:publish --tag=scribe-config --force || true
-php artisan vendor:publish --tag=scribe-routes || true
-
-# Restore Scribe config if backed up
-if [ -f "config/scribe.php.bak" ]; then
-    echo "--- Restoring Scribe config for production ---"
-    mv config/scribe.php.bak config/scribe.php
+    echo "✗ Scribe not in prod deps—run 'composer require knuckleswtf/scribe' locally, commit, and re-deploy"
 fi
 
 # ============================================
@@ -103,7 +89,7 @@ fi
 echo "--- Checking APP_KEY ---"
 if ! grep -q "APP_KEY=base64:" .env; then
     echo "APP_KEY not set, generating..."
-    php artisan key:generate --force
+    sudo -u www-data php artisan key:generate --force
     echo "APP_KEY generated"
 else
     echo "APP_KEY already set"
@@ -113,55 +99,62 @@ fi
 # Step 4: Clear all caches
 # ============================================
 echo "--- Clearing caches ---"
-php artisan config:clear
-php artisan cache:clear
-php artisan view:clear
-php artisan route:clear
-php artisan optimize:clear || true
+sudo -u www-data php artisan config:clear || true
+sudo -u www-data php artisan cache:clear || true
+sudo -u www-data php artisan view:clear || true
+sudo -u www-data php artisan route:clear || true
+sudo -u www-data php artisan optimize:clear || true
 
 # ============================================
 # Step 5: Run migrations
 # ============================================
 echo "--- Running migrations ---"
-php artisan migrate --force || echo "Warning: Migrations failed or not needed"
+sudo -u www-data php artisan migrate --force || echo "Warning: Migrations failed or not needed"
 
 # ============================================
 # Step 6: Optimize for production
 # ============================================
 echo "--- Optimizing for production ---"
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-php artisan optimize
+sudo -u www-data php artisan config:cache
+sudo -u www-data php artisan route:cache
+sudo -u www-data php artisan view:cache
+sudo -u www-data php artisan optimize
 
 # ============================================
-# Step 7: Set permissions (enhanced for sessions)
+# Step 7: Set permissions (enhanced for sessions, like workflow)
 # ============================================
 echo "--- Setting permissions ---"
-mkdir -p storage/framework/sessions  # Ensure sessions dir exists
-sudo chown -R www-data:www-data storage bootstrap/cache vendor 2>/dev/null || chown -R www-data:www-data storage bootstrap/cache vendor 2>/dev/null || echo "Warning: Could not set ownership"
-sudo chmod -R 775 storage bootstrap/cache vendor 2>/dev/null || chmod -R 775 storage bootstrap/cache vendor 2>/dev/null || echo "Warning: Could not set permissions"
+sudo mkdir -p storage/framework/sessions storage/logs bootstrap/cache
+sudo -u www-data touch storage/logs/laravel.log
+sudo chown -R www-data:www-data storage bootstrap/cache vendor . 2>/dev/null || echo "Warning: Could not set ownership"
+sudo chmod -R ug+rwx storage bootstrap/cache 2>/dev/null || echo "Warning: Could not set permissions"
+sudo find . -type d -exec chmod 775 {} \; 2>/dev/null || true
+sudo find . -type f -exec chmod 664 {} \; 2>/dev/null || true
 
 # ============================================
-# Step 8: Restart PHP-FPM
+# Step 8: Restart PHP-FPM & Nginx (like workflow)
 # ============================================
-echo "--- Restarting PHP-FPM ---"
-sudo systemctl restart php8.3-fpm 2>/dev/null || echo "Warning: Could not restart PHP-FPM (may need manual restart)"
+echo "--- Restarting services ---"
+sudo systemctl restart php8.3-fpm 2>/dev/null || true
+sudo systemctl restart php8.4-fpm 2>/dev/null || true
+sudo systemctl restart nginx 2>/dev/null || true
 
 # ============================================
 # Step 9: Post-Deploy Verification
 # ============================================
 echo "--- Post-deploy checks ---"
-if php artisan route:list | grep -q "docs"; then
+if sudo -u www-data php artisan route:list | grep -q "docs"; then
     echo "✓ Scribe /docs route registered"
 else
-    echo "✗ /docs route missing—check Scribe install"
+    echo "✗ /docs route missing—ensure Scribe published"
 fi
-if [ -d "storage/framework/sessions" ] && [ -w "storage/framework/sessions" ]; then
+if [ -d "storage/framework/sessions" ] && sudo -u www-data test -w "storage/framework/sessions"; then
     echo "✓ Sessions directory writable"
 else
-    echo "✗ Sessions not writable—fix permissions manually"
+    echo "✗ Sessions not writable—check logs"
 fi
-echo "Deployment ready. Test login and /docs. Check logs if issues persist."
+# Quick PHP config verify (like workflow)
+php -i | grep -E "(upload_max_filesize|post_max_size|max_execution_time|memory_limit)" || true
+echo "Deployment ready. Test login and /docs. Check storage/logs/laravel.log if issues."
 
 echo "=== Deployment completed successfully: $(date) ==="
