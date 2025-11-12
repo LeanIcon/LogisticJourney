@@ -96,15 +96,27 @@ echo "--- Preparing Node environment ---"
 sudo mkdir -p /var/www/.npm
 sudo chown -R www-data:www-data /var/www/.npm 2>/dev/null || true
 
+echo "--- Installing Node.js if missing ---"
+if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
+    echo "Node.js/npm not found—installing via apt (Ubuntu/Debian)..."
+    sudo apt update -qq >/dev/null 2>&1
+    sudo apt install -y nodejs npm >/dev/null 2>&1 || echo "WARNING: Node install failed (check apt sources)"
+    # Optional: For latest Node, uncomment below (requires curl)
+    # curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt install -y nodejs >/dev/null 2>&1
+else
+    echo "Node.js/npm already installed"
+fi
+
 echo "--- Installing Node dependencies ---"
 if command -v npm >/dev/null 2>&1; then
-    sudo -u www-data npm ci --no-audit --no-fund --progress=false || sudo -u www-data npm install --no-audit --no-fund --progress=false
+    sudo -u www-data npm ci --no-audit --no-fund --progress=false --prefix "$APP_DIR" || sudo -u www-data npm install --no-audit --no-fund --progress=false --prefix "$APP_DIR"
 else
-    echo "WARNING: npm not found—install Node.js for asset builds"
+    echo "ERROR: npm still not available after install—manual fix needed"
+    exit 1
 fi
 
 echo "--- Building frontend assets ---"
-sudo -u www-data npm run build || echo "WARNING: npm run build failed (check package.json scripts)"
+sudo -u www-data npm run build --prefix "$APP_DIR" || echo "WARNING: npm run build failed (check package.json scripts)"
 
 # ============================================
 # Scribe Handling (post-install; assumes pre-committed as prod dep)
