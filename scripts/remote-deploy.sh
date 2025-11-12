@@ -15,6 +15,24 @@ if [ -f "config/scribe.php" ]; then
     echo "✓ scribe.php backed up (restore after adding Scribe locally)"
 fi
 
+# Pre-Step: PHP/NGINX config for large uploads (like workflow)
+echo "--- Configuring PHP for large uploads ---"
+for PHP_VER in 8.3 8.4; do
+    for MODE in fpm cli; do
+        INI_FILE="/etc/php/${PHP_VER}/${MODE}/conf.d/99-uploads.ini"
+        echo "upload_max_filesize = 1024M
+post_max_size = 1024M
+memory_limit = 1024M
+max_execution_time = 1800
+max_input_time = 1800" | sudo tee "$INI_FILE" >/dev/null 2>&1 || true
+    done
+done
+
+# NGINX client max body (idempotent)
+if ! sudo grep -q "client_max_body_size" /etc/nginx/nginx.conf; then
+    sudo sed -i '/http {/a \ \ \ \ client_max_body_size 1024M;\n\ \ \ \ client_body_timeout 1800s;\n\ \ \ \ client_header_timeout 1800s;' /etc/nginx/nginx.conf || true
+fi
+
 # Pre-Step: Early full permissions fix (like workflow)
 echo "--- Fixing early permissions ---"
 sudo chown -R www-data:www-data . 2>/dev/null || true
@@ -70,6 +88,23 @@ echo "Using composer: $COMPOSER_CMD"
 # Install prod deps (run as www-data; assumes Scribe in composer.json "require" locally)
 export COMPOSER_ALLOW_SUPERUSER=1
 sudo -u www-data $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
+
+# ============================================
+# Step 2.5: Install Node Dependencies & Build Assets
+# ============================================
+echo "--- Preparing Node environment ---"
+sudo mkdir -p /var/www/.npm
+sudo chown -R www-data:www-data /var/www/.npm 2>/dev/null || true
+
+echo "--- Installing Node dependencies ---"
+if command -v npm >/dev/null 2>&1; then
+    sudo -u www-data npm ci --no-audit --no-fund --progress=false || sudo -u www-data npm install --no-audit --no-fund --progress=false
+else
+    echo "WARNING: npm not found—install Node.js for asset builds"
+fi
+
+echo "--- Building frontend assets ---"
+sudo -u www-data npm run build || echo "WARNING: npm run build failed (check package.json scripts)"
 
 # ============================================
 # Scribe Handling (post-install; assumes pre-committed as prod dep)
@@ -132,18 +167,18 @@ sudo -u www-data php artisan optimize
 echo "--- Setting permissions ---"
 sudo mkdir -p storage/framework/sessions storage/logs bootstrap/cache
 sudo -u www-data touch storage/logs/laravel.log
-sudo chown -R www-data:www-data storage bootstrap/cache vendor . 2>/dev/null || echo "Warning: Could not set ownership"
+sudo chown -R www-data:www-data storage bootstrap/cache vendor . node_modules 2>/dev/null || echo "Warning: Could not set ownership"
 sudo chmod -R ug+rwx storage bootstrap/cache 2>/dev/null || echo "Warning: Could not set permissions"
 sudo find . -type d -exec chmod 775 {} \; 2>/dev/null || true
 sudo find . -type f -exec chmod 664 {} \; 2>/dev/null || true
 
 # ============================================
-# Step 8: Restart PHP-FPM & Nginx (like workflow)
+# Step 8: Restart PHP-FPM & Nginx (like workflow; after PHP config)
 # ============================================
 echo "--- Restarting services ---"
 sudo systemctl restart php8.3-fpm 2>/dev/null || true
 sudo systemctl restart php8.4-fpm 2>/dev/null || true
-sudo systemctl restart nginx 2>/dev/null || true
+sudo systemctl reload nginx 2>/dev/null || true  # Reload for config changes
 
 # ============================================
 # Step 9: Post-Deploy Verification
