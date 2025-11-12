@@ -23,6 +23,16 @@ if [ ! -f .env ]; then
     fi
 fi
 
+# Ensure key env vars for prod (add defaults if missing)
+echo "--- Ensuring key .env vars for production ---"
+if ! grep -q "^APP_URL=" .env; then
+    echo "APP_URL missing—set to http://localhost (update manually!)"
+    echo "APP_URL=http://localhost" >> .env
+fi
+if ! grep -q "^SESSION_DRIVER=" .env; then
+    echo "SESSION_DRIVER=file" >> .env
+fi
+
 # ============================================
 # Step 2: Find and use Composer
 # ============================================
@@ -55,10 +65,25 @@ else
     $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
 fi
 
-# If Scribe is causing issues (dev-only), skip its config in prod
-if [ -f "config/scribe.php" ]; then
-    echo "--- Skipping Scribe config for production ---"
-    mv config/scribe.php config/scribe.php.bak || true
+# Install/ensure Scribe as prod dep for /docs
+if ! $COMPOSER_CMD show knuckleswtf/scribe >/dev/null 2>&1; then
+    echo "--- Installing Scribe as production dependency for /docs ---"
+    if command -v sudo >/dev/null 2>&1 && id -u www-data >/dev/null 2>&1; then
+        sudo -u www-data $COMPOSER_CMD require knuckleswtf/scribe --no-interaction --no-scripts
+    else
+        $COMPOSER_CMD require knuckleswtf/scribe --no-interaction --no-scripts
+    fi
+fi
+
+# Publish Scribe config/routes if needed
+echo "--- Publishing Scribe config and routes ---"
+php artisan vendor:publish --tag=scribe-config --force || true
+php artisan vendor:publish --tag=scribe-routes || true
+
+# Restore Scribe config if backed up
+if [ -f "config/scribe.php.bak" ]; then
+    echo "--- Restoring Scribe config for production ---"
+    mv config/scribe.php.bak config/scribe.php
 fi
 
 # ============================================
@@ -99,9 +124,10 @@ php artisan view:cache
 php artisan optimize
 
 # ============================================
-# Step 7: Set permissions
+# Step 7: Set permissions (enhanced for sessions)
 # ============================================
 echo "--- Setting permissions ---"
+mkdir -p storage/framework/sessions  # Ensure sessions dir exists
 sudo chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || echo "Warning: Could not set ownership"
 sudo chmod -R 775 storage bootstrap/cache 2>/dev/null || chmod -R 775 storage bootstrap/cache 2>/dev/null || echo "Warning: Could not set permissions"
 
@@ -110,5 +136,21 @@ sudo chmod -R 775 storage bootstrap/cache 2>/dev/null || chmod -R 775 storage bo
 # ============================================
 echo "--- Restarting PHP-FPM ---"
 sudo systemctl restart php8.3-fpm 2>/dev/null || echo "Warning: Could not restart PHP-FPM (may need manual restart)"
+
+# ============================================
+# Step 9: Post-Deploy Verification
+# ============================================
+echo "--- Post-deploy checks ---"
+if php artisan route:list | grep -q "docs"; then
+    echo "✓ Scribe /docs route registered"
+else
+    echo "✗ /docs route missing—check Scribe install"
+fi
+if [ -d "storage/framework/sessions" ] && [ -w "storage/framework/sessions" ]; then
+    echo "✓ Sessions directory writable"
+else
+    echo "✗ Sessions not writable—fix permissions manually"
+fi
+echo "Deployment ready. Test login and /docs. Check logs if issues persist."
 
 echo "=== Deployment completed successfully: $(date) ==="
