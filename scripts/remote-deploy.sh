@@ -71,8 +71,10 @@ sudo -u www-data $COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-
 # Scribe Handling (post-install; assumes pre-committed as prod dep)
 # ============================================
 echo "--- Handling Scribe for /docs ---"
+HAS_SCRIBE=false
 if sudo -u www-data $COMPOSER_CMD show knuckleswtf/scribe --no-dev >/dev/null 2>&1; then
     echo "✓ Scribe detected in prod deps"
+    HAS_SCRIBE=true
     sudo -u www-data php artisan vendor:publish --tag=scribe-config --force || true
     sudo -u www-data php artisan vendor:publish --tag=scribe-routes || true
     # Restore if backed up from prior deploys
@@ -80,7 +82,12 @@ if sudo -u www-data $COMPOSER_CMD show knuckleswtf/scribe --no-dev >/dev/null 2>
         mv config/scribe.php.bak config/scribe.php
     fi
 else
-    echo "✗ Scribe not in prod deps—run 'composer require knuckleswtf/scribe' locally, commit, and re-deploy"
+    echo "✗ Scribe not in prod deps—backing up config to avoid errors"
+    if [ -f "config/scribe.php" ]; then
+        mv config/scribe.php config/scribe.php.bak
+        echo "✓ scribe.php backed up (restore after adding Scribe locally)"
+    fi
+    echo "Run 'composer require knuckleswtf/scribe' locally, commit, and re-deploy for /docs"
 fi
 
 # ============================================
@@ -143,8 +150,10 @@ sudo systemctl restart nginx 2>/dev/null || true
 # Step 9: Post-Deploy Verification
 # ============================================
 echo "--- Post-deploy checks ---"
-if sudo -u www-data php artisan route:list | grep -q "docs"; then
+if [ "$HAS_SCRIBE" = true ] && sudo -u www-data php artisan route:list | grep -q "docs"; then
     echo "✓ Scribe /docs route registered"
+elif [ "$HAS_SCRIBE" = false ]; then
+    echo "✗ /docs skipped (Scribe not in prod)"
 else
     echo "✗ /docs route missing—ensure Scribe published"
 fi
@@ -155,6 +164,6 @@ else
 fi
 # Quick PHP config verify (like workflow)
 php -i | grep -E "(upload_max_filesize|post_max_size|max_execution_time|memory_limit)" || true
-echo "Deployment ready. Test login and /docs. Check storage/logs/laravel.log if issues."
+echo "Deployment ready. Test login. Check storage/logs/laravel.log if issues."
 
 echo "=== Deployment completed successfully: $(date) ==="
