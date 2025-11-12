@@ -46,7 +46,7 @@ else
 fi
 
 echo "Using composer: $COMPOSER_CMD"
-$COMPOSER_CMD install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+$COMPOSER_CMD install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
 
 # ============================================
 # Step 3: Generate APP_KEY if missing
