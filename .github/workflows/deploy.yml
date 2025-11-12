@@ -1,9 +1,9 @@
-name: Deploy Laravel to Azure VM
+name: Deploy to VM
 
 on:
   push:
     branches:
-      - production
+      - staging
 
 jobs:
   deploy:
