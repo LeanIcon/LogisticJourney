@@ -9,22 +9,14 @@ use function Knuckles\Scribe\Config\{removeStrategies, configureStrategy};
 
 return [
     // The HTML <title> for the generated documentation.
-    'title' => config('app.name') . ' API Documentation',
+    'title' => config('app.name').' API Documentation',
 
     // A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
     'description' => '',
 
-    // Text to place in the "Introduction" section, right after the `description`. Markdown and HTML are supported.
-    'intro_text' => <<<INTRO
-        This documentation aims to provide all the information you need to work with our API.
-
-        <aside>As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
-        You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).</aside>
-    INTRO,
-
     // The base URL displayed in the docs.
     // If you're using `laravel` type, you can set this to a dynamic string, like '{{ config("app.tenant_url") }}' to get a dynamic base URL.
-    'base_url' => config("app.url"),
+    'base_url' => 'https://api.littdigitalacademy.org',
 
     // Routes to include in the docs
     'routes' => [
@@ -103,29 +95,37 @@ return [
     // How is your API authenticated? This information will be used in the displayed docs, generated examples and response calls.
     'auth' => [
         // Set this to true if ANY endpoints in your API use authentication.
-        'enabled' => false,
+        'enabled' => true,
 
         // Set this to true if your API should be authenticated by default. If so, you must also set `enabled` (above) to true.
         // You can then use @unauthenticated or @authenticated on individual endpoints to change their status from the default.
-        'default' => false,
+        'default' => true,
 
         // Where is the auth value meant to be sent in a request?
-        'in' => AuthIn::BEARER->value,
+        'in' => 'header',
 
         // The name of the auth parameter (e.g. token, key, apiKey) or header (e.g. Authorization, Api-Key).
-        'name' => 'key',
+        'name' => 'Authorization',
 
         // The value of the parameter to be used by Scribe to authenticate response calls.
         // This will NOT be included in the generated documentation. If empty, Scribe will use a random value.
-        'use_value' => env('SCRIBE_AUTH_KEY'),
+        'use_value' => 'Bearer 3|aOMMYFMGyUS9ISz1941uyCwUndbOKiO2GqKKoZnEcb107a90',
 
         // Placeholder your users will see for the auth parameter in the example requests.
         // Set this to null if you want Scribe to use a random value as placeholder instead.
-        'placeholder' => '{YOUR_AUTH_KEY}',
+        'placeholder' => 'Bearer {YOUR_AUTH_TOKEN}',
 
         // Any extra authentication-related info for your users. Markdown and HTML are supported.
-        'extra_info' => 'You can retrieve your token by visiting your dashboard and clicking <b>Generate API token</b>.',
+        'extra_info' => 'Authenticate using a Bearer token from Sanctum. Example: <code>Bearer 14|KQEecOsc6NCmfB47ESS5wqJmB0KyydIHx9QcHnkP6c319277</code>.',
     ],
+
+    // Text to place in the "Introduction" section, right after the `description`. Markdown and HTML are supported.
+    'intro_text' => <<<INTRO
+        This documentation aims to provide all the information you need to work with our API.
+
+        <aside>As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
+        You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).</aside>
+    INTRO,
 
     // Example requests for each endpoint will be shown in each of these languages.
     // Supported options are: bash, javascript, php, python
@@ -200,44 +200,6 @@ return [
         // By default, Scribe will try the model's factory, and if that fails, try fetching the first from the database.
         // You can reorder or remove strategies here.
         'models_source' => ['factoryCreate', 'factoryMake', 'databaseFirst'],
-    ],
-
-    // The strategies Scribe will use to extract information about your routes at each stage.
-    // Use configureStrategy() to specify settings for a strategy in the list.
-    // Use removeStrategies() to remove an included strategy.
-    'strategies' => [
-        'metadata' => [
-            ...Defaults::METADATA_STRATEGIES,
-        ],
-        'headers' => [
-            ...Defaults::HEADERS_STRATEGIES,
-            Strategies\StaticData::withSettings(data: [
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-            ]),
-        ],
-        'urlParameters' => [
-            ...Defaults::URL_PARAMETERS_STRATEGIES,
-        ],
-        'queryParameters' => [
-            ...Defaults::QUERY_PARAMETERS_STRATEGIES,
-        ],
-        'bodyParameters' => [
-            ...Defaults::BODY_PARAMETERS_STRATEGIES,
-        ],
-        'responses' => configureStrategy(
-            Defaults::RESPONSES_STRATEGIES,
-            Strategies\Responses\ResponseCalls::withSettings(
-                only: ['GET *'],
-                // Recommended: disable debug mode in response calls to avoid error stack traces in responses
-                config: [
-                    'app.debug' => false,
-                ]
-            )
-        ),
-        'responseFields' => [
-            ...Defaults::RESPONSE_FIELDS_STRATEGIES,
-        ]
     ],
 
     // For response calls, API resource responses and transformer responses,
