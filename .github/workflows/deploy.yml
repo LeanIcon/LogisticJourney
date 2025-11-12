@@ -68,6 +68,14 @@ jobs:
             echo "➤ Using .env.example as .env..."
             sudo cp .env.example .env
 
+            echo "➤ Staging: Disable HTTPS force..."
+            sudo sed -i "s/APP_ENV=production/APP_ENV=staging/" .env
+            echo "FORCE_HTTPS=false" | sudo tee -a .env
+            sudo sed -i '/URL::forceScheme/s/^/\/\//' app/Providers/AppServiceProvider.php  # Comment force line
+            sudo -u www-data php artisan optimize:clear
+            sudo -u www-data php artisan config:cache --no-interaction
+            echo "➤ HTTP assets enabled"
+
             echo "➤ Setting directory permissions..."
             sudo chown -R www-data:www-data .
             sudo find . -type d -exec chmod 775 {} \;
