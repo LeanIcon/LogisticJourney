@@ -18,20 +18,16 @@ jobs:
       - name: Install rsync
         run: sudo apt-get update && sudo apt-get install -y rsync
 
-      # Preferred: SSH private key path (recommended)
       - name: Add SSH key to ssh-agent
-        if: secrets.SSH_PRIVATE_KEY != ''
         uses: webfactory/ssh-agent@v0.8.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Rsync files to server (key)
-        if: secrets.SSH_PRIVATE_KEY != ''
+      - name: Rsync files to server
         run: |
           rsync -avz --delete --exclude='.git' --exclude='vendor' --exclude='node_modules' --exclude='public/build' -e "ssh -p ${SSH_PORT:-22} -o StrictHostKeyChecking=no" . ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${REMOTE_DIR}
 
-      - name: Run remote deploy script (key)
-        if: secrets.SSH_PRIVATE_KEY != ''
+      - name: Run remote deploy script
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -39,31 +35,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || '22' }}
           script: |
-            cd ${REMOTE_DIR}
-            chmod +x scripts/remote-deploy.sh || true
-            ./scripts/remote-deploy.sh
-
-      # Fallback: password-based scp/ssh (less secure)
-      - name: Upload project (password)
-        if: secrets.SSH_PRIVATE_KEY == '' && secrets.SSH_PASSWORD != ''
-        uses: appleboy/scp-action@v0.1.6
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT || '22' }}
-          source: "."
-          target: ${{ secrets.REMOTE_DIR }}
-
-      - name: Run remote deploy script (password)
-        if: secrets.SSH_PRIVATE_KEY == '' && secrets.SSH_PASSWORD != ''
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT || '22' }}
-          script: |
-            cd ${REMOTE_DIR}
+            cd ${{ secrets.REMOTE_DIR }}
             chmod +x scripts/remote-deploy.sh || true
             ./scripts/remote-deploy.sh
