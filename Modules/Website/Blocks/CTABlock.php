@@ -84,10 +84,7 @@ final class CTABlock
             'description' => $data['description'] ?? null,
             'button' => [
                 'text' => $data['button_text'] ?? 'Book a Demo Now',
-                'url' => $data['button_url'] ?? '#',
-                'style' => $data['button_style'] ?? 'primary',
             ],
-            'background_color' => $data['background_color'] ?? 'blue',
             'image' => [
                 'path' => $imagePath,
                 'url' => $imageUrl,

@@ -104,7 +104,7 @@ final class OurStoryBlock
         }
 
         return [
-            'eyebrow' => $data['eyebrow'] ?? 'Our Story',
+            'heading' => $data['heading'] ?? 'Our Story',
 
             'section' => [
                 'headline' => $data['headline'] ?? null,

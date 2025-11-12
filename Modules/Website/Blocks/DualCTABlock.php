@@ -87,13 +87,9 @@ final class DualCTABlock
             'buttons' => [
                 'primary' => [
                     'text' => $data['button_primary_text'] ?? 'Book a Demo',
-                    'url' => $data['button_primary_url'] ?? '#',
-                    'style' => $data['button_primary_style'] ?? 'primary',
                 ],
                 'secondary' => [
                     'text' => $data['button_secondary_text'] ?? 'Talk to Our Team',
-                    'url' => $data['button_secondary_url'] ?? '#',
-                    'style' => $data['button_secondary_style'] ?? 'outline',
                 ],
             ],
             'image' => [
