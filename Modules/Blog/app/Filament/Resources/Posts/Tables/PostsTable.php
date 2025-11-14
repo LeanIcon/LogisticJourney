@@ -24,12 +24,6 @@ final class PostsTable
     {
         return $table
             ->columns([
-                ImageColumn::make('featured_image')
-                    ->label('Image')
-                    ->circular()
-                    ->defaultImageUrl(url('/images/placeholder.png'))
-                    ->toggleable(),
-
                 TextColumn::make('title')
                     ->searchable()
                     ->sortable()
@@ -50,9 +44,9 @@ final class PostsTable
                 TextColumn::make('type')
                     ->badge()
                     ->colors([
-                        'primary' => 'post',
+                        'primary' => 'blog',
                         'success' => 'article',
-                        'info' => 'tutorial',
+                        'info' => 'case_study',
                         'warning' => 'news',
                     ])
                     ->toggleable(),
@@ -65,12 +59,6 @@ final class PostsTable
                         'warning' => 'scheduled',
                     ])
                     ->sortable(),
-
-                IconColumn::make('is_featured')
-                    ->label('Featured')
-                    ->boolean()
-                    ->sortable()
-                    ->toggleable(),
 
                 TextColumn::make('published_at')
                     ->label('Published')

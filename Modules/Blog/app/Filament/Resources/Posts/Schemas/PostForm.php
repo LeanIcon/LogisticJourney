@@ -42,11 +42,6 @@ final class PostForm
                                     ->unique(ignoreRecord: true)
                                     ->helperText('URL-friendly version of the title'),
 
-                                Textarea::make('excerpt')
-                                    ->maxLength(500)
-                                    ->rows(3)
-                                    ->helperText('Brief summary (max 500 characters)'),
-
                                 RichEditor::make('body')
                                     ->required()
                                     ->columnSpanFull()
