@@ -14,7 +14,7 @@ use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -75,7 +75,7 @@ final class PolicyResource extends Resource
                 Section::make('Policy Content')
                     ->description('Full policy document in markdown format')
                     ->schema([
-                        MarkdownEditor::make('content')
+                        RichEditor::make('content')
                             ->required()
                             ->columnSpanFull()
                             ->helperText('Full policy document'),
