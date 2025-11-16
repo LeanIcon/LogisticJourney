@@ -21,7 +21,7 @@ class PolicyResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'status' => $this->status,
-                'content' => html_entity_decode($this->content),
+            'content' => html_entity_decode($this->content),
             'meta_title' => $this->meta_title,
             'meta_description' => $this->meta_description,
             'created_at' => $this->created_at?->toIso8601String(),
