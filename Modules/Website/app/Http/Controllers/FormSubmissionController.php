@@ -7,6 +7,7 @@ namespace Modules\Website\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Modules\Website\app\Services\FormNotificationService;
 use Modules\Website\Models\Form;
 use Modules\Website\Models\FormSubmission;
 
@@ -76,6 +77,16 @@ final class FormSubmissionController extends Controller
         // Validate request
         $validated = $request->validate($rules);
 
+        // reCAPTCHA verification
+        $recaptchaToken = $request->input('captcha');
+        $notificationService = new FormNotificationService();
+        if (!$notificationService->verifyRecaptcha($recaptchaToken)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'reCAPTCHA verification failed.'
+            ], 422);
+        }
+
         // Persist submission
         $submission = FormSubmission::create([
             'form_id' => $form->id,
@@ -83,6 +94,29 @@ final class FormSubmissionController extends Controller
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
         ]);
+
+        // Save contact data locally
+        $contactData = [
+            'form' => $form->slug,
+            'fields' => json_encode($validated),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'timestamp' => now()->toDateTimeString(),
+        ];
+        $notificationService->saveContactData($contactData);
+
+        // Send notification email
+        $subject = 'New Form Submission: ' . $form->slug;
+        $body = "Form: {$form->slug}\n" .
+            "Fields: " . json_encode($validated, JSON_PRETTY_PRINT) . "\n" .
+            "IP: " . $request->ip() . "\n" .
+            "User Agent: " . $request->userAgent();
+        $notificationService->sendNotification($subject, $body);
+
+        // Send confirmation email to user if email field exists
+        if (isset($validated['email']) && filter_var($validated['email'], FILTER_VALIDATE_EMAIL)) {
+            $notificationService->sendConfirmationToUser($validated['email']);
+        }
 
         // Optionally log or dispatch notifications here
         Log::info('Form submitted', ['form' => $form->slug, 'id' => $submission->id]);
