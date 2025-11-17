@@ -16,13 +16,13 @@ class CaseStudyResource extends JsonResource
             'featured_image' => $this->featured_image,
             'client' => [
                 'name' => $this->client_name,
-                'logo' => $this->client_logo,
+                'logo' => $this->client_logo ? asset('storage/' . $this->client_logo) : null,
                 'quote' => $this->excerpt,
                 'quote_author' => $this->quote_author,
                 'quote_author_title' => $this->quote_author_title,
             ],
             'content' => [
-                'banner' => $this->featured_image,
+                'banner' => $this->featured_image ? asset('storage/' . $this->featured_image) : null,
                 'introduction' => $this->introduction,
                 'the_problem' => $this->the_problem,
                 'the_solution' => $this->the_solution,
