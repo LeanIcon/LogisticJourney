@@ -12,18 +12,19 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Submit a form.'
+      title: 'Submit a form with reCAPTCHA verification.'
       description: ''
       authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
       identifier:
         custom: []
         name: identifier
-        description: 'The form slug to submit to.'
+        description: 'The form slug identifier.'
         required: true
         example: contact-us
         type: string
@@ -36,21 +37,10 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      fields:
+      name:
         custom: []
-        name: fields
-        description: 'The form field values keyed by field name'
-        required: true
-        example: []
-        type: object
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      fields.name:
-        custom: []
-        name: fields.name
-        description: 'The name of the submitter.'
+        name: name
+        description: "The submitter's full name."
         required: true
         example: 'John Doe'
         type: string
@@ -58,10 +48,10 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      fields.email:
+      email:
         custom: []
-        name: fields.email
-        description: 'Email address.'
+        name: email
+        description: 'Valid email address for contact and confirmation.'
         required: true
         example: john@example.com
         type: string
@@ -69,12 +59,34 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      fields.message:
+      phone:
         custom: []
-        name: fields.message
-        description: 'Message content.'
+        name: phone
+        description: 'Optional phone number.'
         required: false
-        example: "I'd like more information"
+        example: '+1 (555) 123-4567'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      subject:
+        custom: []
+        name: subject
+        description: 'Optional subject or category.'
+        required: false
+        example: general
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      message:
+        custom: []
+        name: message
+        description: 'The message content.'
+        required: true
+        example: "I'd like more information about your services"
         type: string
         enumValues: []
         exampleWasSpecified: true
@@ -83,20 +95,21 @@ endpoints:
       captcha:
         custom: []
         name: captcha
-        description: 'reCAPTCHA token.'
+        description: 'reCAPTCHA token from Google reCAPTCHA (v2 or v3).'
         required: true
-        example: xyz123
+        example: 03AGdBq25hcBhpXPC...
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      fields:
-        name: 'John Doe'
-        email: john@example.com
-        message: "I'd like more information"
-      captcha: xyz123
+      name: 'John Doe'
+      email: john@example.com
+      phone: '+1 (555) 123-4567'
+      subject: general
+      message: "I'd like more information about your services"
+      captcha: 03AGdBq25hcBhpXPC...
     fileParameters: []
     responses:
       -
@@ -104,16 +117,9 @@ endpoints:
         status: 201
         content: |-
           {
-            "status": "success",
-            "data": {
-              "id": 1,
-              "form_id": 1,
-              "fields": {
-                "name": "John Doe",
-                "email": "john@example.com",
-                "message": "I'd like more information"
-              }
-            }
+            "status": "ok",
+            "id": 123,
+            "message": "Submission received"
           }
         headers: []
         description: success
@@ -125,7 +131,7 @@ endpoints:
             "message": "Form not found"
           }
         headers: []
-        description: ''
+        description: form_not_found
       -
         custom: []
         status: 422
@@ -133,13 +139,28 @@ endpoints:
           {
             "message": "Validation failed",
             "errors": {
-              "fields.email": ["The email field is required"]
+              "email": ["The email field is required"],
+              "name": ["The name field is required"],
+              "message": ["The message field is required"]
             }
           }
         headers: []
-        description: ''
+        description: validation_error
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "status": "error",
+            "message": "reCAPTCHA verification failed."
+          }
+        headers: []
+        description: captcha_failed
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3|aOMMYFMGyUS9ISz1941uyCwUndbOKiO2GqKKoZnEcb107a90'
     controller: null
     method: null
     route: null

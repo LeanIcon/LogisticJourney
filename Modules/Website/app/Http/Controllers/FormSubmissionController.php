@@ -7,48 +7,49 @@ namespace Modules\Website\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
-use Modules\Website\app\Services\FormNotificationService;
+use Modules\Website\Services\FormNotificationService;
 use Modules\Website\Models\Form;
 use Modules\Website\Models\FormSubmission;
 
 final class FormSubmissionController extends Controller
 {
     /**
-     * Submit a form.
+     * Submit a form with reCAPTCHA verification.
      *
      * @group Form Submissions
      * @authenticated false
      *
-     * Handles form submission and validation. Field names and validation rules are dynamic 
-     * based on the form definition. Frontend should call GET /api/v1/forms/{slug} first
-     * to retrieve the fields array before submitting.
-     *
-     * @urlParam identifier string required The form slug to submit to. Example: contact-us
-     * @bodyParam fields object required The form field values keyed by field name
-     * @bodyParam fields.name string required The name of the submitter. Example: John Doe
-     * @bodyParam fields.email string required Email address. Example: john@example.com
-     * @bodyParam fields.message string Message content. Example: I'd like more information
-     * @bodyParam captcha string required reCAPTCHA token. Example: xyz123
-     *
+     * 
+     * @urlParam identifier string required The form slug identifier. Example: contact-us
+     * 
+     * @bodyParam name string required The submitter's full name. Example: John Doe
+     * @bodyParam email string required Valid email address for contact and confirmation. Example: john@example.com
+     * @bodyParam phone string Optional phone number. Example: +1 (555) 123-4567
+     * @bodyParam subject string Optional subject or category. Example: general
+     * @bodyParam message string required The message content. Example: I'd like more information about your services
+     * @bodyParam captcha string required reCAPTCHA token from Google reCAPTCHA (v2 or v3). Example: 03AGdBq25hcBhpXPC...
+     * 
      * @response scenario=success status=201 {
-     *   "status": "success",
-     *   "data": {
-     *     "id": 1,
-     *     "form_id": 1,
-     *     "fields": {
-     *       "name": "John Doe",
-     *       "email": "john@example.com",
-     *       "message": "I'd like more information"
-     *     }
-     *   }
+     *   "status": "ok",
+     *   "id": 123,
+     *   "message": "Submission received"
      * }
-     * @response status=422 {
+     * 
+     * @response status=422 scenario="validation_error" {
      *   "message": "Validation failed",
      *   "errors": {
-     *     "fields.email": ["The email field is required"]
+     *     "email": ["The email field is required"],
+     *     "name": ["The name field is required"],
+     *     "message": ["The message field is required"]
      *   }
      * }
-     * @response status=404 {
+     * 
+     * @response status=422 scenario="captcha_failed" {
+     *   "status": "error",
+     *   "message": "reCAPTCHA verification failed."
+     * }
+     * 
+     * @response status=404 scenario="form_not_found" {
      *   "message": "Form not found"
      * }
      */
@@ -74,11 +75,13 @@ final class FormSubmissionController extends Controller
             }
         }
 
-        // Validate request
+        // Validate request fields
         $validated = $request->validate($rules);
 
-        // reCAPTCHA verification
+        // Get reCAPTCHA token from request
         $recaptchaToken = $request->input('captcha');
+        
+        // Verify reCAPTCHA token with Google's API
         $notificationService = new FormNotificationService();
         if (!$notificationService->verifyRecaptcha($recaptchaToken)) {
             return response()->json([
@@ -87,7 +90,7 @@ final class FormSubmissionController extends Controller
             ], 422);
         }
 
-        // Persist submission
+        // Persist submission to database
         $submission = FormSubmission::create([
             'form_id' => $form->id,
             'data' => $validated,
@@ -95,7 +98,7 @@ final class FormSubmissionController extends Controller
             'user_agent' => $request->userAgent(),
         ]);
 
-        // Save contact data locally
+        // Save contact data locally (backup/logging)
         $contactData = [
             'form' => $form->slug,
             'fields' => json_encode($validated),
@@ -105,7 +108,7 @@ final class FormSubmissionController extends Controller
         ];
         $notificationService->saveContactData($contactData);
 
-        // Send notification email
+        // Send notification email to admin/team
         $subject = 'New Form Submission: ' . $form->slug;
         $body = "Form: {$form->slug}\n" .
             "Fields: " . json_encode($validated, JSON_PRETTY_PRINT) . "\n" .
@@ -113,14 +116,15 @@ final class FormSubmissionController extends Controller
             "User Agent: " . $request->userAgent();
         $notificationService->sendNotification($subject, $body);
 
-        // Send confirmation email to user if email field exists
+        // Send confirmation email to user if email field exists and is valid
         if (isset($validated['email']) && filter_var($validated['email'], FILTER_VALIDATE_EMAIL)) {
             $notificationService->sendConfirmationToUser($validated['email']);
         }
 
-        // Optionally log or dispatch notifications here
+        // Log submission for debugging/auditing
         Log::info('Form submitted', ['form' => $form->slug, 'id' => $submission->id]);
 
+        // Return success response
         return response()->json([
             'status' => 'ok',
             'id' => $submission->id,

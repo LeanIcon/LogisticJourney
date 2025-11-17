@@ -24,9 +24,10 @@ endpoints:
       subgroupDescription: ''
       title: 'List all FAQs'
       description: 'Retrieve a list of all FAQs sorted by most recently updated first.'
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -56,7 +57,10 @@ endpoints:
         headers: []
         description: ''
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3|aOMMYFMGyUS9ISz1941uyCwUndbOKiO2GqKKoZnEcb107a90'
     controller: null
     method: null
     route: null
@@ -77,9 +81,10 @@ endpoints:
       subgroupDescription: ''
       title: 'Get a specific FAQ'
       description: 'Retrieve a single FAQ by its ID.'
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -140,7 +145,10 @@ endpoints:
         headers: []
         description: ''
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3|aOMMYFMGyUS9ISz1941uyCwUndbOKiO2GqKKoZnEcb107a90'
     controller: null
     method: null
     route: null

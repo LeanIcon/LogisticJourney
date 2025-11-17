@@ -11,7 +11,8 @@
         "filament/filament": "^4.2.0",
         "filament/spatie-laravel-tags-plugin": "^4.2.0",
         "laravel/framework": "^12.37.0",
-        "nunomaduro/essentials": "^1.0.1"
+        "nunomaduro/essentials": "^1.0.1",
+        "phpmailer/phpmailer": "^7.0"
     },
     "require-dev": {
         "driftingly/rector-laravel": "^2.1.3",

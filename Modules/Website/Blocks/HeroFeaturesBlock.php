@@ -11,7 +11,7 @@ use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Modules\Blocks\Interfaces\Block as BlockTrait;
 
-final class FeaturesHeroBlock
+final class HeroFeaturesBlock
 {
     use BlockTrait;
 
