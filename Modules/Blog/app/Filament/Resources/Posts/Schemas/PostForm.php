@@ -86,8 +86,8 @@ final class PostForm
                                 Select::make('type')
                                     ->options([
                                         'blog' => 'Blog',
-                                        'case study' => 'Case Study'
-                                    ])
+                                        'article' => 'Article',
+                                        ])
                                     ->default('blog')
                                     ->required(),
 
