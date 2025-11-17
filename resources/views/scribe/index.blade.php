@@ -92,6 +92,22 @@
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-case-studies" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="case-studies">
+                    <a href="#case-studies">Case Studies</a>
+                </li>
+                                    <ul id="tocify-subheader-case-studies" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="case-studies-GETapi-v1-case-studies">
+                                <a href="#case-studies-GETapi-v1-case-studies">List all published case studies</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="case-studies-GETapi-v1-case-studies-featured">
+                                <a href="#case-studies-GETapi-v1-case-studies-featured">Get the latest featured published case study</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="case-studies-GETapi-v1-case-studies--slug-">
+                                <a href="#case-studies-GETapi-v1-case-studies--slug-">Show a single published case study by slug</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
                     <ul id="tocify-header-endpoints" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="endpoints">
                     <a href="#endpoints">Endpoints</a>
@@ -1073,7 +1089,853 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                <h1 id="endpoints">Endpoints</h1>
+                <h1 id="case-studies">Case Studies</h1>
+
+    <p>Endpoints for managing and viewing case studies.</p>
+<p>Resource fields:</p>
+<ul>
+<li>id: int</li>
+<li>title: string</li>
+<li>slug: string</li>
+<li>featured_image: string|null (main image, raw value)</li>
+<li>client: object
+<ul>
+<li>name: string</li>
+<li>logo: string|null (raw value)</li>
+<li>quote: string</li>
+<li>quote_author: string</li>
+<li>quote_author_title: string</li>
+</ul></li>
+<li>content: object
+<ul>
+<li>banner: string|null (raw featured_image)</li>
+<li>introduction: string</li>
+<li>the_problem: string</li>
+<li>the_solution: string</li>
+<li>the_result: string</li>
+<li>the_road_ahead: string</li>
+</ul></li>
+<li>sidebar: object
+<ul>
+<li>industry: string</li>
+<li>location: string</li>
+<li>engagement_type: string</li>
+<li>implementation_period: string</li>
+<li>solution: string</li>
+<li>logo: string|null (URL)</li>
+</ul></li>
+<li>meta: object
+<ul>
+<li>meta_title: string|null</li>
+<li>meta_description: string|null</li>
+<li>status: string</li>
+<li>is_featured: bool</li>
+<li>published_at: string|null</li>
+<li>created_at: string</li>
+<li>updated_at: string</li>
+</ul></li>
+</ul>
+
+                                <h2 id="case-studies-GETapi-v1-case-studies">List all published case studies</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-case-studies">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://logisticjourney.onrender.com/api/v1/case-studies?featured=&amp;per_page=16" \
+    --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://logisticjourney.onrender.com/api/v1/case-studies"
+);
+
+const params = {
+    "featured": "0",
+    "per_page": "16",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-case-studies">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;title&quot;: &quot;How Logistic Journey Helped Turn Paper Chaos into Digital Clarity&quot;,
+            &quot;slug&quot;: &quot;how-logistic-journey-helped-turn-paper-chaos-into-digital-clarity&quot;,
+            &quot;featured_image&quot;: null,
+            &quot;client&quot;: {
+                &quot;name&quot;: &quot;Park Avenue Stationers&quot;,
+                &quot;logo&quot;: null,
+                &quot;quote&quot;: &quot;&ldquo;It&rsquo;s early days, but the difference is already clear. We can finally see what&rsquo;s really happening on the road &mdash; and that visibility changes everything.&rdquo;&quot;,
+                &quot;quote_author&quot;: &quot;Devon Miles&quot;,
+                &quot;quote_author_title&quot;: &quot;Operations Manager, Park Avenue Stationers&quot;
+            },
+            &quot;content&quot;: {
+                &quot;banner&quot;: null,
+                &quot;introduction&quot;: &quot;&lt;p&gt;Park Avenue Stationers is a long-established distributor of office supplies, serving schools, corporates, and small businesses across South Africa. With a busy fleet of delivery vehicles, their challenge wasn&rsquo;t about getting goods out the door &mdash; it was about how they got there.&lt;/p&gt;&lt;p&gt;Before partnering with Logistic Journey, inefficiencies in route planning and delivery tracking were costing them precious time, fuel, and customer satisfaction.&lt;/p&gt;&quot;,
+                &quot;the_problem&quot;: &quot;&lt;p&gt;Park Avenue Stationers&rsquo; delivery process had evolved over time &ndash; but not necessarily forward.&lt;/p&gt;&lt;ol start=\&quot;1\&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Inefficient Route Planning&lt;/strong&gt; Routes were planned manually, often based on driver experience rather than data. This led to:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Excessive mileage&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Higher fuel costs&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Unpredictable delivery times&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;A Paper-Based System&lt;/strong&gt; Every trip relied on paper trip sheets, delivery notes, and manual reconciliations. That meant:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Hours of administrative work each week.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Lost paperwork and inconsistent data capture.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Limited ability to analyze delivery performance.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Limited Post-Delivery Insight&lt;/strong&gt; After deliveries, management could only review video recordings and GPS trails, which showed where vehicles went &ndash; but not why. There was no journey-level visibility, no real-time metrics, and no ability to connect performance data back to individual trips.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Misuse of Company Vehicles&lt;/strong&gt; Without visibility between stops, some drivers occasionally used company vehicles for personal errands during routes &ndash; unnoticed until after the fact.&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;In short, Park Avenue had visibility at the macro level &ndash; but not where it mattered most.&lt;/p&gt;&quot;,
+                &quot;the_solution&quot;: &quot;&lt;p&gt;Logistic Journey partnered with Park Avenue Stationers as a beta testing client, working closely with their operations and delivery teams to implement a smarter, more transparent delivery management system.&lt;/p&gt;&lt;ol start=\&quot;1\&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Journey-Level Visibility&lt;/strong&gt;&lt;br&gt;We introduced journey-level statistics to measure estimated vs. actual distances, helping identify:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Route deviations.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Extra kilometers travelled.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fuel inefficiencies.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;This instantly created accountability and empowered managers to take proactive action.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Intuitive Reporting &amp;amp; Analytics&lt;/strong&gt;&lt;br&gt;We built simple reporting tools to let managers and dispatchers review delivery performance by:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Date range.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Driver&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Route&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Customer cluster&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;These insights turned what used to be &ldquo;gut&rdquo; feel into data-driven decision-making.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Real-Time Communication&lt;/strong&gt;&lt;br&gt;Through the Logistic Journey mobile app, dispatchers and drivers could now communicate directly inside the platform &ndash; reducing reliance on WhatsApp messages and phone calls that previously scattered communication.&lt;/p&gt;&lt;p&gt;This single-channel approach:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Improved delivery coordination.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Created a permanent communication log for accountability.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt;&quot;,
+                &quot;the_result&quot;: &quot;&lt;p&gt;Although Park Avenue&amp;#039;s partnership is still in early adoption, the transformation has already begun to show real results.&lt;/p&gt;&lt;p&gt;○ &lt;strong&gt;Real-Time Vehicle Tracking&lt;/strong&gt;&lt;br&gt;For the first time, management can view each journey in detail &ndash; from departure to delivery completion.&lt;br&gt;Deviations and detours are flagged automatically, helping identify route inefficiencies and potential&lt;br&gt;misuse of company vehicles.&lt;/p&gt;&lt;p&gt;○ &lt;strong&gt;Enhanced Accountability&lt;/strong&gt;&lt;br&gt;Drivers now know that every kilometer and stop is tracked transparently. The result?&lt;br&gt;A noticeable shift in behavior and ownership of delivery performance.&lt;/p&gt;&lt;p&gt;○ &lt;strong&gt;Smarter Decisions Through Data&lt;/strong&gt;&lt;br&gt;Every trip adds to a growing pool of delivery data. Over time, this allows Park Avenue to analyze trends,&lt;br&gt;predict resource needs, and continuously refine route planning for maximum efficiency.&lt;/p&gt;&lt;p&gt;○ &lt;strong&gt;Communication Clarity&lt;/strong&gt;&lt;br&gt;The in-app messaging and notification system replaced scattered WhatsApp threads, streamlining&lt;br&gt;dispatch-driver collaboration.&lt;/p&gt;&lt;h3&gt;Obstacles Along the Way&lt;/h3&gt;&lt;p&gt;No digital transformation comes without growing pains.&lt;/p&gt;&lt;ol start=\&quot;1\&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Human Resistance&lt;/strong&gt; Some staff were initially hesitant to adopt the new platform, fearing that data visibility would expose inefficiencies. Our approach: transparency and empathy. We framed the system not as surveillance, but as a tool for success &ndash; one that helps everyone perform at their best.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;System Integration Gap&lt;/strong&gt; Park Avenue&amp;#039;s ordering and sales system isn&amp;#039;t yet integrated with Logistic Journey, requiring some manual data entry during the beta phase. However, our technical team is already mapping the integration pathway to automate this process in the next development sprint.&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;h3&gt;Early Results Snapshot&lt;/h3&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Metric&lt;/p&gt;&lt;/th&gt;&lt;th rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Before&lt;/p&gt;&lt;/th&gt;&lt;th rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;After (Beta Phase)&lt;/p&gt;&lt;/th&gt;&lt;th rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Change&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Route visibility&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Limited (GPS)&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Full journey-level tracking&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;⬆ Improved&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Communication&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;WhatsApp &amp;amp; calls&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;In-app real-time&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;⬆ Streamlined&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Distance variance&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Untracked&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Measured vs. estimated&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;⬆ Transparent&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Driver accountability&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Low&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;High (visible metrics)&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;⬆ Positive shift&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Data availability&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Manual&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Automated reports&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;⬆ Immediate access&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;h3&gt;Lessons Learned&lt;/h3&gt;&lt;ol start=\&quot;1\&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Visibility Creates Responsibility&lt;/strong&gt; Once drivers saw their journey data reflected in reports, they became more mindful about routes and time management.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Simplicity Beats Complexity&lt;/strong&gt; The mobile app&amp;#039;s intuitive design meant even tech-resistant users could adopt it quickly.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Data Needs Time to Mature&lt;/strong&gt; The longer the system runs, the more valuable the insights become &ndash; trends emerge, patterns surface, and strategic decisions get sharper.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Digital Transformation is Emotional Before It&amp;#039;s Technical&lt;/strong&gt; The biggest challenge wasn&amp;#039;t the software &ndash; it was trust. Once the team saw that data empowers rather than punishes, adoption accelerated.&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&quot;,
+                &quot;the_road_ahead&quot;: &quot;&lt;p&gt;Park Avenue Stationers continues to use Logistic Journey as part of its ongoing digital transformation.&lt;br&gt;Next steps include:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Integrating the ordering/sales platform for seamless workflows.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Expanding analytics to include delivery cost-per-route.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Creating a driver leaderboard to recognize high performers.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;As more data flows through the system, Park Avenue will be able to make decisions not on assumptions &ndash;&lt;br&gt;but on evidence, insight, and impact.&lt;/p&gt;&lt;h3&gt;Key Takeaway&lt;/h3&gt;&lt;p&gt;When logistics teams see the journey, they start to own the outcome.&lt;/p&gt;&lt;p&gt;Logistic Journey&amp;#039;s partnership with Park Avenue Stationers shows that visibility isn&amp;#039;t just about control &ndash;&lt;br&gt;it&amp;#039;s about trust, accountability, and progress.&lt;/p&gt;&lt;p&gt;Early wins in efficiency and communication are already reshaping how Park Avenue delivers.&lt;br&gt;And as their digital maturity grows, so too will their competitive advantage.&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;&lt;strong&gt;PARK AVENUE STATIONERS&lt;/strong&gt;&lt;br&gt;&lt;em&gt;Your Office Supplies Specialists&lt;/em&gt;&lt;/p&gt;&lt;p&gt;&amp;quot;It&amp;#039;s early days, but the difference is already clear. We can finally see what&amp;#039;s really happening&lt;br&gt;on the road &ndash; and that visibility changes everything.&amp;quot;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;strong&gt;Devon Miles&lt;/strong&gt;&lt;br&gt;&lt;em&gt;Operations Manager, Park Avenue Stationers&lt;/em&gt;&lt;/p&gt;&lt;p&gt;Digital transformation isn&amp;#039;t about replacing people with software &ndash; it&amp;#039;s about empowering teams&lt;br&gt;with clarity. Park Avenue Stationers&amp;#039; story shows what happens when logistics stops being guesswork&lt;br&gt;and starts being guided by insight.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Making Every Journey Count&lt;/strong&gt;&lt;br&gt;&lt;em&gt;With Logistic Journey&lt;/em&gt;&lt;/p&gt;&quot;
+            },
+            &quot;sidebar&quot;: {
+                &quot;industry&quot;: &quot;Office Supplies &amp; Distributions&quot;,
+                &quot;location&quot;: &quot;South Africa&quot;,
+                &quot;engagement_type&quot;: &quot;Beta Testing Product&quot;,
+                &quot;implementation_period&quot;: &quot;3 - 4 weeks&quot;,
+                &quot;solution&quot;: &quot;Logistic Journey delivery management platform&quot;,
+                &quot;logo&quot;: null
+            },
+            &quot;meta&quot;: {
+                &quot;meta_title&quot;: null,
+                &quot;meta_description&quot;: null,
+                &quot;status&quot;: &quot;published&quot;,
+                &quot;is_featured&quot;: true,
+                &quot;published_at&quot;: null,
+                &quot;created_at&quot;: &quot;2025-11-17T15:12:45+00:00&quot;,
+                &quot;updated_at&quot;: &quot;2025-11-17T15:12:45+00:00&quot;
+            }
+        }
+    ],
+    &quot;links&quot;: {
+        &quot;first&quot;: &quot;http://127.0.0.1:8000/api/v1/case-studies?page=1&quot;,
+        &quot;last&quot;: &quot;http://127.0.0.1:8000/api/v1/case-studies?page=1&quot;,
+        &quot;prev&quot;: null,
+        &quot;next&quot;: null
+    },
+    &quot;meta&quot;: {
+        &quot;current_page&quot;: 1,
+        &quot;from&quot;: 1,
+        &quot;last_page&quot;: 1,
+        &quot;links&quot;: [
+            {
+                &quot;url&quot;: null,
+                &quot;label&quot;: &quot;&amp;laquo; Previous&quot;,
+                &quot;page&quot;: null,
+                &quot;active&quot;: false
+            },
+            {
+                &quot;url&quot;: &quot;http://127.0.0.1:8000/api/v1/case-studies?page=1&quot;,
+                &quot;label&quot;: &quot;1&quot;,
+                &quot;page&quot;: 1,
+                &quot;active&quot;: true
+            },
+            {
+                &quot;url&quot;: null,
+                &quot;label&quot;: &quot;Next &amp;raquo;&quot;,
+                &quot;page&quot;: null,
+                &quot;active&quot;: false
+            }
+        ],
+        &quot;path&quot;: &quot;http://127.0.0.1:8000/api/v1/case-studies&quot;,
+        &quot;per_page&quot;: 16,
+        &quot;to&quot;: 1,
+        &quot;total&quot;: 1
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-case-studies" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-case-studies"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-case-studies"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-case-studies" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-case-studies">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-case-studies" data-method="GET"
+      data-path="api/v1/case-studies"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-case-studies', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-case-studies"
+                    onclick="tryItOut('GETapi-v1-case-studies');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-case-studies"
+                    onclick="cancelTryOut('GETapi-v1-case-studies');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-case-studies"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/case-studies</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-case-studies"
+               value="Bearer {YOUR_AUTH_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-case-studies"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-case-studies"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>featured</code></b>&nbsp;&nbsp;
+<small>boolean</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <label data-endpoint="GETapi-v1-case-studies" style="display: none">
+            <input type="radio" name="featured"
+                   value="1"
+                   data-endpoint="GETapi-v1-case-studies"
+                   data-component="query"             >
+            <code>true</code>
+        </label>
+        <label data-endpoint="GETapi-v1-case-studies" style="display: none">
+            <input type="radio" name="featured"
+                   value="0"
+                   data-endpoint="GETapi-v1-case-studies"
+                   data-component="query"             >
+            <code>false</code>
+        </label>
+    <br>
+<p>Optional. If true, only featured case studies are returned. Example: <code>false</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>per_page</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="per_page"                data-endpoint="GETapi-v1-case-studies"
+               value="16"
+               data-component="query">
+    <br>
+<p>Optional. Number of results per page. Default: 15 Example: <code>16</code></p>
+            </div>
+                </form>
+
+    <h3>Response</h3>
+    <h4 class="fancy-heading-panel"><b>Response Fields</b></h4>
+    <div style=" padding-left: 28px;  clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>data</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+
+            </summary>
+                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>The ID of the case study</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>title</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>The title</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>The slug</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>featured_image</code></b>&nbsp;&nbsp;
+<small>string|null</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Main image (raw value)</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>client</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Client info (raw logo)</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>content</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Main content sections (includes banner)</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>sidebar</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Sidebar info (logo is URL)</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>meta</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Meta info</p>
+                    </div>
+                                    </details>
+        </div>
+                        <h2 id="case-studies-GETapi-v1-case-studies-featured">Get the latest featured published case study</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-case-studies-featured">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://logisticjourney.onrender.com/api/v1/case-studies/featured" \
+    --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://logisticjourney.onrender.com/api/v1/case-studies/featured"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-case-studies-featured">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 1,
+        &quot;title&quot;: &quot;How Logistic Journey Helped Turn Paper Chaos into Digital Clarity&quot;,
+        &quot;slug&quot;: &quot;how-logistic-journey-helped-turn-paper-chaos-into-digital-clarity&quot;,
+        &quot;featured_image&quot;: null,
+        &quot;client&quot;: {
+            &quot;name&quot;: &quot;Park Avenue Stationers&quot;,
+            &quot;logo&quot;: null,
+            &quot;quote&quot;: &quot;&ldquo;It&rsquo;s early days, but the difference is already clear. We can finally see what&rsquo;s really happening on the road &mdash; and that visibility changes everything.&rdquo;&quot;,
+            &quot;quote_author&quot;: &quot;Devon Miles&quot;,
+            &quot;quote_author_title&quot;: &quot;Operations Manager, Park Avenue Stationers&quot;
+        },
+        &quot;content&quot;: {
+            &quot;banner&quot;: null,
+            &quot;introduction&quot;: &quot;&lt;p&gt;Park Avenue Stationers is a long-established distributor of office supplies, serving schools, corporates, and small businesses across South Africa. With a busy fleet of delivery vehicles, their challenge wasn&rsquo;t about getting goods out the door &mdash; it was about how they got there.&lt;/p&gt;&lt;p&gt;Before partnering with Logistic Journey, inefficiencies in route planning and delivery tracking were costing them precious time, fuel, and customer satisfaction.&lt;/p&gt;&quot;,
+            &quot;the_problem&quot;: &quot;&lt;p&gt;Park Avenue Stationers&rsquo; delivery process had evolved over time &ndash; but not necessarily forward.&lt;/p&gt;&lt;ol start=\&quot;1\&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Inefficient Route Planning&lt;/strong&gt; Routes were planned manually, often based on driver experience rather than data. This led to:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Excessive mileage&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Higher fuel costs&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Unpredictable delivery times&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;A Paper-Based System&lt;/strong&gt; Every trip relied on paper trip sheets, delivery notes, and manual reconciliations. That meant:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Hours of administrative work each week.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Lost paperwork and inconsistent data capture.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Limited ability to analyze delivery performance.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Limited Post-Delivery Insight&lt;/strong&gt; After deliveries, management could only review video recordings and GPS trails, which showed where vehicles went &ndash; but not why. There was no journey-level visibility, no real-time metrics, and no ability to connect performance data back to individual trips.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Misuse of Company Vehicles&lt;/strong&gt; Without visibility between stops, some drivers occasionally used company vehicles for personal errands during routes &ndash; unnoticed until after the fact.&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;In short, Park Avenue had visibility at the macro level &ndash; but not where it mattered most.&lt;/p&gt;&quot;,
+            &quot;the_solution&quot;: &quot;&lt;p&gt;Logistic Journey partnered with Park Avenue Stationers as a beta testing client, working closely with their operations and delivery teams to implement a smarter, more transparent delivery management system.&lt;/p&gt;&lt;ol start=\&quot;1\&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Journey-Level Visibility&lt;/strong&gt;&lt;br&gt;We introduced journey-level statistics to measure estimated vs. actual distances, helping identify:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Route deviations.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Extra kilometers travelled.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fuel inefficiencies.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;This instantly created accountability and empowered managers to take proactive action.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Intuitive Reporting &amp;amp; Analytics&lt;/strong&gt;&lt;br&gt;We built simple reporting tools to let managers and dispatchers review delivery performance by:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Date range.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Driver&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Route&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Customer cluster&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;These insights turned what used to be &ldquo;gut&rdquo; feel into data-driven decision-making.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Real-Time Communication&lt;/strong&gt;&lt;br&gt;Through the Logistic Journey mobile app, dispatchers and drivers could now communicate directly inside the platform &ndash; reducing reliance on WhatsApp messages and phone calls that previously scattered communication.&lt;/p&gt;&lt;p&gt;This single-channel approach:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Improved delivery coordination.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Created a permanent communication log for accountability.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt;&quot;,
+            &quot;the_result&quot;: &quot;&lt;p&gt;Although Park Avenue&amp;#039;s partnership is still in early adoption, the transformation has already begun to show real results.&lt;/p&gt;&lt;p&gt;○ &lt;strong&gt;Real-Time Vehicle Tracking&lt;/strong&gt;&lt;br&gt;For the first time, management can view each journey in detail &ndash; from departure to delivery completion.&lt;br&gt;Deviations and detours are flagged automatically, helping identify route inefficiencies and potential&lt;br&gt;misuse of company vehicles.&lt;/p&gt;&lt;p&gt;○ &lt;strong&gt;Enhanced Accountability&lt;/strong&gt;&lt;br&gt;Drivers now know that every kilometer and stop is tracked transparently. The result?&lt;br&gt;A noticeable shift in behavior and ownership of delivery performance.&lt;/p&gt;&lt;p&gt;○ &lt;strong&gt;Smarter Decisions Through Data&lt;/strong&gt;&lt;br&gt;Every trip adds to a growing pool of delivery data. Over time, this allows Park Avenue to analyze trends,&lt;br&gt;predict resource needs, and continuously refine route planning for maximum efficiency.&lt;/p&gt;&lt;p&gt;○ &lt;strong&gt;Communication Clarity&lt;/strong&gt;&lt;br&gt;The in-app messaging and notification system replaced scattered WhatsApp threads, streamlining&lt;br&gt;dispatch-driver collaboration.&lt;/p&gt;&lt;h3&gt;Obstacles Along the Way&lt;/h3&gt;&lt;p&gt;No digital transformation comes without growing pains.&lt;/p&gt;&lt;ol start=\&quot;1\&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Human Resistance&lt;/strong&gt; Some staff were initially hesitant to adopt the new platform, fearing that data visibility would expose inefficiencies. Our approach: transparency and empathy. We framed the system not as surveillance, but as a tool for success &ndash; one that helps everyone perform at their best.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;System Integration Gap&lt;/strong&gt; Park Avenue&amp;#039;s ordering and sales system isn&amp;#039;t yet integrated with Logistic Journey, requiring some manual data entry during the beta phase. However, our technical team is already mapping the integration pathway to automate this process in the next development sprint.&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;h3&gt;Early Results Snapshot&lt;/h3&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Metric&lt;/p&gt;&lt;/th&gt;&lt;th rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Before&lt;/p&gt;&lt;/th&gt;&lt;th rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;After (Beta Phase)&lt;/p&gt;&lt;/th&gt;&lt;th rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Change&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Route visibility&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Limited (GPS)&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Full journey-level tracking&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;⬆ Improved&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Communication&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;WhatsApp &amp;amp; calls&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;In-app real-time&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;⬆ Streamlined&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Distance variance&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Untracked&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Measured vs. estimated&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;⬆ Transparent&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Driver accountability&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Low&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;High (visible metrics)&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;⬆ Positive shift&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Data availability&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Manual&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;Automated reports&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=\&quot;1\&quot; colspan=\&quot;1\&quot;&gt;&lt;p&gt;⬆ Immediate access&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;h3&gt;Lessons Learned&lt;/h3&gt;&lt;ol start=\&quot;1\&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Visibility Creates Responsibility&lt;/strong&gt; Once drivers saw their journey data reflected in reports, they became more mindful about routes and time management.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Simplicity Beats Complexity&lt;/strong&gt; The mobile app&amp;#039;s intuitive design meant even tech-resistant users could adopt it quickly.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Data Needs Time to Mature&lt;/strong&gt; The longer the system runs, the more valuable the insights become &ndash; trends emerge, patterns surface, and strategic decisions get sharper.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Digital Transformation is Emotional Before It&amp;#039;s Technical&lt;/strong&gt; The biggest challenge wasn&amp;#039;t the software &ndash; it was trust. Once the team saw that data empowers rather than punishes, adoption accelerated.&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&quot;,
+            &quot;the_road_ahead&quot;: &quot;&lt;p&gt;Park Avenue Stationers continues to use Logistic Journey as part of its ongoing digital transformation.&lt;br&gt;Next steps include:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Integrating the ordering/sales platform for seamless workflows.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Expanding analytics to include delivery cost-per-route.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Creating a driver leaderboard to recognize high performers.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;As more data flows through the system, Park Avenue will be able to make decisions not on assumptions &ndash;&lt;br&gt;but on evidence, insight, and impact.&lt;/p&gt;&lt;h3&gt;Key Takeaway&lt;/h3&gt;&lt;p&gt;When logistics teams see the journey, they start to own the outcome.&lt;/p&gt;&lt;p&gt;Logistic Journey&amp;#039;s partnership with Park Avenue Stationers shows that visibility isn&amp;#039;t just about control &ndash;&lt;br&gt;it&amp;#039;s about trust, accountability, and progress.&lt;/p&gt;&lt;p&gt;Early wins in efficiency and communication are already reshaping how Park Avenue delivers.&lt;br&gt;And as their digital maturity grows, so too will their competitive advantage.&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;&lt;strong&gt;PARK AVENUE STATIONERS&lt;/strong&gt;&lt;br&gt;&lt;em&gt;Your Office Supplies Specialists&lt;/em&gt;&lt;/p&gt;&lt;p&gt;&amp;quot;It&amp;#039;s early days, but the difference is already clear. We can finally see what&amp;#039;s really happening&lt;br&gt;on the road &ndash; and that visibility changes everything.&amp;quot;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;strong&gt;Devon Miles&lt;/strong&gt;&lt;br&gt;&lt;em&gt;Operations Manager, Park Avenue Stationers&lt;/em&gt;&lt;/p&gt;&lt;p&gt;Digital transformation isn&amp;#039;t about replacing people with software &ndash; it&amp;#039;s about empowering teams&lt;br&gt;with clarity. Park Avenue Stationers&amp;#039; story shows what happens when logistics stops being guesswork&lt;br&gt;and starts being guided by insight.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Making Every Journey Count&lt;/strong&gt;&lt;br&gt;&lt;em&gt;With Logistic Journey&lt;/em&gt;&lt;/p&gt;&quot;
+        },
+        &quot;sidebar&quot;: {
+            &quot;industry&quot;: &quot;Office Supplies &amp; Distributions&quot;,
+            &quot;location&quot;: &quot;South Africa&quot;,
+            &quot;engagement_type&quot;: &quot;Beta Testing Product&quot;,
+            &quot;implementation_period&quot;: &quot;3 - 4 weeks&quot;,
+            &quot;solution&quot;: &quot;Logistic Journey delivery management platform&quot;,
+            &quot;logo&quot;: null
+        },
+        &quot;meta&quot;: {
+            &quot;meta_title&quot;: null,
+            &quot;meta_description&quot;: null,
+            &quot;status&quot;: &quot;published&quot;,
+            &quot;is_featured&quot;: true,
+            &quot;published_at&quot;: null,
+            &quot;created_at&quot;: &quot;2025-11-17T15:12:45+00:00&quot;,
+            &quot;updated_at&quot;: &quot;2025-11-17T15:12:45+00:00&quot;
+        }
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-case-studies-featured" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-case-studies-featured"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-case-studies-featured"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-case-studies-featured" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-case-studies-featured">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-case-studies-featured" data-method="GET"
+      data-path="api/v1/case-studies/featured"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-case-studies-featured', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-case-studies-featured"
+                    onclick="tryItOut('GETapi-v1-case-studies-featured');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-case-studies-featured"
+                    onclick="cancelTryOut('GETapi-v1-case-studies-featured');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-case-studies-featured"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/case-studies/featured</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-case-studies-featured"
+               value="Bearer {YOUR_AUTH_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-case-studies-featured"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-case-studies-featured"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+    <h3>Response</h3>
+    <h4 class="fancy-heading-panel"><b>Response Fields</b></h4>
+    <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>The ID of the case study</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>title</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>The title</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>The slug</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>featured_image</code></b>&nbsp;&nbsp;
+<small>string|null</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Main image URL</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>client</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Client info</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>content</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Main content sections</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>sidebar</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Sidebar info</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>meta</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Meta info</p>
+        </div>
+                        <h2 id="case-studies-GETapi-v1-case-studies--slug-">Show a single published case study by slug</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-case-studies--slug-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://logisticjourney.onrender.com/api/v1/case-studies/architecto" \
+    --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://logisticjourney.onrender.com/api/v1/case-studies/architecto"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-case-studies--slug-">
+            <blockquote>
+            <p>Example response (404):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;No query results for model [Modules\\Blog\\Models\\CaseStudy].&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-case-studies--slug-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-case-studies--slug-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-case-studies--slug-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-case-studies--slug-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-case-studies--slug-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-case-studies--slug-" data-method="GET"
+      data-path="api/v1/case-studies/{slug}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-case-studies--slug-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-case-studies--slug-"
+                    onclick="tryItOut('GETapi-v1-case-studies--slug-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-case-studies--slug-"
+                    onclick="cancelTryOut('GETapi-v1-case-studies--slug-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-case-studies--slug-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/case-studies/{slug}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-case-studies--slug-"
+               value="Bearer {YOUR_AUTH_TOKEN}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-case-studies--slug-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-case-studies--slug-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="slug"                data-endpoint="GETapi-v1-case-studies--slug-"
+               value="architecto"
+               data-component="url">
+    <br>
+<p>The slug of the case study Example: <code>architecto</code></p>
+            </div>
+                    </form>
+
+    <h3>Response</h3>
+    <h4 class="fancy-heading-panel"><b>Response Fields</b></h4>
+    <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>The ID of the case study</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>title</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>The title</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>slug</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>The slug</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>featured_image</code></b>&nbsp;&nbsp;
+<small>string|null</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Main image (raw value)</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>client</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Client info (raw logo)</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>content</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Main content sections (includes banner)</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>sidebar</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Sidebar info (logo is URL)</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>meta</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Meta info</p>
+        </div>
+                    <h1 id="endpoints">Endpoints</h1>
 
     
 

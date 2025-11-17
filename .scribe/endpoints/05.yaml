@@ -1,113 +1,18 @@
-name: Forms
+name: 'Form Submissions'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
-      - GET
-    uri: api/v1/forms
+      - POST
+    uri: 'api/v1/pages/{identifier}/submit'
     metadata:
       custom: []
-      groupName: Forms
+      groupName: 'Form Submissions'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'List available forms with their fields and settings.'
-      description: ''
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters:
-      include_submissions:
-        custom: []
-        name: include_submissions
-        description: 'Include submission count in response.'
-        required: false
-        example: true
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      active:
-        custom: []
-        name: active
-        description: 'Filter by active/inactive forms.'
-        required: false
-        example: true
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-    cleanQueryParameters:
-      include_submissions: true
-      active: true
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: |-
-          {
-            "data": [
-              {
-                "id": 1,
-                "name": "Demo Request",
-                "slug": "demo-request",
-                "description": "Request a demo of the product",
-                "active": true,
-                "fields": [
-                  {
-                    "name": "name",
-                    "type": "string",
-                    "label": "Full Name",
-                    "placeholder": "John Doe",
-                    "validation": ["required", "max:255"]
-                  },
-                  {
-                    "name": "email",
-                    "type": "email",
-                    "label": "Email Address",
-                    "validation": ["required", "email"]
-                  }
-                ],
-                "settings": {
-                  "success_message": "Thanks for your interest!",
-                  "notification_email": "sales@example.com"
-                }
-              }
-            ]
-          }
-        headers: []
-        description: success
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3|aOMMYFMGyUS9ISz1941uyCwUndbOKiO2GqKKoZnEcb107a90'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/forms/{identifier}'
-    metadata:
-      custom: []
-      groupName: Forms
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get a single form by slug or id. Useful for frontend to render dynamic forms.'
+      title: 'Submit a form with reCAPTCHA verification.'
       description: ''
       authenticated: true
       deprecated: false
@@ -119,38 +24,138 @@ endpoints:
       identifier:
         custom: []
         name: identifier
-        description: 'The form slug (e.g. `demo-request`) or id.'
+        description: 'The form slug identifier.'
         required: true
-        example: architecto
+        example: contact-us
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      identifier: architecto
+      identifier: contact-us
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: "The submitter's full name."
+        required: true
+        example: 'John Doe'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'Valid email address for contact and confirmation.'
+        required: true
+        example: john@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      phone:
+        custom: []
+        name: phone
+        description: 'Optional phone number.'
+        required: false
+        example: '+1 (555) 123-4567'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      subject:
+        custom: []
+        name: subject
+        description: 'Optional subject or category.'
+        required: false
+        example: general
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      message:
+        custom: []
+        name: message
+        description: 'The message content.'
+        required: true
+        example: "I'd like more information about your services"
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      captcha:
+        custom: []
+        name: captcha
+        description: 'reCAPTCHA token from Google reCAPTCHA (v2 or v3).'
+        required: true
+        example: 03AGdBq25hcBhpXPC...
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: 'John Doe'
+      email: john@example.com
+      phone: '+1 (555) 123-4567'
+      subject: general
+      message: "I'd like more information about your services"
+      captcha: 03AGdBq25hcBhpXPC...
     fileParameters: []
     responses:
       -
         custom: []
-        status: 200
+        status: 201
         content: |-
           {
-           "data": {
-             "id": 1,
-             "name": "Demo Request",
-             "slug": "demo-request",
-             "fields": [
-               {"name":"name","type":"string","label":"Name","validation":["required"]}
-             ]
-           }
+            "status": "ok",
+            "id": 123,
+            "message": "Submission received"
           }
         headers: []
-        description: ''
+        description: success
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+            "message": "Form not found"
+          }
+        headers: []
+        description: form_not_found
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "message": "Validation failed",
+            "errors": {
+              "email": ["The email field is required"],
+              "name": ["The name field is required"],
+              "message": ["The message field is required"]
+            }
+          }
+        headers: []
+        description: validation_error
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "status": "error",
+            "message": "reCAPTCHA verification failed."
+          }
+        headers: []
+        description: captcha_failed
     responseFields: []
     auth:
       - headers

@@ -1,27 +1,29 @@
-name: FAQs
+name: Policies
 description: |-
 
-  APIs for managing frequently asked questions. Retrieve all FAQs or a specific FAQ by ID.
+  APIs for managing public policies. Retrieve all policies or a specific policy by slug.
 
-  FAQs help users find answers to common questions about products and services.
+  Policies are typically legal documents like terms of service or privacy policy.
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/faqs
+    uri: api/v1/policies
     metadata:
       custom: []
-      groupName: FAQs
+      groupName: Policies
       groupDescription: |-
 
-        APIs for managing frequently asked questions. Retrieve all FAQs or a specific FAQ by ID.
+        APIs for managing public policies. Retrieve all policies or a specific policy by slug.
 
-        FAQs help users find answers to common questions about products and services.
+        Policies are typically legal documents like terms of service or privacy policy.
       subgroup: ''
       subgroupDescription: ''
-      title: 'List all FAQs'
-      description: 'Retrieve a list of all FAQs sorted by most recently updated first.'
+      title: 'List all policies'
+      description: |-
+        Retrieve a list of all published and draft policies.
+        Results are sorted by most recently updated first.
       authenticated: true
       deprecated: false
     headers:
@@ -44,9 +46,12 @@ endpoints:
             "data": [
               {
                 "id": 1,
-                "question": "What is your return policy?",
-                "answer": "We offer 30-day returns on all products...",
+                "title": "Privacy Policy",
+                "slug": "privacy-policy",
                 "status": "published",
+                "content": "# Privacy Policy\n\nYour privacy is important to us...",
+                "meta_title": "Privacy Policy",
+                "meta_description": "Read our privacy policy",
                 "created_at": "2025-11-10T10:30:00Z",
                 "updated_at": "2025-11-11T15:45:00Z"
               }
@@ -66,19 +71,19 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/faqs/{id}'
+    uri: 'api/v1/policies/{slug}'
     metadata:
       custom: []
-      groupName: FAQs
+      groupName: Policies
       groupDescription: |-
 
-        APIs for managing frequently asked questions. Retrieve all FAQs or a specific FAQ by ID.
+        APIs for managing public policies. Retrieve all policies or a specific policy by slug.
 
-        FAQs help users find answers to common questions about products and services.
+        Policies are typically legal documents like terms of service or privacy policy.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get a specific FAQ'
-      description: 'Retrieve a single FAQ by its ID.'
+      title: 'Get a policy by slug'
+      description: 'Retrieve a single policy using its URL-friendly slug.'
       authenticated: true
       deprecated: false
     headers:
@@ -86,31 +91,31 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      id:
+      slug:
         custom: []
-        name: id
-        description: 'The ID of the faq.'
+        name: slug
+        description: 'The slug of the policy.'
         required: true
-        example: 1
-        type: integer
+        example: architecto
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      faq:
+      policy:
         custom: []
-        name: faq
-        description: 'The FAQ ID.'
+        name: policy
+        description: 'The policy slug (e.g., "privacy-policy").'
         required: true
-        example: 1
-        type: integer
+        example: privacy-policy
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      id: 1
-      faq: 1
+      slug: architecto
+      policy: privacy-policy
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -124,9 +129,12 @@ endpoints:
           {
             "data": {
               "id": 1,
-              "question": "What is your return policy?",
-              "answer": "We offer 30-day returns on all products...",
+              "title": "Privacy Policy",
+              "slug": "privacy-policy",
               "status": "published",
+              "content": "# Privacy Policy\n\nYour privacy is important to us...",
+              "meta_title": "Privacy Policy",
+              "meta_description": "Read our privacy policy",
               "created_at": "2025-11-10T10:30:00Z",
               "updated_at": "2025-11-11T15:45:00Z"
             }
