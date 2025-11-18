@@ -27,7 +27,6 @@ final class PageForm
                                 \Modules\Blocks\Filament\Forms\BlockEditor::make('blocks')
                                     ->label('Page Blocks')
                                     ->collapsed(),
-                                RichEditor::make('content')->label('Legacy Content')->nullable(),
                             ])->columnSpan(2),
                         Section::make('Page Details')
                             ->schema([

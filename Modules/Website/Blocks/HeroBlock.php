@@ -21,7 +21,7 @@ final class HeroBlock
     /**
      * The block's unique identifier.
      */
-    protected static string $name = 'Hero';
+    protected static string $name = 'Home Hero';
 
     /**
      * The block's group.

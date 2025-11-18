@@ -15,12 +15,15 @@ use Modules\Website\Filament\Resources\Forms\Pages\ListForms;
 use Modules\Website\Filament\Resources\Forms\Schemas\FormForm;
 use Modules\Website\Filament\Resources\Forms\Tables\FormsTable;
 use Modules\Website\Models\Form;
+use UnitEnum;
 
 final class FormResource extends Resource
 {
     protected static ?string $model = Form::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Website Management';
 
     public static function form(Schema $schema): Schema
     {

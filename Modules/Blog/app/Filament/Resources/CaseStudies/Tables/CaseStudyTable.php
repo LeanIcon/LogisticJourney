@@ -10,6 +10,12 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreBulkAction;
+use Filament\Actions\ViewAction;
 
 final class CaseStudyTable
 {
@@ -17,10 +23,6 @@ final class CaseStudyTable
     {
         return $table
             ->columns([
-                ImageColumn::make('featured_image')
-                    ->label('Image')
-                    ->size(60)
-                    ->square(),
                 TextColumn::make('title')
                     ->searchable()
                     ->sortable()
@@ -39,19 +41,6 @@ final class CaseStudyTable
                 ToggleColumn::make('is_featured')
                     ->label('Featured')
                     ->sortable(),
-                TextColumn::make('published_at')
-                    ->label('Published')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(),
-                TextColumn::make('creator.name')
-                    ->label('Created By')
-                    ->sortable()
-                    ->toggleable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -67,6 +56,17 @@ final class CaseStudyTable
                     ]),
                 TrashedFilter::make(),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('created_at', 'desc')
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
+                ]),
+            ]);
     }
 }

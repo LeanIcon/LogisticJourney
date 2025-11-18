@@ -18,6 +18,7 @@ use Modules\Pricing\Filament\Clusters\Pricing\Resources\Promotions\Schemas\Promo
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Promotions\Schemas\PromotionInfolist;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Promotions\Tables\PromotionsTable;
 use Modules\Pricing\Models\Promotion;
+use UnitEnum;
 
 final class PromotionResource extends Resource
 {
@@ -25,10 +26,12 @@ final class PromotionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $cluster = PricingCluster::class;
+    // protected static string|UnitEnum|null $navigationGroup = 'Pricing';
 
     protected static ?string $recordTitleAttribute = 'title';
-
+    
+    protected static bool $shouldRegisterNavigation = false;
+    
     public static function form(Schema $schema): Schema
     {
         return PromotionForm::configure($schema);

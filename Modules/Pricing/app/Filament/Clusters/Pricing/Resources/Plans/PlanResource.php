@@ -18,6 +18,7 @@ use Modules\Pricing\Filament\Clusters\Pricing\Resources\Plans\Schemas\PlanForm;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Plans\Schemas\PlanInfolist;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Plans\Tables\PlansTable;
 use Modules\Pricing\Models\Plan;
+use UnitEnum;
 
 final class PlanResource extends Resource
 {
@@ -25,10 +26,12 @@ final class PlanResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $cluster = PricingCluster::class;
+    // protected static string|UnitEnum|null $navigationGroup = 'Pricing';
 
     protected static ?string $recordTitleAttribute = 'name';
-
+    
+    protected static bool $shouldRegisterNavigation = false;
+    
     public static function form(Schema $schema): Schema
     {
         return PlanForm::configure($schema);

@@ -17,6 +17,7 @@ use Modules\Website\Filament\Resources\Contacts\Schemas\ContactForm;
 use Modules\Website\Filament\Resources\Contacts\Schemas\ContactInfolist;
 use Modules\Website\Filament\Resources\Contacts\Tables\ContactsTable;
 use Modules\Website\Models\Contact;
+use UnitEnum;
 
 final class ContactResource extends Resource
 {
@@ -25,6 +26,8 @@ final class ContactResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Website Management';
 
     public static function form(Schema $schema): Schema
     {

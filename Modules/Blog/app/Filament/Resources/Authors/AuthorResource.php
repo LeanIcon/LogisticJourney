@@ -29,7 +29,6 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Modules\Blog\Filament\Resources\Authors\Pages\ManageAuthors;
-use Modules\Blog\Filament\Resources\Authors\Schemas\AuthorInfolist;
 use Modules\Blog\Models\Author;
 use UnitEnum;
 
@@ -94,13 +93,9 @@ final class AuthorResource extends Resource
                             ->label('Guest Author')
                             ->helperText('Mark as external/guest contributor'),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
-    }
-
-    public static function infolist(Schema $schema): Schema
-    {
-        return AuthorInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -115,7 +110,6 @@ final class AuthorResource extends Resource
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
                 ForceDeleteAction::make(),

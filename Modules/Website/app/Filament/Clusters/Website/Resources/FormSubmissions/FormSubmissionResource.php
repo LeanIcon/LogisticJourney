@@ -18,6 +18,7 @@ use Modules\Website\Filament\Clusters\Website\Resources\FormSubmissions\Schemas\
 use Modules\Website\Filament\Clusters\Website\Resources\FormSubmissions\Tables\FormSubmissionsTable;
 use Modules\Website\Filament\Clusters\Website\WebsiteCluster;
 use Modules\Website\Models\FormSubmission;
+use UnitEnum;
 
 final class FormSubmissionResource extends Resource
 {
@@ -25,7 +26,7 @@ final class FormSubmissionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $cluster = WebsiteCluster::class;
+    protected static string|UnitEnum|null $navigationGroup = 'Website Management';
 
     public static function form(Schema $schema): Schema
     {

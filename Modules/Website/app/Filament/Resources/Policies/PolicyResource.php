@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 use Modules\Website\Filament\Resources\Policies\Pages\ManagePolicies;
 use Modules\Website\Models\Policy;
+use UnitEnum;
 
 final class PolicyResource extends Resource
 {
@@ -41,6 +42,8 @@ final class PolicyResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'title';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Website Management';
 
     public static function form(Schema $schema): Schema
     {
@@ -72,15 +75,6 @@ final class PolicyResource extends Resource
                     ])
                     ->columns(3),
 
-                Section::make('Policy Content')
-                    ->description('Full policy document in markdown format')
-                    ->schema([
-                        RichEditor::make('content')
-                            ->required()
-                            ->columnSpanFull()
-                            ->helperText('Full policy document'),
-                    ]),
-
                 Section::make('SEO & Meta')
                     ->description('Search engine optimization settings')
                     ->schema([
@@ -93,8 +87,17 @@ final class PolicyResource extends Resource
                             ->rows(2)
                             ->helperText('SEO description (max 160 characters)'),
                     ])
-                    ->columns(2)
-                    ->collapsed(),
+                    ->columns(2),
+                    
+                Section::make('Policy Content')
+                    ->description('Full policy document in markdown format')
+                    ->schema([
+                        RichEditor::make('content')
+                            ->required()
+                            ->columnSpanFull()
+                            ->helperText('Full policy document'),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -102,31 +105,13 @@ final class PolicyResource extends Resource
     {
         return $schema
             ->components([
-                Section::make('Policy Information')
-                    ->schema([
-                        TextEntry::make('title')
-                            // ->size(FontSize::Large)
-                            ->weight(FontWeight::Bold),
-
-                        TextEntry::make('slug')
-                            ->copyable()
-                            ->icon('heroicon-o-link'),
-
-                        TextEntry::make('status')
-                            ->badge()
-                            ->colors([
-                                'gray' => 'draft',
-                                'success' => 'published',
-                            ]),
-                    ])
-                    ->columns(3),
-
                 Section::make('Content')
                     ->schema([
                         TextEntry::make('content')
                             ->markdown()
                             ->columnSpanFull(),
-                    ]),
+                    ])
+                    ->columnSpanFull(),
 
                 Section::make('SEO Information')
                     ->schema([
@@ -196,7 +181,9 @@ final class PolicyResource extends Resource
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                ViewAction::make(),
+                ViewAction::make()
+                    ->modalWidth('7xl')
+                    ->slideOver(),
                 EditAction::make(),
                 DeleteAction::make(),
                 ForceDeleteAction::make(),

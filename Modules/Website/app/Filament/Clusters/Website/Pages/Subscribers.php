@@ -32,13 +32,13 @@ final class Subscribers extends Page implements HasTable
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Marketing';
+    protected static string|UnitEnum|null $navigationGroup = 'Website Management';
 
     protected static ?string $title = 'Subscribers';
 
     protected static ?string $navigationLabel = 'Subscribers';
 
-    protected static ?string $cluster = WebsiteCluster::class;
+    protected static bool $shouldRegisterNavigation = false;
 
     public function table(Table $table): Table
     {

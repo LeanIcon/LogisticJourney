@@ -28,6 +28,33 @@ final class CaseStudyForm
                     ->schema([
                         Section::make('Case Study Content')
                             ->schema([
+                                RichEditor::make('introduction')
+                                    ->label('Introduction')
+                                    ->columnSpanFull()
+                                    ->helperText('Brief introduction about the client and their business'),
+                                RichEditor::make('the_problem')
+                                    ->label('The Problem')
+                                    ->required()
+                                    ->columnSpanFull()
+                                    ->helperText('Detailed description of the challenges faced'),
+                                RichEditor::make('the_solution')
+                                    ->label('What We Did to Solve It')
+                                    ->required()
+                                    ->columnSpanFull()
+                                    ->helperText('How your solution addressed the problems'),
+                                RichEditor::make('the_result')
+                                    ->label('The Result')
+                                    ->required()
+                                    ->columnSpanFull()
+                                    ->helperText('Outcomes and impact of the solution'),
+                                RichEditor::make('the_road_ahead')
+                                    ->label('The Road Ahead')
+                                    ->columnSpanFull()
+                                    ->helperText('Future plans or next steps (optional)'),
+                            ])
+                            ->columnSpan(2),
+                        Section::make('Publishing & Details')
+                            ->schema([
                                 TextInput::make('title')
                                     ->required()
                                     ->maxLength(255)
@@ -54,40 +81,6 @@ final class CaseStudyForm
                                 TextInput::make('quote_author_title')
                                     ->maxLength(255)
                                     ->helperText('Example: Operations Manager, Park Avenue Stationers'),
-                                RichEditor::make('introduction')
-                                    ->label('Introduction')
-                                    ->columnSpanFull()
-                                    ->helperText('Brief introduction about the client and their business'),
-                                RichEditor::make('the_problem')
-                                    ->label('The Problem')
-                                    ->required()
-                                    ->columnSpanFull()
-                                    ->helperText('Detailed description of the challenges faced'),
-                                RichEditor::make('the_solution')
-                                    ->label('What We Did to Solve It')
-                                    ->required()
-                                    ->columnSpanFull()
-                                    ->helperText('How your solution addressed the problems'),
-                                RichEditor::make('the_result')
-                                    ->label('The Result')
-                                    ->required()
-                                    ->columnSpanFull()
-                                    ->helperText('Outcomes and impact of the solution'),
-                                RichEditor::make('the_road_ahead')
-                                    ->label('The Road Ahead')
-                                    ->columnSpanFull()
-                                    ->helperText('Future plans or next steps (optional)'),
-                                TextInput::make('meta_title')
-                                    ->maxLength(255)
-                                    ->helperText('SEO title (leave empty to use case study title)'),
-                                Textarea::make('meta_description')
-                                    ->maxLength(160)
-                                    ->rows(2)
-                                    ->helperText('SEO description (max 160 characters)'),
-                            ])
-                            ->columnSpan(2),
-                        Section::make('Publishing & Details')
-                            ->schema([
                                 Select::make('status')
                                     ->options([
                                         'draft' => 'Draft',

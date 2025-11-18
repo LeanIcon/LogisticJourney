@@ -16,7 +16,6 @@ use Modules\Blog\Filament\Resources\Categories\Pages\EditCategory;
 use Modules\Blog\Filament\Resources\Categories\Pages\ListCategories;
 use Modules\Blog\Filament\Resources\Categories\Pages\ViewCategory;
 use Modules\Blog\Filament\Resources\Categories\Schemas\CategoryForm;
-use Modules\Blog\Filament\Resources\Categories\Schemas\CategoryInfolist;
 use Modules\Blog\Filament\Resources\Categories\Tables\CategoriesTable;
 use Modules\Blog\Models\Category;
 use UnitEnum;
@@ -36,11 +35,6 @@ final class CategoryResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return CategoryForm::configure($schema);
-    }
-
-    public static function infolist(Schema $schema): Schema
-    {
-        return CategoryInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table

@@ -78,7 +78,8 @@ final class ContactForm
                             ->rows(4)
                             ->columnSpanFull()
                             ->helperText('Lead notes or inquiry details'),
-                    ]),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 }

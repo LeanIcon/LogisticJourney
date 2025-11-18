@@ -36,44 +36,31 @@ final class Faqs
                     ->tabs([
                         Tab::make('Content')
                             ->schema([
-                                        TextInput::make('title')
-                                            ->label('Title')
-                                            ->required()
-                                            ->reactive(),
-
-                                        Repeater::make('faqs')
-                                            ->label('FAQ items')
-                                            ->schema([
-                                                TextInput::make('question')
-                                                    ->label('Question')
-                                                    ->required()
-                                                    ->maxLength(300),
-
-                                                RichEditor::make('answer')
-                                                    ->label('Answer')
-                                                    ->required()
-                                                    ->toolbarButtons(['bold', 'italic', 'link'])
-                                                    ->disableToolbarButtons(['attachFiles']),
-                                            ])
-                                            ->minItems(1)
-                                            ->defaultItems(3)
-                                            ->columnSpanFull(),
-                            ]),
-                        Tab::make('Preview')
-                            ->schema([
-                                CodeEditor::make('code_preview')
-                                    ->label('Block Preview')
-                                    ->language(Language::Php)
-                                    ->dehydrated(false)
-                                    ->default('Loading preview...')
+                                TextInput::make('title')
+                                    ->label('Title')
+                                    ->required()
                                     ->reactive()
-                                    ->afterStateHydrated(function (CodeEditor $component, $state, callable $set, callable $get) {
-                                        $title = $get('title') ?? 'Example Title';
-                                        $faqs = $get('faqs') ?? [['question' => 'What is X?', 'answer' => 'X is ...']];
-                                        $faqsExport = var_export($faqs, true);
-                                        $code = "<?php\n\nreturn [\n    'type' => 'Faqs',\n    'data' => [\n        'title' => '{$title}',\n        'faqs' => {$faqsExport},\n    ]\n];";
-                                        $set('code_preview', $code);
-                                    }),
+                                    ->columnSpanFull(),
+
+                                Repeater::make('faqs')
+                                    ->label('FAQ items')
+                                    ->schema([
+                                        TextInput::make('question')
+                                            ->label('Question')
+                                            ->required()
+                                            ->maxLength(300),
+
+                                        RichEditor::make('answer')
+                                            ->label('Answer')
+                                            ->required()
+                                            ->toolbarButtons(['bold', 'italic', 'link'])
+                                            ->disableToolbarButtons(['attachFiles']),
+                                    ])
+                                    ->minItems(1)
+                                    ->defaultItems(3)
+                                    ->columnSpanFull()
+                                    ->grid(1)
+                                    ->itemLabel(fn (array $state): ?string => $state['question'] ?? null),
                             ]),
                     ]),
             ]);

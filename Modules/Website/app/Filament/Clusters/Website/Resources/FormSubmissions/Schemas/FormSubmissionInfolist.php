@@ -15,22 +15,6 @@ final class FormSubmissionInfolist
     {
         return $schema
             ->components([
-                Section::make('Submission Overview')
-                    ->description('Details about this form submission')
-                    ->schema([
-                        TextEntry::make('form.title')
-                            ->label('Form')
-                            ->icon('heroicon-o-document-text'),
-                        TextEntry::make('submitted_at')
-                            ->dateTime()
-                            ->icon('heroicon-o-calendar'),
-                        TextEntry::make('id')
-                            ->label('Submission ID')
-                            ->copyable()
-                            ->icon('heroicon-o-hashtag'),
-                    ])
-                    ->columns(3),
-
                 Section::make('Submitted Data')
                     ->description('Form fields and values submitted')
                     ->schema([
@@ -40,7 +24,7 @@ final class FormSubmissionInfolist
                     ]),
 
                 Section::make('Technical Information')
-                    ->description('IP address and browser information')
+                    ->description('IP address, browser information, and timestamps')
                     ->schema([
                         TextEntry::make('ip_address')
                             ->label('IP Address')
@@ -49,23 +33,18 @@ final class FormSubmissionInfolist
                         TextEntry::make('user_agent')
                             ->label('Browser/Device')
                             ->icon('heroicon-o-device-phone-mobile')
-                            ->limit(100),
-                    ])
-                    ->columns(2)
-                    ->collapsed(),
-
-                Section::make('Timestamps')
-                    ->description('Record creation and modification dates')
-                    ->schema([
+                            ->limit(100)
+                            ->columnSpanFull(),
                         TextEntry::make('created_at')
+                            ->label('Submitted At')
                             ->dateTime()
                             ->icon('heroicon-o-plus-circle'),
                         TextEntry::make('updated_at')
+                            ->label('Last Updated')
                             ->dateTime()
                             ->icon('heroicon-o-pencil-square'),
                     ])
-                    ->columns(2)
-                    ->collapsed(),
+                    ->columns(2),
             ]);
     }
 }

@@ -49,7 +49,8 @@ final class CategoryForm
                             ->default(0)
                             ->helperText('Display order (lower numbers appear first)'),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 }

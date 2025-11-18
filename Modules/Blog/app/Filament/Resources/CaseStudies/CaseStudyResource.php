@@ -14,7 +14,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Modules\Blog\Filament\Resources\CaseStudies\Pages\CreateCaseStudy;
 use Modules\Blog\Filament\Resources\CaseStudies\Pages\EditCaseStudy;
 use Modules\Blog\Filament\Resources\CaseStudies\Pages\ListCaseStudies;
+use Modules\Blog\Filament\Resources\CaseStudies\Pages\ViewCaseStudy;
 use Modules\Blog\Filament\Resources\CaseStudies\Schemas\CaseStudyForm;
+use Modules\Blog\Filament\Resources\CaseStudies\Schemas\CaseStudyInfolist;
 use Modules\Blog\Filament\Resources\CaseStudies\Tables\CaseStudyTable;
 use Modules\Blog\Models\CaseStudy;
 use UnitEnum;
@@ -22,14 +24,23 @@ use UnitEnum;
 final class CaseStudyResource extends Resource
 {
     protected static ?string $model = CaseStudy::class;
+
     protected static string|UnitEnum|null $navigationGroup = 'Content';
+
     protected static ?int $navigationSort = 20;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
+
     protected static ?string $recordTitleAttribute = 'title';
 
     public static function form(Schema $schema): Schema
     {
         return CaseStudyForm::configure($schema);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return CaseStudyInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -49,6 +60,7 @@ final class CaseStudyResource extends Resource
         return [
             'index' => ListCaseStudies::route('/'),
             'create' => CreateCaseStudy::route('/create'),
+            'view' => ViewCaseStudy::route('/{record}'),
             'edit' => EditCaseStudy::route('/{record}/edit'),
         ];
     }

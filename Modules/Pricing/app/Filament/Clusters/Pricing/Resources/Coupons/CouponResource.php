@@ -18,17 +18,20 @@ use Modules\Pricing\Filament\Clusters\Pricing\Resources\Coupons\Schemas\CouponFo
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Coupons\Schemas\CouponInfolist;
 use Modules\Pricing\Filament\Clusters\Pricing\Resources\Coupons\Tables\CouponsTable;
 use Modules\Pricing\Models\Coupon;
+use UnitEnum;
 
 final class CouponResource extends Resource
 {
     protected static ?string $model = Coupon::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
-    protected static ?string $cluster = PricingCluster::class;
+    
+    // protected static string|UnitEnum|null $navigationGroup = 'Pricing';
 
     protected static ?string $recordTitleAttribute = 'code';
-
+    
+    protected static bool $shouldRegisterNavigation = false;
+    
     public static function form(Schema $schema): Schema
     {
         return CouponForm::configure($schema);

@@ -46,16 +46,6 @@ final class PostForm
                                     ->required()
                                     ->columnSpanFull()
                                     ->fileAttachmentsDirectory('blog/attachments'),
-
-                                // SEO Fields
-                                TextInput::make('meta_title')
-                                    ->maxLength(255)
-                                    ->helperText('SEO title (leave empty to use post title)'),
-
-                                Textarea::make('meta_description')
-                                    ->maxLength(160)
-                                    ->rows(2)
-                                    ->helperText('SEO description (max 160 characters)'),
                             ])
                             ->columnSpan(2),
 
