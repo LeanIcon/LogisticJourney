@@ -26,7 +26,7 @@
             </style>
 
     <script>
-        var tryItOutBaseUrl = "https://logisticjourney.onrender.com";
+        var tryItOutBaseUrl = "https://cms.logisticjourney.com";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
@@ -176,13 +176,27 @@
                             </li>
                                                                         </ul>
                             </ul>
-                    <ul id="tocify-header-form-submissions" class="tocify-header">
-                <li class="tocify-item level-1" data-unique="form-submissions">
-                    <a href="#form-submissions">Form Submissions</a>
+                    <ul id="tocify-header-form-submission" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="form-submission">
+                    <a href="#form-submission">Form Submission</a>
                 </li>
-                                    <ul id="tocify-subheader-form-submissions" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="form-submissions-POSTapi-v1-pages--identifier--submit">
-                                <a href="#form-submissions-POSTapi-v1-pages--identifier--submit">Submit a form with reCAPTCHA verification.</a>
+                                    <ul id="tocify-subheader-form-submission" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="form-submission-POSTapi-v1-pages--identifier--submit">
+                                <a href="#form-submission-POSTapi-v1-pages--identifier--submit">Submit a form with Google reCAPTCHA verification.
+
+This endpoint allows the frontend to submit any form (contact, demo request, etc.) with dynamic fields and Google reCAPTCHA protection. The form is identified by its slug (e.g., `contact-us`).
+
+**Frontend Integration Notes:**
+- Obtain a reCAPTCHA token from the frontend using your site key (`RECAPTCHA_SITE_KEY` from .env).
+- Send the token in the `captcha` field of the request body.
+- All required fields for the form will be validated dynamically based on backend configuration.
+- On success, a confirmation email is sent to the user (if email is provided and valid).
+- On failure, you will receive detailed validation errors or a captcha error.
+
+**Request:**
+- Method: POST
+- URL: `/api/forms/{identifier}/submit`
+- Content-Type: `application/json`</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -234,7 +248,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: November 17, 2025</li>
+        <li>Last updated: November 21, 2025</li>
     </ul>
 </div>
 
@@ -243,7 +257,7 @@
     <div class="content">
         <h1 id="introduction">Introduction</h1>
 <aside>
-    <strong>Base URL</strong>: <code>https://logisticjourney.onrender.com</code>
+    <strong>Base URL</strong>: <code>https://cms.logisticjourney.com</code>
 </aside>
 <pre><code>This documentation aims to provide all the information you need to work with our API.
 
@@ -273,7 +287,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/categories" \
+    --get "https://cms.logisticjourney.com/api/v1/categories" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -281,7 +295,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/categories"
+    "https://cms.logisticjourney.com/api/v1/categories"
 );
 
 const headers = {
@@ -430,7 +444,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/categories/architecto/posts?q=cloud&amp;per_page=16" \
+    --get "https://cms.logisticjourney.com/api/v1/categories/architecto/posts?q=cloud&amp;per_page=16" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -438,7 +452,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/categories/architecto/posts"
+    "https://cms.logisticjourney.com/api/v1/categories/architecto/posts"
 );
 
 const params = {
@@ -656,7 +670,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/posts?type=article&amp;category=news&amp;q=cloud+computing&amp;per_page=16&amp;sort=published_at&amp;direction=desc" \
+    --get "https://cms.logisticjourney.com/api/v1/posts?type=article&amp;category=news&amp;q=cloud+computing&amp;per_page=16&amp;sort=published_at&amp;direction=desc" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -664,7 +678,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/posts"
+    "https://cms.logisticjourney.com/api/v1/posts"
 );
 
 const params = {
@@ -905,7 +919,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/posts/architecto" \
+    --get "https://cms.logisticjourney.com/api/v1/posts/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -913,7 +927,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/posts/architecto"
+    "https://cms.logisticjourney.com/api/v1/posts/architecto"
 );
 
 const headers = {
@@ -1150,7 +1164,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/case-studies?featured=&amp;per_page=16" \
+    --get "https://cms.logisticjourney.com/api/v1/case-studies?featured=&amp;per_page=16" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1158,7 +1172,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/case-studies"
+    "https://cms.logisticjourney.com/api/v1/case-studies"
 );
 
 const params = {
@@ -1200,16 +1214,16 @@ access-control-allow-origin: *
             &quot;id&quot;: 1,
             &quot;title&quot;: &quot;How Logistic Journey Helped Turn Paper Chaos into Digital Clarity&quot;,
             &quot;slug&quot;: &quot;how-logistic-journey-helped-turn-paper-chaos-into-digital-clarity&quot;,
-            &quot;featured_image&quot;: null,
+            &quot;featured_image&quot;: &quot;case-studies/featured-images/01KA98TBSPSSHKKG3JD079BMCK.jpg&quot;,
             &quot;client&quot;: {
                 &quot;name&quot;: &quot;Park Avenue Stationers&quot;,
-                &quot;logo&quot;: null,
+                &quot;logo&quot;: &quot;http://cms.logisticjourney.com/storage/case-studies/logos/01KA98TBS1C4MN0JF9WCQWB58C.png&quot;,
                 &quot;quote&quot;: &quot;&ldquo;It&rsquo;s early days, but the difference is already clear. We can finally see what&rsquo;s really happening on the road &mdash; and that visibility changes everything.&rdquo;&quot;,
                 &quot;quote_author&quot;: &quot;Devon Miles&quot;,
                 &quot;quote_author_title&quot;: &quot;Operations Manager, Park Avenue Stationers&quot;
             },
             &quot;content&quot;: {
-                &quot;banner&quot;: null,
+                &quot;banner&quot;: &quot;http://cms.logisticjourney.com/storage/case-studies/featured-images/01KA98TBSPSSHKKG3JD079BMCK.jpg&quot;,
                 &quot;introduction&quot;: &quot;&lt;p&gt;Park Avenue Stationers is a long-established distributor of office supplies, serving schools, corporates, and small businesses across South Africa. With a busy fleet of delivery vehicles, their challenge wasn&rsquo;t about getting goods out the door &mdash; it was about how they got there.&lt;/p&gt;&lt;p&gt;Before partnering with Logistic Journey, inefficiencies in route planning and delivery tracking were costing them precious time, fuel, and customer satisfaction.&lt;/p&gt;&quot;,
                 &quot;the_problem&quot;: &quot;&lt;p&gt;Park Avenue Stationers&rsquo; delivery process had evolved over time &ndash; but not necessarily forward.&lt;/p&gt;&lt;ol start=\&quot;1\&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Inefficient Route Planning&lt;/strong&gt; Routes were planned manually, often based on driver experience rather than data. This led to:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Excessive mileage&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Higher fuel costs&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Unpredictable delivery times&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;A Paper-Based System&lt;/strong&gt; Every trip relied on paper trip sheets, delivery notes, and manual reconciliations. That meant:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Hours of administrative work each week.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Lost paperwork and inconsistent data capture.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Limited ability to analyze delivery performance.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Limited Post-Delivery Insight&lt;/strong&gt; After deliveries, management could only review video recordings and GPS trails, which showed where vehicles went &ndash; but not why. There was no journey-level visibility, no real-time metrics, and no ability to connect performance data back to individual trips.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Misuse of Company Vehicles&lt;/strong&gt; Without visibility between stops, some drivers occasionally used company vehicles for personal errands during routes &ndash; unnoticed until after the fact.&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;In short, Park Avenue had visibility at the macro level &ndash; but not where it mattered most.&lt;/p&gt;&quot;,
                 &quot;the_solution&quot;: &quot;&lt;p&gt;Logistic Journey partnered with Park Avenue Stationers as a beta testing client, working closely with their operations and delivery teams to implement a smarter, more transparent delivery management system.&lt;/p&gt;&lt;ol start=\&quot;1\&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Journey-Level Visibility&lt;/strong&gt;&lt;br&gt;We introduced journey-level statistics to measure estimated vs. actual distances, helping identify:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Route deviations.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Extra kilometers travelled.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fuel inefficiencies.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;This instantly created accountability and empowered managers to take proactive action.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Intuitive Reporting &amp;amp; Analytics&lt;/strong&gt;&lt;br&gt;We built simple reporting tools to let managers and dispatchers review delivery performance by:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Date range.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Driver&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Route&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Customer cluster&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;These insights turned what used to be &ldquo;gut&rdquo; feel into data-driven decision-making.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Real-Time Communication&lt;/strong&gt;&lt;br&gt;Through the Logistic Journey mobile app, dispatchers and drivers could now communicate directly inside the platform &ndash; reducing reliance on WhatsApp messages and phone calls that previously scattered communication.&lt;/p&gt;&lt;p&gt;This single-channel approach:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Improved delivery coordination.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Created a permanent communication log for accountability.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt;&quot;,
@@ -1222,7 +1236,7 @@ access-control-allow-origin: *
                 &quot;engagement_type&quot;: &quot;Beta Testing Product&quot;,
                 &quot;implementation_period&quot;: &quot;3 - 4 weeks&quot;,
                 &quot;solution&quot;: &quot;Logistic Journey delivery management platform&quot;,
-                &quot;logo&quot;: null
+                &quot;logo&quot;: &quot;http://cms.logisticjourney.com/storage/case-studies/logos/01KA98TBS1C4MN0JF9WCQWB58C.png&quot;
             },
             &quot;meta&quot;: {
                 &quot;meta_title&quot;: null,
@@ -1231,7 +1245,7 @@ access-control-allow-origin: *
                 &quot;is_featured&quot;: true,
                 &quot;published_at&quot;: null,
                 &quot;created_at&quot;: &quot;2025-11-17T15:12:45+00:00&quot;,
-                &quot;updated_at&quot;: &quot;2025-11-17T15:12:45+00:00&quot;
+                &quot;updated_at&quot;: &quot;2025-11-17T16:01:57+00:00&quot;
             }
         }
     ],
@@ -1485,7 +1499,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/case-studies/featured" \
+    --get "https://cms.logisticjourney.com/api/v1/case-studies/featured" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1493,7 +1507,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/case-studies/featured"
+    "https://cms.logisticjourney.com/api/v1/case-studies/featured"
 );
 
 const headers = {
@@ -1527,16 +1541,16 @@ access-control-allow-origin: *
         &quot;id&quot;: 1,
         &quot;title&quot;: &quot;How Logistic Journey Helped Turn Paper Chaos into Digital Clarity&quot;,
         &quot;slug&quot;: &quot;how-logistic-journey-helped-turn-paper-chaos-into-digital-clarity&quot;,
-        &quot;featured_image&quot;: null,
+        &quot;featured_image&quot;: &quot;case-studies/featured-images/01KA98TBSPSSHKKG3JD079BMCK.jpg&quot;,
         &quot;client&quot;: {
             &quot;name&quot;: &quot;Park Avenue Stationers&quot;,
-            &quot;logo&quot;: null,
+            &quot;logo&quot;: &quot;http://cms.logisticjourney.com/storage/case-studies/logos/01KA98TBS1C4MN0JF9WCQWB58C.png&quot;,
             &quot;quote&quot;: &quot;&ldquo;It&rsquo;s early days, but the difference is already clear. We can finally see what&rsquo;s really happening on the road &mdash; and that visibility changes everything.&rdquo;&quot;,
             &quot;quote_author&quot;: &quot;Devon Miles&quot;,
             &quot;quote_author_title&quot;: &quot;Operations Manager, Park Avenue Stationers&quot;
         },
         &quot;content&quot;: {
-            &quot;banner&quot;: null,
+            &quot;banner&quot;: &quot;http://cms.logisticjourney.com/storage/case-studies/featured-images/01KA98TBSPSSHKKG3JD079BMCK.jpg&quot;,
             &quot;introduction&quot;: &quot;&lt;p&gt;Park Avenue Stationers is a long-established distributor of office supplies, serving schools, corporates, and small businesses across South Africa. With a busy fleet of delivery vehicles, their challenge wasn&rsquo;t about getting goods out the door &mdash; it was about how they got there.&lt;/p&gt;&lt;p&gt;Before partnering with Logistic Journey, inefficiencies in route planning and delivery tracking were costing them precious time, fuel, and customer satisfaction.&lt;/p&gt;&quot;,
             &quot;the_problem&quot;: &quot;&lt;p&gt;Park Avenue Stationers&rsquo; delivery process had evolved over time &ndash; but not necessarily forward.&lt;/p&gt;&lt;ol start=\&quot;1\&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Inefficient Route Planning&lt;/strong&gt; Routes were planned manually, often based on driver experience rather than data. This led to:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Excessive mileage&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Higher fuel costs&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Unpredictable delivery times&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;A Paper-Based System&lt;/strong&gt; Every trip relied on paper trip sheets, delivery notes, and manual reconciliations. That meant:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Hours of administrative work each week.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Lost paperwork and inconsistent data capture.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Limited ability to analyze delivery performance.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Limited Post-Delivery Insight&lt;/strong&gt; After deliveries, management could only review video recordings and GPS trails, which showed where vehicles went &ndash; but not why. There was no journey-level visibility, no real-time metrics, and no ability to connect performance data back to individual trips.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Misuse of Company Vehicles&lt;/strong&gt; Without visibility between stops, some drivers occasionally used company vehicles for personal errands during routes &ndash; unnoticed until after the fact.&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;In short, Park Avenue had visibility at the macro level &ndash; but not where it mattered most.&lt;/p&gt;&quot;,
             &quot;the_solution&quot;: &quot;&lt;p&gt;Logistic Journey partnered with Park Avenue Stationers as a beta testing client, working closely with their operations and delivery teams to implement a smarter, more transparent delivery management system.&lt;/p&gt;&lt;ol start=\&quot;1\&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Journey-Level Visibility&lt;/strong&gt;&lt;br&gt;We introduced journey-level statistics to measure estimated vs. actual distances, helping identify:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Route deviations.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Extra kilometers travelled.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fuel inefficiencies.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;This instantly created accountability and empowered managers to take proactive action.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Intuitive Reporting &amp;amp; Analytics&lt;/strong&gt;&lt;br&gt;We built simple reporting tools to let managers and dispatchers review delivery performance by:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Date range.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Driver&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Route&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Customer cluster&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;These insights turned what used to be &ldquo;gut&rdquo; feel into data-driven decision-making.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;strong&gt;Real-Time Communication&lt;/strong&gt;&lt;br&gt;Through the Logistic Journey mobile app, dispatchers and drivers could now communicate directly inside the platform &ndash; reducing reliance on WhatsApp messages and phone calls that previously scattered communication.&lt;/p&gt;&lt;p&gt;This single-channel approach:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Improved delivery coordination.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Created a permanent communication log for accountability.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt;&quot;,
@@ -1549,7 +1563,7 @@ access-control-allow-origin: *
             &quot;engagement_type&quot;: &quot;Beta Testing Product&quot;,
             &quot;implementation_period&quot;: &quot;3 - 4 weeks&quot;,
             &quot;solution&quot;: &quot;Logistic Journey delivery management platform&quot;,
-            &quot;logo&quot;: null
+            &quot;logo&quot;: &quot;http://cms.logisticjourney.com/storage/case-studies/logos/01KA98TBS1C4MN0JF9WCQWB58C.png&quot;
         },
         &quot;meta&quot;: {
             &quot;meta_title&quot;: null,
@@ -1558,7 +1572,7 @@ access-control-allow-origin: *
             &quot;is_featured&quot;: true,
             &quot;published_at&quot;: null,
             &quot;created_at&quot;: &quot;2025-11-17T15:12:45+00:00&quot;,
-            &quot;updated_at&quot;: &quot;2025-11-17T15:12:45+00:00&quot;
+            &quot;updated_at&quot;: &quot;2025-11-17T16:01:57+00:00&quot;
         }
     }
 }</code>
@@ -1729,7 +1743,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/case-studies/architecto" \
+    --get "https://cms.logisticjourney.com/api/v1/case-studies/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1737,7 +1751,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/case-studies/architecto"
+    "https://cms.logisticjourney.com/api/v1/case-studies/architecto"
 );
 
 const headers = {
@@ -1953,7 +1967,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/blocks" \
+    --get "https://cms.logisticjourney.com/api/v1/blocks" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1961,7 +1975,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/blocks"
+    "https://cms.logisticjourney.com/api/v1/blocks"
 );
 
 const headers = {
@@ -2094,7 +2108,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://logisticjourney.onrender.com/api/v1/blocks" \
+    "https://cms.logisticjourney.com/api/v1/blocks" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2102,7 +2116,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/blocks"
+    "https://cms.logisticjourney.com/api/v1/blocks"
 );
 
 const headers = {
@@ -2219,7 +2233,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/blocks/architecto" \
+    --get "https://cms.logisticjourney.com/api/v1/blocks/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2227,7 +2241,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/blocks/architecto"
+    "https://cms.logisticjourney.com/api/v1/blocks/architecto"
 );
 
 const headers = {
@@ -2373,7 +2387,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://logisticjourney.onrender.com/api/v1/blocks/architecto" \
+    "https://cms.logisticjourney.com/api/v1/blocks/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2381,7 +2395,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/blocks/architecto"
+    "https://cms.logisticjourney.com/api/v1/blocks/architecto"
 );
 
 const headers = {
@@ -2515,7 +2529,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://logisticjourney.onrender.com/api/v1/blocks/architecto" \
+    "https://cms.logisticjourney.com/api/v1/blocks/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2523,7 +2537,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/blocks/architecto"
+    "https://cms.logisticjourney.com/api/v1/blocks/architecto"
 );
 
 const headers = {
@@ -2653,7 +2667,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/pricings" \
+    --get "https://cms.logisticjourney.com/api/v1/pricings" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2661,7 +2675,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/pricings"
+    "https://cms.logisticjourney.com/api/v1/pricings"
 );
 
 const headers = {
@@ -2794,7 +2808,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://logisticjourney.onrender.com/api/v1/pricings" \
+    "https://cms.logisticjourney.com/api/v1/pricings" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2802,7 +2816,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/pricings"
+    "https://cms.logisticjourney.com/api/v1/pricings"
 );
 
 const headers = {
@@ -2919,7 +2933,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/pricings/architecto" \
+    --get "https://cms.logisticjourney.com/api/v1/pricings/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2927,7 +2941,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/pricings/architecto"
+    "https://cms.logisticjourney.com/api/v1/pricings/architecto"
 );
 
 const headers = {
@@ -3073,7 +3087,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://logisticjourney.onrender.com/api/v1/pricings/architecto" \
+    "https://cms.logisticjourney.com/api/v1/pricings/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3081,7 +3095,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/pricings/architecto"
+    "https://cms.logisticjourney.com/api/v1/pricings/architecto"
 );
 
 const headers = {
@@ -3215,7 +3229,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://logisticjourney.onrender.com/api/v1/pricings/architecto" \
+    "https://cms.logisticjourney.com/api/v1/pricings/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3223,7 +3237,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/pricings/architecto"
+    "https://cms.logisticjourney.com/api/v1/pricings/architecto"
 );
 
 const headers = {
@@ -3353,7 +3367,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/pages/type/architecto" \
+    --get "https://cms.logisticjourney.com/api/v1/pages/type/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3361,7 +3375,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/pages/type/architecto"
+    "https://cms.logisticjourney.com/api/v1/pages/type/architecto"
 );
 
 const headers = {
@@ -3507,7 +3521,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/websites" \
+    --get "https://cms.logisticjourney.com/api/v1/websites" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3515,7 +3529,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/websites"
+    "https://cms.logisticjourney.com/api/v1/websites"
 );
 
 const headers = {
@@ -3648,7 +3662,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://logisticjourney.onrender.com/api/v1/websites" \
+    "https://cms.logisticjourney.com/api/v1/websites" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3656,7 +3670,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/websites"
+    "https://cms.logisticjourney.com/api/v1/websites"
 );
 
 const headers = {
@@ -3773,7 +3787,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/websites/architecto" \
+    --get "https://cms.logisticjourney.com/api/v1/websites/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3781,7 +3795,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/websites/architecto"
+    "https://cms.logisticjourney.com/api/v1/websites/architecto"
 );
 
 const headers = {
@@ -3927,7 +3941,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://logisticjourney.onrender.com/api/v1/websites/architecto" \
+    "https://cms.logisticjourney.com/api/v1/websites/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3935,7 +3949,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/websites/architecto"
+    "https://cms.logisticjourney.com/api/v1/websites/architecto"
 );
 
 const headers = {
@@ -4069,7 +4083,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://logisticjourney.onrender.com/api/v1/websites/architecto" \
+    "https://cms.logisticjourney.com/api/v1/websites/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4077,7 +4091,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/websites/architecto"
+    "https://cms.logisticjourney.com/api/v1/websites/architecto"
 );
 
 const headers = {
@@ -4212,7 +4226,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/faqs" \
+    --get "https://cms.logisticjourney.com/api/v1/faqs" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4220,7 +4234,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/faqs"
+    "https://cms.logisticjourney.com/api/v1/faqs"
 );
 
 const headers = {
@@ -4355,7 +4369,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/faqs/1" \
+    --get "https://cms.logisticjourney.com/api/v1/faqs/1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4363,7 +4377,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/faqs/1"
+    "https://cms.logisticjourney.com/api/v1/faqs/1"
 );
 
 const headers = {
@@ -4516,11 +4530,25 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                <h1 id="form-submissions">Form Submissions</h1>
+                <h1 id="form-submission">Form Submission</h1>
 
     
 
-                                <h2 id="form-submissions-POSTapi-v1-pages--identifier--submit">Submit a form with reCAPTCHA verification.</h2>
+                                <h2 id="form-submission-POSTapi-v1-pages--identifier--submit">Submit a form with Google reCAPTCHA verification.
+
+This endpoint allows the frontend to submit any form (contact, demo request, etc.) with dynamic fields and Google reCAPTCHA protection. The form is identified by its slug (e.g., `contact-us`).
+
+**Frontend Integration Notes:**
+- Obtain a reCAPTCHA token from the frontend using your site key (`RECAPTCHA_SITE_KEY` from .env).
+- Send the token in the `captcha` field of the request body.
+- All required fields for the form will be validated dynamically based on backend configuration.
+- On success, a confirmation email is sent to the user (if email is provided and valid).
+- On failure, you will receive detailed validation errors or a captcha error.
+
+**Request:**
+- Method: POST
+- URL: `/api/forms/{identifier}/submit`
+- Content-Type: `application/json`</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -4534,7 +4562,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://logisticjourney.onrender.com/api/v1/pages/contact-us/submit" \
+    "https://cms.logisticjourney.com/api/v1/pages/architecto/submit" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -4551,7 +4579,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/pages/contact-us/submit"
+    "https://cms.logisticjourney.com/api/v1/pages/architecto/submit"
 );
 
 const headers = {
@@ -4604,18 +4632,12 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Validation failed&quot;,
-    &quot;errors&quot;: {
-        &quot;email&quot;: [
-            &quot;The email field is required&quot;
-        ],
-        &quot;name&quot;: [
-            &quot;The name field is required&quot;
-        ],
-        &quot;message&quot;: [
-            &quot;The message field is required&quot;
-        ]
-    }
+  &quot;message&quot;: &quot;Validation failed&quot;,
+  &quot;errors&quot;: {
+    &quot;email&quot;: [&quot;The email field is required&quot;],
+    &quot;name&quot;: [&quot;The name field is required&quot;],
+    &quot;message&quot;: [&quot;The message field is required&quot;]
+  }dentifier. Example: contact-us
 }</code>
  </pre>
             <blockquote>
@@ -4720,10 +4742,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="identifier"                data-endpoint="POSTapi-v1-pages--identifier--submit"
-               value="contact-us"
+               value="architecto"
                data-component="url">
     <br>
-<p>The form slug identifier. Example: <code>contact-us</code></p>
+<p>The form slug i Example: <code>architecto</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -4796,7 +4818,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="03AGdBq25hcBhpXPC..."
                data-component="body">
     <br>
-<p>reCAPTCHA token from Google reCAPTCHA (v2 or v3). Example: <code>03AGdBq25hcBhpXPC...</code></p>
+<p>Google reCAPTCHA token (v2 or v3) from frontend widget. Example: <code>03AGdBq25hcBhpXPC...</code></p>
         </div>
         </form>
 
@@ -4818,7 +4840,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/forms?include_submissions=1&amp;active=1" \
+    --get "https://cms.logisticjourney.com/api/v1/forms?include_submissions=1&amp;active=1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4826,7 +4848,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/forms"
+    "https://cms.logisticjourney.com/api/v1/forms"
 );
 
 const params = {
@@ -5037,7 +5059,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/forms/architecto" \
+    --get "https://cms.logisticjourney.com/api/v1/forms/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5045,7 +5067,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/forms/architecto"
+    "https://cms.logisticjourney.com/api/v1/forms/architecto"
 );
 
 const headers = {
@@ -5202,7 +5224,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/pages?type=about&amp;q=services&amp;include_hierarchy=1&amp;per_page=16" \
+    --get "https://cms.logisticjourney.com/api/v1/pages?type=about&amp;q=services&amp;include_hierarchy=1&amp;per_page=16" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5210,7 +5232,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/pages"
+    "https://cms.logisticjourney.com/api/v1/pages"
 );
 
 const params = {
@@ -5427,7 +5449,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/pages/about-us?include_hierarchy=1" \
+    --get "https://cms.logisticjourney.com/api/v1/pages/about-us?include_hierarchy=1" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5435,7 +5457,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/pages/about-us"
+    "https://cms.logisticjourney.com/api/v1/pages/about-us"
 );
 
 const params = {
@@ -5643,7 +5665,7 @@ Results are sorted by most recently updated first.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/policies" \
+    --get "https://cms.logisticjourney.com/api/v1/policies" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5651,7 +5673,7 @@ Results are sorted by most recently updated first.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/policies"
+    "https://cms.logisticjourney.com/api/v1/policies"
 );
 
 const headers = {
@@ -5789,7 +5811,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://logisticjourney.onrender.com/api/v1/policies/architecto" \
+    --get "https://cms.logisticjourney.com/api/v1/policies/architecto" \
     --header "Authorization: Bearer {YOUR_AUTH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5797,7 +5819,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://logisticjourney.onrender.com/api/v1/policies/architecto"
+    "https://cms.logisticjourney.com/api/v1/policies/architecto"
 );
 
 const headers = {
