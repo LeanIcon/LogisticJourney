@@ -21,6 +21,9 @@ jobs:
       - name: Sync project files to VM
         run: |
           rsync -az --delete \
+            --exclude 'storage/app/public/*' \
+            --exclude 'storage/app/private/*' \
+            --exclude '.env' \
             --rsync-path="sudo rsync" \
             -e "ssh -o StrictHostKeyChecking=no" \
             ./ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_DIR }}
@@ -89,7 +92,7 @@ jobs:
             sudo -u www-data php artisan config:clear || true
             sudo -u www-data php artisan route:clear || true
             sudo -u www-data php artisan view:clear || true
-
+            
             sudo -u www-data php artisan storage:link
 
             sudo -u www-data php artisan route:cache
