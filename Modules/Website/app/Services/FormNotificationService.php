@@ -61,6 +61,8 @@ class FormNotificationService
         $context  = stream_context_create($options);
         $result = file_get_contents($url, false, $context);
         $response = json_decode($result, true);
+        // Log the full response for debugging
+        \Log::info('reCAPTCHA response', ['result' => $result, 'response' => $response]);
         return isset($response['success']) && $response['success'] === true;
     }
 
@@ -120,4 +122,9 @@ class FormNotificationService
                 return "$greeting<br>Thank you for reaching out to us. We appreciate your interest and will get back to you shortly.";
             }
         }
+
+    public function getRecaptchaSecret()
+    {
+        return $this->recaptchaSecret;
+    }
 }

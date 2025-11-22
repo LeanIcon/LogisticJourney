@@ -96,9 +96,26 @@ final class FormSubmissionController extends Controller
         // Verify reCAPTCHA token with Google's API
         $notificationService = new FormNotificationService();
         if (!$notificationService->verifyRecaptcha($recaptchaToken)) {
+            // Get the last reCAPTCHA response from the log (or re-verify to get details)
+            $url = 'https://www.google.com/recaptcha/api/siteverify';
+            $data = [
+                'secret' => $notificationService->getRecaptchaSecret(),
+                'response' => $recaptchaToken
+            ];
+            $options = [
+                'http' => [
+                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method'  => 'POST',
+                    'content' => http_build_query($data),
+                ],
+            ];
+            $context  = stream_context_create($options);
+            $result = file_get_contents($url, false, $context);
+            $response = json_decode($result, true);
             return response()->json([
                 'status' => 'error',
-                'message' => 'reCAPTCHA verification failed.'
+                'message' => 'reCAPTCHA verification failed.',
+                'recaptcha_response' => $response
             ], 422);
         }
 
