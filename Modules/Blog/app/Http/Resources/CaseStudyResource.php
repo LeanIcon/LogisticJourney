@@ -20,7 +20,7 @@ class CaseStudyResource extends JsonResource
                 'quote' => $this->excerpt,
                 'quote_author' => $this->quote_author,
                 'quote_author_title' => $this->quote_author_title,
-                'quote_author_avatar' => $this->avatar ? asset('storage/' . $this->avatar) : null,
+                'avatar' => $this->avatar ? asset('storage/' . $this->avatar) : null,
             ],
             'content' => [
                 'banner' => $this->featured_image ? asset('storage/' . $this->featured_image) : null,
