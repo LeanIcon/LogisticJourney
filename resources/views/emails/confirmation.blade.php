@@ -95,68 +95,51 @@
       margin: 48px 0;
     }
     .contact-section {
-      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-      border-left: 5px solid #667eea;
-      padding: 36px;
-      border-radius: 12px;
+      background: #f8f9fa;
+      border: 1px solid #e2e8f0;
+      padding: 32px;
+      border-radius: 8px;
       margin: 40px 0;
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.08);
     }
     .contact-title {
-      font-size: 18px;
+      font-size: 16px;
       color: #1a202c;
       font-weight: 700;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       text-transform: uppercase;
-      letter-spacing: 1.2px;
+      letter-spacing: 0.5px;
     }
     .contact-link {
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      display: inline-block;
       text-decoration: none;
       font-size: 18px;
       color: #667eea;
       font-weight: 600;
-      transition: all 0.3s ease;
-      padding: 14px 18px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      border: 2px solid transparent;
+      transition: color 0.2s ease;
     }
     .contact-link:hover {
-      background: white;
       color: #764ba2;
-      border-color: #667eea;
-      transform: translateX(4px);
+      text-decoration: underline;
     }
     .contact-icon {
-      font-size: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      background: white;
-      border-radius: 50%;
-      color: #667eea;
+      display: none;
     }
     .social-section {
-      margin-top: 32px;
-      padding-top: 28px;
-      border-top: 2px solid rgba(102, 126, 234, 0.2);
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
     }
     .social-title {
-      font-size: 18px;
+      font-size: 16px;
       color: #1a202c;
       font-weight: 700;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       text-transform: uppercase;
-      letter-spacing: 1.2px;
+      letter-spacing: 0.5px;
     }
     .social-links {
       display: flex;
-      gap: 18px;
+      gap: 12px;
       justify-content: flex-start;
       flex-wrap: wrap;
     }
@@ -164,19 +147,17 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 52px;
-      height: 52px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      background: #667eea;
+      border-radius: 6px;
       text-decoration: none;
       color: white;
-      font-size: 24px;
-      transition: all 0.3s ease;
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+      font-size: 20px;
+      transition: background-color 0.2s ease;
     }
     .social-link:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 28px rgba(102, 126, 234, 0.4);
+      background: #764ba2;
     }
     .cta-section {
       text-align: center;
@@ -184,20 +165,20 @@
     }
     .cta-button {
       display: inline-block;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #667eea;
       color: white;
       text-decoration: none;
-      padding: 20px 52px;
-      border-radius: 50px;
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.35);
+      padding: 16px 48px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      transition: background-color 0.2s ease;
+      border: 2px solid #667eea;
     }
     .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.45);
+      background: #764ba2;
+      border-color: #764ba2;
     }
     .footer {
       background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
@@ -290,13 +271,13 @@
         font-size: 16px;
       }
       .social-link {
-        width: 48px;
-        height: 48px;
-        font-size: 20px;
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
       }
       .cta-button {
         font-size: 16px;
-        padding: 18px 40px;
+        padding: 14px 36px;
       }
       .footer {
         padding: 40px 24px;
@@ -333,10 +314,9 @@
       <div class="contact-section">
         <div class="contact-title">Get In Touch</div>
         <a href="mailto:sales@logisticjourney.com" class="contact-link">
-          <span class="contact-icon">&#9993;</span>
-          <span>sales@logisticjourney.com</span>
+          sales@logisticjourney.com
         </a>
-        <!-- Added social section with Instagram and Facebook -->
+        <!-- Social section -->
         <div class="social-section">
           <div class="social-title">Follow Us</div>
           <div class="social-links">
@@ -370,7 +350,7 @@
         <div class="footer-company-name">Logistic Journey</div>
         <p style="font-size: 15px; color: #a0aec0;">Logistics & Transportation Solutions</p>
       </div>
-      <!-- Added physical address section -->
+      <!-- Physical address section -->
       <div class="footer-address">
         <div class="footer-address-title">&#128205; OUR LOCATION</div>
         <div>
