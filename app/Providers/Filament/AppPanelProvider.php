@@ -21,6 +21,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Livewire\Admin\CustomLogin;
 
 final class AppPanelProvider extends PanelProvider
 {
@@ -30,7 +31,7 @@ final class AppPanelProvider extends PanelProvider
             ->default()
             ->id('app')
             ->path('app')
-            ->login()
+            ->login(CustomLogin::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
