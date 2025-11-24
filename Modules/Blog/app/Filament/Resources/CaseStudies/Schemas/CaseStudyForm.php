@@ -102,6 +102,12 @@ final class CaseStudyForm
                                     ->directory('case-studies/logos')
                                     ->maxSize(1024)
                                     ->helperText('Client company logo for the card'),
+                                FileUpload::make('avatar')
+                                    ->label('Quote Author Avatar')
+                                    ->image()
+                                    ->directory('case-studies/avatars')
+                                    ->maxSize(1024)
+                                    ->helperText('Photo of the person providing the quote'),
                                 FileUpload::make('featured_image')
                                     ->label('Featured Image')
                                     ->image()

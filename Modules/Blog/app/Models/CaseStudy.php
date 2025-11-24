@@ -19,6 +19,7 @@ class CaseStudy extends Model
         'excerpt',
         'quote_author',
         'quote_author_title',
+        'avatar',
         'introduction',
         'the_problem',
         'the_solution',
