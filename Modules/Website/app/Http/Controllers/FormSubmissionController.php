@@ -137,13 +137,24 @@ final class FormSubmissionController extends Controller
         ];
         $notificationService->saveContactData($contactData);
 
-        // Send notification email to admin/team
-        $subject = 'New Form Submission: ' . $form->slug;
-        $body = "Form: {$form->slug}\n" .
+        // Send formatted notification email to admin/team
+        $subject = 'New Form Submission: ' . ucwords(str_replace('-', ' ', $form->slug));
+        
+        // Plain text fallback
+        $plainBody = "Form: {$form->slug}\n" .
             "Fields: " . json_encode($validated, JSON_PRETTY_PRINT) . "\n" .
             "IP: " . $request->ip() . "\n" .
             "User Agent: " . $request->userAgent();
-        $notificationService->sendNotification($subject, $body);
+        
+        // Metadata for the email template
+        $metadata = [
+            'form_name' => $form->name ?? ucwords(str_replace('-', ' ', $form->slug)),
+            'form_slug' => $form->slug,
+            'timestamp' => now()->format('M d, Y h:i A'),
+        ];
+        
+        // Send the formatted HTML email
+        $notificationService->sendNotification($subject, $plainBody, $validated, $metadata);
 
         // Send confirmation email to user if email field exists and is valid
         if (isset($validated['email']) && filter_var($validated['email'], FILTER_VALIDATE_EMAIL)) {
