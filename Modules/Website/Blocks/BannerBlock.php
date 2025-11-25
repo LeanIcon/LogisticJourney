@@ -82,20 +82,19 @@ final class BannerBlock
     }
 
     public static function mutateData(array $data): array
-    {
-        $imagePath = $data['image'] ?? null;
-        $imageUrl = $imagePath ? Storage::url($imagePath) : null;
-
-        return [
-            'section' => [
-                'headline' => $data['headline'] ?? null,
-                'subheadline' => $data['subheadline'] ?? null,
-            ],
-            'image' => [
-                'path' => $data['image'] ?? null,
-                'url' => $imageUrl,
-                'alt' => $data['image_alt'] ?? null,
-            ],
-        ];
+        {
+            $imagePath = $data['image'] ?? null;
+            
+            return [
+                'section' => [
+                    'headline' => $data['headline'] ?? null,
+                    'subheadline' => $data['subheadline'] ?? null,
+                ],
+                'image' => [
+                    'path' => $imagePath,
+                    'url' => $imagePath ? Storage::url($imagePath) : null,
+                    'alt' => $data['image_alt'] ?? null,
+                ],
+            ];
     }
 }
