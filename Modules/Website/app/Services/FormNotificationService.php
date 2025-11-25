@@ -19,9 +19,9 @@ class FormNotificationService
 
     public function __construct()
     {
-        $this->smtpHost = env('SMTP_HOST', 'mail.logisticjourney.com');
+        $this->smtpHost = env('SMTP_HOST', 'smtp-mail.outlook.com');
         $this->smtpUsername = env('SMTP_USERNAME', 'sales@logisticjourney.com');
-        $this->smtpPassword = env('SMTP_PASSWORD', 'xWr[ML3u0.');
+        $this->smtpPassword = env('SMTP_PASSWORD', '#4HelloLogisticJourney2025!');
         $this->smtpPort = env('SMTP_PORT', 587);
         $this->smtpSecure = env('SMTP_SECURE', 'tls');
         $this->mailFrom = env('MAIL_FROM', 'sales@logisticjourney.com');
