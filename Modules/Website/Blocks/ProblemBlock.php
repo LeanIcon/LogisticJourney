@@ -72,6 +72,15 @@ final class ProblemBlock
                     ->schema([
                         Grid::make(2)
                             ->schema([
+                                FileUpload::make('problem_1_icon')
+                                    ->label('Problem 1 Icon')
+                                    ->image()
+                                    ->directory('problem-block-icons')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Icon image (max 1MB)')
+                                    ->columnSpanFull(),
+
                                 TextInput::make('problem_1_title')
                                     ->label('Problem 1 Title')
                                     ->maxLength(50)
@@ -82,6 +91,15 @@ final class ProblemBlock
                                     ->maxLength(150)
                                     ->default('Wasted trips and unhappy customers')
                                     ->rows(2),
+
+                                FileUpload::make('problem_2_icon')
+                                    ->label('Problem 2 Icon')
+                                    ->image()
+                                    ->directory('problem-block-icons')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Icon image (max 1MB)')
+                                    ->columnSpanFull(),
 
                                 TextInput::make('problem_2_title')
                                     ->label('Problem 2 Title')
@@ -94,6 +112,15 @@ final class ProblemBlock
                                     ->default('Blind once drivers leave depot')
                                     ->rows(2),
 
+                                FileUpload::make('problem_3_icon')
+                                    ->label('Problem 3 Icon')
+                                    ->image()
+                                    ->directory('problem-block-icons')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Icon image (max 1MB)')
+                                    ->columnSpanFull(),
+
                                 TextInput::make('problem_3_title')
                                     ->label('Problem 3 Title')
                                     ->maxLength(50)
@@ -104,6 +131,15 @@ final class ProblemBlock
                                     ->maxLength(150)
                                     ->default('Paper, Excel and errors everywhere')
                                     ->rows(2),
+
+                                FileUpload::make('problem_4_icon')
+                                    ->label('Problem 4 Icon')
+                                    ->image()
+                                    ->directory('problem-block-icons')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Icon image (max 1MB)')
+                                    ->columnSpanFull(),
 
                                 TextInput::make('problem_4_title')
                                     ->label('Problem 4 Title')
@@ -137,10 +173,12 @@ final class ProblemBlock
     {
         $problems = [];
         for ($i = 1; $i <= 4; $i++) {
+            $iconKey = "problem_{$i}_icon";
             $titleKey = "problem_{$i}_title";
             $descKey = "problem_{$i}_description";
             if (!empty($data[$titleKey])) {
                 $problems[] = [
+                    'icon' => !empty($data[$iconKey]) ? url('storage/' . $data[$iconKey]) : null,
                     'title' => $data[$titleKey],
                     'description' => $data[$descKey] ?? '',
                 ];
@@ -151,7 +189,7 @@ final class ProblemBlock
             'title' => $data['title'] ?? null,
             'description' => $data['description'] ?? null,
             'problems' => $problems,
-            'side_image' => $data['side_image'] ?? null,
+            'side_image' => !empty($data['side_image']) ? url('storage/' . $data['side_image']) : null,
         ];
     }
 }
