@@ -77,6 +77,15 @@ final class HowToGetStartedBlock
                     ->schema([
                         Grid::make(1)
                             ->schema([
+                                FileUpload::make('step_1_image')
+                                    ->label('Step 1 Image')
+                                    ->image()
+                                    ->directory('get-started-step-images')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Step 1 image (max 1MB)')
+                                    ->columnSpanFull(),
+
                                 TextInput::make('step_1_title')
                                     ->label('Step 1 Title')
                                     ->maxLength(50)
@@ -88,6 +97,15 @@ final class HowToGetStartedBlock
                                     ->maxLength(200)
                                     ->default('Send us an email to show your interest.')
                                     ->rows(2)
+                                    ->columnSpanFull(),
+
+                                FileUpload::make('step_2_image')
+                                    ->label('Step 2 Image')
+                                    ->image()
+                                    ->directory('get-started-step-images')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Step 2 image (max 1MB)')
                                     ->columnSpanFull(),
 
                                 TextInput::make('step_2_title')
@@ -103,6 +121,15 @@ final class HowToGetStartedBlock
                                     ->rows(2)
                                     ->columnSpanFull(),
 
+                                FileUpload::make('step_3_image')
+                                    ->label('Step 3 Image')
+                                    ->image()
+                                    ->directory('get-started-step-images')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Step 3 image (max 1MB)')
+                                    ->columnSpanFull(),
+
                                 TextInput::make('step_3_title')
                                     ->label('Step 3 Title')
                                     ->maxLength(50)
@@ -116,6 +143,15 @@ final class HowToGetStartedBlock
                                     ->rows(2)
                                     ->columnSpanFull(),
 
+                                FileUpload::make('step_4_image')
+                                    ->label('Step 4 Image')
+                                    ->image()
+                                    ->directory('get-started-step-images')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Step 4 image (max 1MB)')
+                                    ->columnSpanFull(),
+
                                 TextInput::make('step_4_title')
                                     ->label('Step 4 Title')
                                     ->maxLength(50)
@@ -127,6 +163,15 @@ final class HowToGetStartedBlock
                                     ->maxLength(200)
                                     ->default('Start creating and managing delivery orders in the system.')
                                     ->rows(2)
+                                    ->columnSpanFull(),
+
+                                FileUpload::make('step_5_image')
+                                    ->label('Step 5 Image')
+                                    ->image()
+                                    ->directory('get-started-step-images')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Step 5 image (max 1MB)')
                                     ->columnSpanFull(),
 
                                 TextInput::make('step_5_title')
@@ -153,11 +198,13 @@ final class HowToGetStartedBlock
     {
         $steps = [];
         for ($i = 1; $i <= 5; $i++) {
+            $imageKey = "step_{$i}_image";
             $titleKey = "step_{$i}_title";
             $descKey = "step_{$i}_description";
             if (!empty($data[$titleKey])) {
                 $steps[] = [
                     'number' => $i,
+                    'image' => !empty($data[$imageKey]) ? url('storage/' . $data[$imageKey]) : null,
                     'title' => $data[$titleKey],
                     'description' => $data[$descKey] ?? '',
                 ];
