@@ -66,15 +66,15 @@ final class CTAHomepageBlock
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Mobile App Image')
-                    ->description('Image showing the mobile app interface')
+                Section::make('Right Side Image')
+                    ->description('Image displayed on the right side of the CTA')
                     ->schema([
                         FileUpload::make('mobile_image')
                             ->image()
                             ->directory('cta-mobile-block-images')
                             ->imageEditor()
                             ->maxSize(2048)
-                            ->helperText('Mobile app screenshot (max 2MB)'),
+                            ->helperText('Image Size (max 2MB)'),
                     ]),
             ]);
     }
@@ -89,7 +89,7 @@ final class CTAHomepageBlock
             'button' => [
                 'text' => $data['button_text'] ?? 'Book a Demo Now',
             ],
-            'mobile_image' => $data['mobile_image'] ?? null,
+            'image' => !empty($data['mobile_image']) ? url('storage/' . $data['mobile_image']) : null,
         ];
     }
 }

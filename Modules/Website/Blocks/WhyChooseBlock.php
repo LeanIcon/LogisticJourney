@@ -131,7 +131,7 @@ final class WhyChooseBlock
         return [
             'title' => $data['title'] ?? null,
             'description' => $data['description'] ?? null,
-            'feature_image' => $data['feature_image'] ?? null,
+            'feature_image' => !empty($data['feature_image']) ? url('storage/' . $data['feature_image']) : null,
             'benefits' => $benefits,
         ];
     }

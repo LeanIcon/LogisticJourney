@@ -143,17 +143,6 @@ final class HowToGetStartedBlock
                                     ->columnSpanFull(),
                             ]),
                     ]),
-
-                Section::make('Side Image')
-                    ->description('Image showing the application setup')
-                    ->schema([
-                        FileUpload::make('side_image')
-                            ->image()
-                            ->directory('how-to-get-started-block-images')
-                            ->imageEditor()
-                            ->maxSize(2048)
-                            ->helperText('Image showing the laptop/setup (max 2MB)'),
-                    ]),
             ]);
     }
 
@@ -179,9 +168,7 @@ final class HowToGetStartedBlock
             'tag' => $data['tag'] ?? 'How it works',
             'title' => $data['title'] ?? null,
             'description' => $data['description'] ?? null,
-            'steps' => $steps,
-            'side_image' => $data['side_image'] ?? null,
-
+            'steps' => $steps
         ];
     }
 }

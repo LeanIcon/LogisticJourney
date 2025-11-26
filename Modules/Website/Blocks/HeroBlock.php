@@ -198,7 +198,7 @@ final class HeroBlock
             'highlight_text' => $data['highlight_text'] ?? null,
             'subheadline' => $data['subheadline'] ?? null,
             'background' => [
-                'image' => $data['background_image'] ?? null,
+                'image' => !empty($data['background_image']) ? url('storage/' . $data['background_image']) : null,
             ],
             'buttons' => ($data['show_buttons'] ?? true) ? [
                 [
