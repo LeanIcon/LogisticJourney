@@ -21,7 +21,7 @@ final class PostResource extends JsonResource
             'type' => $this->type,
             'content' => $this->body ?? $this->content,
             'featured_image' => $this->featured_image ? asset('storage/' . $this->featured_image) : null,
-            'banner' => $this->banner,
+            'banner' => $this->banner ? asset('storage/' . $this->banner) : null,
             'published_at' => optional($this->published_at)->toDateTimeString(),
             'is_published' => $this->status === 'published',
             'is_featured' => $this->is_featured,
