@@ -12,279 +12,210 @@
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-      padding: 40px 20px;
-      min-height: 100vh;
+      background-color: #f5f5f5;
+      padding: 20px;
+      line-height: 1.6;
     }
     .email-container {
-      max-width: 680px;
+      max-width: 600px;
       margin: 0 auto;
-      background: #ffffff;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
     }
     .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-      padding: 60px 40px;
+      background-color: #667eea;
+      color: #ffffff;
+      padding: 40px 30px;
       text-align: center;
-      color: white;
-      position: relative;
-      overflow: hidden;
-    }
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
-      background-size: 40px 40px;
-      animation: drift 25s linear infinite;
-    }
-    @keyframes drift {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(40px, 40px); }
-    }
-    .header-content {
-      position: relative;
-      z-index: 1;
     }
     .header h1 {
-      font-size: 44px;
-      font-weight: 800;
-      margin-bottom: 16px;
-      letter-spacing: -1px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
     .header p {
-      font-size: 20px;
+      font-size: 16px;
       opacity: 0.95;
-      font-weight: 400;
-      letter-spacing: 0.3px;
     }
     .content {
-      padding: 56px 40px;
+      padding: 40px 30px;
+      color: #333333;
     }
     .greeting {
-      font-size: 28px;
-      color: #1a202c;
-      font-weight: 700;
-      margin-bottom: 28px;
-      letter-spacing: -0.5px;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #1a1a1a;
     }
     .message-text {
-      font-size: 20px;
-      line-height: 1.9;
-      color: #4a5568;
-      margin-bottom: 28px;
-      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #4a4a4a;
+      margin-bottom: 20px;
     }
     .highlight {
       color: #667eea;
-      font-weight: 700;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-weight: 600;
     }
     .divider {
-      height: 2px;
-      background: linear-gradient(to right, transparent, #e2e8f0, transparent);
-      margin: 48px 0;
+      height: 1px;
+      background-color: #e0e0e0;
+      margin: 30px 0;
     }
-    .contact-section {
-      background: #f8f9fa;
-      border: 1px solid #e2e8f0;
-      padding: 32px;
-      border-radius: 8px;
-      margin: 40px 0;
+    .contact-box {
+      background-color: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      padding: 25px;
+      margin: 30px 0;
     }
     .contact-title {
-      font-size: 16px;
-      color: #1a202c;
+      font-size: 14px;
       font-weight: 700;
-      margin-bottom: 16px;
+      color: #1a1a1a;
+      margin-bottom: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+    }
+    .contact-item {
+      margin-bottom: 20px;
+    }
+    .contact-item:last-child {
+      margin-bottom: 0;
+    }
+    .contact-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #666666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
     }
     .contact-link {
       display: inline-block;
-      text-decoration: none;
-      font-size: 18px;
       color: #667eea;
-      font-weight: 600;
-      transition: color 0.2s ease;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
     }
     .contact-link:hover {
-      color: #764ba2;
       text-decoration: underline;
-    }
-    .contact-icon {
-      display: none;
-    }
-    .social-section {
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid #e2e8f0;
-    }
-    .social-title {
-      font-size: 16px;
-      color: #1a202c;
-      font-weight: 700;
-      margin-bottom: 16px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
     .social-links {
       display: flex;
-      gap: 12px;
-      justify-content: flex-start;
+      gap: 10px;
       flex-wrap: wrap;
     }
     .social-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      background: #667eea;
-      border-radius: 6px;
+      display: inline-block;
+      padding: 8px 16px;
+      background-color: #667eea;
+      color: #ffffff;
       text-decoration: none;
-      color: white;
-      font-size: 20px;
-      transition: background-color 0.2s ease;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 4px;
     }
     .social-link:hover {
-      background: #764ba2;
+      background-color: #5568d3;
     }
     .cta-section {
       text-align: center;
-      margin: 48px 0;
+      margin: 30px 0;
     }
     .cta-button {
       display: inline-block;
-      background: #667eea;
-      color: white;
+      background-color: #667eea;
+      color: #ffffff;
       text-decoration: none;
-      padding: 16px 48px;
-      border-radius: 6px;
-      font-size: 16px;
+      padding: 14px 40px;
+      font-size: 15px;
       font-weight: 600;
-      letter-spacing: 0.3px;
-      transition: background-color 0.2s ease;
-      border: 2px solid #667eea;
+      border-radius: 4px;
     }
     .cta-button:hover {
-      background: #764ba2;
-      border-color: #764ba2;
+      background-color: #5568d3;
     }
     .footer {
-      background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+      background-color: #2d3748;
       color: #cbd5e0;
-      padding: 48px 40px;
+      padding: 40px 30px;
       text-align: center;
-      font-size: 16px;
-      line-height: 1.8;
+      font-size: 14px;
     }
     .footer-company {
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     .footer-company-name {
       font-size: 18px;
       font-weight: 700;
-      color: #f7fafc;
-      margin-bottom: 8px;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+    .footer-tagline {
+      font-size: 14px;
+      color: #a0aec0;
     }
     .footer-address {
-      background: rgba(102, 126, 234, 0.1);
+      background-color: rgba(102, 126, 234, 0.1);
       padding: 20px;
-      border-radius: 8px;
-      margin: 24px 0;
-      font-size: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
       line-height: 1.8;
-      color: #cbd5e0;
     }
     .footer-address-title {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: #667eea;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .footer-links {
-      display: flex;
-      gap: 24px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 24px 0;
+      margin: 20px 0;
     }
     .footer-link {
       color: #a0aec0;
       text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      transition: color 0.3s ease;
+      margin: 0 12px;
+      font-size: 13px;
     }
     .footer-link:hover {
       color: #667eea;
+      text-decoration: underline;
     }
     .footer-copyright {
-      font-size: 14px;
-      opacity: 0.8;
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid rgba(102, 126, 234, 0.2);
+      font-size: 12px;
+      color: #a0aec0;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(160, 174, 192, 0.2);
+      line-height: 1.6;
     }
     @media (max-width: 600px) {
+      body {
+        padding: 0;
+      }
       .email-container {
-        margin: 0;
-        border-radius: 0;
+        border: none;
       }
       .header {
-        padding: 40px 24px;
+        padding: 30px 20px;
       }
       .header h1 {
-        font-size: 36px;
-      }
-      .header p {
-        font-size: 18px;
+        font-size: 28px;
       }
       .content {
-        padding: 40px 24px;
+        padding: 30px 20px;
       }
-      .greeting {
-        font-size: 24px;
-      }
-      .message-text {
-        font-size: 18px;
-      }
-      .contact-section {
-        padding: 28px;
-      }
-      .contact-title {
-        font-size: 16px;
-      }
-      .contact-link {
-        font-size: 16px;
-      }
-      .social-link {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-      }
-      .cta-button {
-        font-size: 16px;
-        padding: 14px 36px;
+      .contact-box {
+        padding: 20px;
       }
       .footer {
-        padding: 40px 24px;
-        font-size: 14px;
+        padding: 30px 20px;
       }
-      .footer-address {
-        font-size: 14px;
+      .footer-link {
+        display: block;
+        margin: 8px 0;
       }
     }
   </style>
@@ -293,66 +224,62 @@
   <div class="email-container">
     <!-- Header -->
     <div class="header">
-      <div class="header-content">
-        <h1>Thank You!</h1>
-        <p>We've received your message and we're thrilled to connect</p>
-      </div>
+      <h1>Thank You!</h1>
+      <p>We've received your message and we're thrilled to connect</p>
     </div>
+
     <!-- Main Content -->
     <div class="content">
       <p class="greeting">Hello!</p>
+      
       <p class="message-text">
         Thank you so much for reaching out to <span class="highlight">Logistic Journey</span>. We truly appreciate your interest and the time you've taken to get in touch with us.
       </p>
+      
       <p class="message-text">
         Your message has been received by our team, and we're reviewing it with great care. We'll be getting back to you shortly with a personalized response tailored to your specific needs and requirements.
       </p>
+      
       <p class="message-text">
         If you need immediate assistance or have any urgent questions, please don't hesitate to reach out using the contact details below.
       </p>
-      <!-- Contact Section -->
-      <div class="contact-section">
+
+      <!-- Contact Box -->
+      <div class="contact-box">
         <div class="contact-title">Get In Touch</div>
-        <a href="mailto:sales@logisticjourney.com" class="contact-link">
-          sales@logisticjourney.com
-        </a>
-        <!-- Social section -->
-        <div class="social-section">
-          <div class="social-title">Follow Us</div>
+        
+        <div class="contact-item">
+          <div class="contact-label">Email</div>
+          <a href="mailto:sales@logisticjourney.com" class="contact-link">sales@logisticjourney.com</a>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-label">Follow Us</div>
           <div class="social-links">
-            <a href="https://www.linkedin.com/company/logisticjourney/" class="social-link" title="LinkedIn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-              </svg>
-            </a>
-            <a href="https://www.instagram.com/logisticjourney/" class="social-link" title="Instagram">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-              </svg>
-            </a>
-            <a href="https://www.facebook.com/logisticjourney/" class="social-link" title="Facebook">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
-              </svg>
-            </a>
+            <a href="https://www.linkedin.com/company/logisticjourney/" class="social-link">LinkedIn</a>
+            <a href="https://www.instagram.com/logisticjourney/" class="social-link">Instagram</a>
+            <a href="https://www.facebook.com/logisticjourney/" class="social-link">Facebook</a>
           </div>
         </div>
       </div>
+
       <div class="divider"></div>
+
       <!-- CTA -->
       <div class="cta-section">
         <a href="https://new.logisticjourney.com" class="cta-button">Visit Our Website</a>
       </div>
     </div>
+
     <!-- Footer -->
     <div class="footer">
       <div class="footer-company">
         <div class="footer-company-name">Logistic Journey</div>
-        <p style="font-size: 15px; color: #a0aec0;">Logistics & Transportation Solutions</p>
+        <div class="footer-tagline">Logistics & Transportation Solutions</div>
       </div>
-      <!-- Physical address section -->
+
       <div class="footer-address">
-        <div class="footer-address-title">&#128205; OUR LOCATION</div>
+        <div class="footer-address-title">Our Location</div>
         <div>
           The Workshop, Unit 7<br>
           70 Seventh Avenue<br>
@@ -360,11 +287,15 @@
           Gauteng, South Africa
         </div>
       </div>
+
       <div class="footer-links">
         <a href="#" class="footer-link">Privacy Policy</a>
+        <span style="color: #4a5568;">•</span>
         <a href="#" class="footer-link">Terms of Service</a>
+        <span style="color: #4a5568;">•</span>
         <a href="#" class="footer-link">Unsubscribe</a>
       </div>
+
       <div class="footer-copyright">
         &copy; 2025 Logistic Journey. All rights reserved.<br>
         You're receiving this email because you contacted us through our website.
