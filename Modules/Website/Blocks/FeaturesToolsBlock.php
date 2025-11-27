@@ -76,6 +76,13 @@ final class FeaturesToolsBlock
                     ->schema([
                         Grid::make(1)
                             ->schema([
+                                TextInput::make('feature_1_icon')
+                                    ->label('Feature 1 Icon')
+                                    ->maxLength(100)
+                                    ->placeholder('truck')
+                                    ->helperText('Icon name/identifier')
+                                    ->columnSpanFull(),
+
                                 TextInput::make('feature_1_title')
                                     ->label('Feature 1 Title')
                                     ->maxLength(50)
@@ -87,6 +94,13 @@ final class FeaturesToolsBlock
                                     ->maxLength(200)
                                     ->default('Keep track of all your vehicles, monitor their conditions, and schedule maintenance to prevent breakdowns.')
                                     ->rows(3)
+                                    ->columnSpanFull(),
+
+                                TextInput::make('feature_2_icon')
+                                    ->label('Feature 2 Icon')
+                                    ->maxLength(100)
+                                    ->placeholder('clipboard-list')
+                                    ->helperText('Icon name/identifier')
                                     ->columnSpanFull(),
 
                                 TextInput::make('feature_2_title')
@@ -102,6 +116,13 @@ final class FeaturesToolsBlock
                                     ->rows(3)
                                     ->columnSpanFull(),
 
+                                TextInput::make('feature_3_icon')
+                                    ->label('Feature 3 Icon')
+                                    ->maxLength(100)
+                                    ->placeholder('map-pin')
+                                    ->helperText('Icon name/identifier')
+                                    ->columnSpanFull(),
+
                                 TextInput::make('feature_3_title')
                                     ->label('Feature 3 Title')
                                     ->maxLength(50)
@@ -113,6 +134,13 @@ final class FeaturesToolsBlock
                                     ->maxLength(200)
                                     ->default('Get real-time updates on vehicle locations, estimated arrival times, and route efficiency.')
                                     ->rows(3)
+                                    ->columnSpanFull(),
+
+                                TextInput::make('feature_4_icon')
+                                    ->label('Feature 4 Icon')
+                                    ->maxLength(100)
+                                    ->placeholder('user-circle')
+                                    ->helperText('Icon name/identifier')
                                     ->columnSpanFull(),
 
                                 TextInput::make('feature_4_title')
@@ -135,6 +163,12 @@ final class FeaturesToolsBlock
                     ->schema([
                         Grid::make(1)
                             ->schema([
+                                TextInput::make('feature_5_icon')
+                                    ->label('Feature 5 Icon')
+                                    ->maxLength(100)
+                                    ->placeholder('chart-bar')
+                                    ->helperText('Icon name/identifier')
+                                    ->columnSpanFull(),
 
                                 TextInput::make('feature_5_title')
                                     ->label('Feature 5 Title')
@@ -149,6 +183,13 @@ final class FeaturesToolsBlock
                                     ->rows(3)
                                     ->columnSpanFull(),
 
+                                TextInput::make('feature_6_icon')
+                                    ->label('Feature 6 Icon')
+                                    ->maxLength(100)
+                                    ->placeholder('route')
+                                    ->helperText('Icon name/identifier')
+                                    ->columnSpanFull(),
+
                                 TextInput::make('feature_6_title')
                                     ->label('Feature 6 Title')
                                     ->maxLength(50)
@@ -160,6 +201,13 @@ final class FeaturesToolsBlock
                                     ->maxLength(200)
                                     ->default('Plan the most efficient routes to reduce travel time and costs.')
                                     ->rows(3)
+                                    ->columnSpanFull(),
+
+                                TextInput::make('feature_7_icon')
+                                    ->label('Feature 7 Icon')
+                                    ->maxLength(100)
+                                    ->placeholder('clock-rotate-left')
+                                    ->helperText('Icon name/identifier')
                                     ->columnSpanFull(),
 
                                 TextInput::make('feature_7_title')
@@ -186,10 +234,12 @@ final class FeaturesToolsBlock
     {
         $features = [];
         for ($i = 1; $i <= 7; $i++) {
+            $iconKey = "feature_{$i}_icon";
             $titleKey = "feature_{$i}_title";
             $descKey = "feature_{$i}_description";
             if (!empty($data[$titleKey])) {
                 $features[] = [
+                    'icon' => $data[$iconKey] ?? null,
                     'title' => $data[$titleKey],
                     'description' => $data[$descKey] ?? '',
                 ];
