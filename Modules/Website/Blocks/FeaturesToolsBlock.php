@@ -10,6 +10,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Modules\Blocks\Interfaces\Block as BlockTrait;
+use Filament\Forms\Components\FileUpload;
+
 
 final class FeaturesToolsBlock
 {
@@ -76,11 +78,13 @@ final class FeaturesToolsBlock
                     ->schema([
                         Grid::make(1)
                             ->schema([
-                                TextInput::make('feature_1_icon')
+                                FileUpload::make('feature_1_icon')
                                     ->label('Feature 1 Icon')
-                                    ->maxLength(100)
-                                    ->placeholder('truck')
-                                    ->helperText('Icon name/identifier')
+                                    ->image()
+                                    ->directory('features-icons')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Feature icon image (max 1MB)')
                                     ->columnSpanFull(),
 
                                 TextInput::make('feature_1_title')
@@ -96,11 +100,13 @@ final class FeaturesToolsBlock
                                     ->rows(3)
                                     ->columnSpanFull(),
 
-                                TextInput::make('feature_2_icon')
+                                FileUpload::make('feature_2_icon')
                                     ->label('Feature 2 Icon')
-                                    ->maxLength(100)
-                                    ->placeholder('clipboard-list')
-                                    ->helperText('Icon name/identifier')
+                                    ->image()
+                                    ->directory('features-icons')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Feature icon image (max 1MB)')
                                     ->columnSpanFull(),
 
                                 TextInput::make('feature_2_title')
@@ -116,11 +122,13 @@ final class FeaturesToolsBlock
                                     ->rows(3)
                                     ->columnSpanFull(),
 
-                                TextInput::make('feature_3_icon')
+                                FileUpload::make('feature_3_icon')
                                     ->label('Feature 3 Icon')
-                                    ->maxLength(100)
-                                    ->placeholder('map-pin')
-                                    ->helperText('Icon name/identifier')
+                                    ->image()
+                                    ->directory('features-icons')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Feature icon image (max 1MB)')
                                     ->columnSpanFull(),
 
                                 TextInput::make('feature_3_title')
@@ -136,11 +144,13 @@ final class FeaturesToolsBlock
                                     ->rows(3)
                                     ->columnSpanFull(),
 
-                                TextInput::make('feature_4_icon')
+                                FileUpload::make('feature_4_icon')
                                     ->label('Feature 4 Icon')
-                                    ->maxLength(100)
-                                    ->placeholder('user-circle')
-                                    ->helperText('Icon name/identifier')
+                                    ->image()
+                                    ->directory('features-icons')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Feature icon image (max 1MB)')
                                     ->columnSpanFull(),
 
                                 TextInput::make('feature_4_title')
@@ -163,11 +173,13 @@ final class FeaturesToolsBlock
                     ->schema([
                         Grid::make(1)
                             ->schema([
-                                TextInput::make('feature_5_icon')
+                                FileUpload::make('feature_5_icon')
                                     ->label('Feature 5 Icon')
-                                    ->maxLength(100)
-                                    ->placeholder('chart-bar')
-                                    ->helperText('Icon name/identifier')
+                                    ->image()
+                                    ->directory('features-icons')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Feature icon image (max 1MB)')
                                     ->columnSpanFull(),
 
                                 TextInput::make('feature_5_title')
@@ -183,11 +195,13 @@ final class FeaturesToolsBlock
                                     ->rows(3)
                                     ->columnSpanFull(),
 
-                                TextInput::make('feature_6_icon')
+                                FileUpload::make('feature_6_icon')
                                     ->label('Feature 6 Icon')
-                                    ->maxLength(100)
-                                    ->placeholder('route')
-                                    ->helperText('Icon name/identifier')
+                                    ->image()
+                                    ->directory('features-icons')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Feature icon image (max 1MB)')
                                     ->columnSpanFull(),
 
                                 TextInput::make('feature_6_title')
@@ -203,11 +217,13 @@ final class FeaturesToolsBlock
                                     ->rows(3)
                                     ->columnSpanFull(),
 
-                                TextInput::make('feature_7_icon')
+                                FileUpload::make('feature_7_icon')
                                     ->label('Feature 7 Icon')
-                                    ->maxLength(100)
-                                    ->placeholder('clock-rotate-left')
-                                    ->helperText('Icon name/identifier')
+                                    ->image()
+                                    ->directory('features-icons')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Feature icon image (max 1MB)')
                                     ->columnSpanFull(),
 
                                 TextInput::make('feature_7_title')
@@ -239,7 +255,7 @@ final class FeaturesToolsBlock
             $descKey = "feature_{$i}_description";
             if (!empty($data[$titleKey])) {
                 $features[] = [
-                    'icon' => $data[$iconKey] ?? null,
+                    'icon' => !empty($data[$iconKey]) ? url('storage/' . $data[$iconKey]) : null,
                     'title' => $data[$titleKey],
                     'description' => $data[$descKey] ?? '',
                 ];
