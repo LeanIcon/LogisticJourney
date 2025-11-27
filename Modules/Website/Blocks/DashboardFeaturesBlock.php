@@ -81,15 +81,6 @@ final class DashboardFeaturesBlock
                                 Repeater::make('features')
                                     ->label('Features')
                                     ->schema([
-                                        FileUpload::make('image')
-                                            ->label('Feature Image')
-                                            ->image()
-                                            ->directory('dashboard-features')
-                                            ->imageEditor()
-                                            ->maxSize(1024)
-                                            ->helperText('Feature image/icon (max 1MB)')
-                                            ->columnSpanFull(),
-
                                         TextInput::make('title')
                                             ->label('Feature Title')
                                             ->placeholder('e.g., Real-Time Vehicle Tracking')
