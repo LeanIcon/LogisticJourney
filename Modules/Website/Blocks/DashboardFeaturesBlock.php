@@ -76,11 +76,20 @@ final class DashboardFeaturesBlock
                             ->columns(2),
 
                         Section::make('Right Column - Feature Highlights')
-                            ->description('List of key features with titles and descriptions')
+                            ->description('List of key features with images, titles and descriptions')
                             ->schema([
                                 Repeater::make('features')
                                     ->label('Features')
                                     ->schema([
+                                        FileUpload::make('image')
+                                            ->label('Feature Image')
+                                            ->image()
+                                            ->directory('dashboard-features')
+                                            ->imageEditor()
+                                            ->maxSize(1024)
+                                            ->helperText('Feature image/icon (max 1MB)')
+                                            ->columnSpanFull(),
+
                                         TextInput::make('title')
                                             ->label('Feature Title')
                                             ->placeholder('e.g., Real-Time Vehicle Tracking')
@@ -103,24 +112,23 @@ final class DashboardFeaturesBlock
     public static function mutateData(array $data): array
     {
         $mapImagePath = $data['map_image'] ?? null;
-        $mapImageUrl = $mapImagePath ? Storage::url($mapImagePath) : null;
-
-        $tableImagePath = $data['table_image'] ?? null;
-        $tableImageUrl = $tableImagePath ? Storage::url($tableImagePath) : null;
+        $mapImageUrl = $mapImagePath ? url('storage/' . $mapImagePath) : null;
 
         return [
             'headline' => $data['headline'] ?? null,
             'description' => $data['description'] ?? null,
             'left_column' => [
                 'map' => [
-                    'path' => $mapImagePath,
                     'url' => $mapImageUrl,
-                    'alt' => $data['map_image_alt'] ?? 'Fleet tracking map',
                 ],
             ],
             'right_column' => [
                 'features' => array_map(function ($feature) {
+                    $featureImagePath = $feature['image'] ?? null;
+                    $featureImageUrl = $featureImagePath ? url('storage/' . $featureImagePath) : null;
+
                     return [
+                        'image' => $featureImageUrl,
                         'title' => $feature['title'] ?? null,
                         'description' => $feature['description'] ?? null,
                     ];

@@ -47,6 +47,15 @@ final class JourneyPlannerBlock
                         Repeater::make('features')
                             ->label('Features')
                             ->schema([
+                                FileUpload::make('image')
+                                    ->label('Feature Image')
+                                    ->image()
+                                    ->directory('journey-planner-features')
+                                    ->imageEditor()
+                                    ->maxSize(1024)
+                                    ->helperText('Feature image/icon (max 1MB)')
+                                    ->columnSpanFull(),
+
                                 TextInput::make('title')
                                     ->label('Feature Title')
                                     ->placeholder('e.g., Customizable Journey Setup')
@@ -76,22 +85,22 @@ final class JourneyPlannerBlock
     public static function mutateData(array $data): array
     {
         $imagePath = $data['image'] ?? null;
-        $imageUrl = $imagePath ? Storage::url($imagePath) : null;
+        $imageUrl = $imagePath ? url('storage/' . $imagePath) : null;
 
         return [
             'headline' => $data['headline'] ?? null,
             'description' => $data['description'] ?? null,
             'features' => array_map(function ($feature) {
+                $featureImagePath = $feature['image'] ?? null;
+                $featureImageUrl = $featureImagePath ? url('storage/' . $featureImagePath) : null;
+
                 return [
+                    'image' => $featureImageUrl,
                     'title' => $feature['title'] ?? null,
                     'description' => $feature['description'] ?? null,
                 ];
             }, $data['features'] ?? []),
-            'image' => [
-                'path' => $imagePath,
-                'url' => $imageUrl,
-                'alt' => $data['image_alt'] ?? 'Journey planner screenshot',
-            ],
+            'image' => $imageUrl,
         ];
     }
 }
