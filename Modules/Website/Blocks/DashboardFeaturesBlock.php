@@ -119,7 +119,6 @@ final class DashboardFeaturesBlock
                     $featureImageUrl = $featureImagePath ? url('storage/' . $featureImagePath) : null;
 
                     return [
-                        'image' => $featureImageUrl,
                         'title' => $feature['title'] ?? null,
                         'description' => $feature['description'] ?? null,
                     ];
