@@ -33,68 +33,81 @@
             z-index: 9999;
         }
 
-        /* Left Side - Gradient Section */
+        /* Left Side - Modern Blue Section */
         .gradient-section {
             position: relative;
-            background: linear-gradient(180deg, 
-                #8B2E8B 0%,
-                #C91F5D 25%,
-                #E91E63 40%,
-                #9C27B0 55%,
-                #673AB7 70%,
-                #3F51B5 85%,
-                #0A2540 100%
-            );
+            background: linear-gradient(180deg, #0d47a1 0%, #1976d2 50%, #42a5f5 100%);
             display: flex;
-            align-items: flex-start;
+            align-items: center;
+            justify-content: center;
             padding: 80px 60px;
             overflow: hidden;
         }
 
-        .gradient-overlay {
+        .gradient-section::before {
+            content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(ellipse at top right, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at bottom left, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            bottom: -20%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: #5e35b1;
+            border-radius: 50%;
+            opacity: 0.6;
+            z-index: 1;
+        }
+
+        .gradient-section::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -15%;
+            width: 500px;
+            height: 500px;
+            background: #1565c0;
+            border-radius: 50%;
+            opacity: 0.4;
+            z-index: 1;
         }
 
         .gradient-content {
             position: relative;
             z-index: 10;
             color: white;
-            max-width: 600px;
-        }
-
-        .quote-label {
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 120px;
-            opacity: 0.9;
+            max-width: 500px;
+            text-align: center;
         }
 
         .main-text {
-            margin-bottom: 32px;
+            margin-bottom: 40px;
+        }
+
+        .small-label {
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            opacity: 0.95;
+            display: block;
         }
 
         .main-title {
-            font-size: 96px;
-            font-weight: 400;
+            font-size: 90px;
+            font-weight: 600;
             line-height: 1.1;
             letter-spacing: -2px;
-            font-family: 'Playfair Display', Georgia, serif;
+            color: white;
+            margin-bottom: 0;
         }
 
         .sub-text {
-            font-size: 16px;
-            line-height: 1.6;
+            font-size: 18px;
+            line-height: 1.7;
             opacity: 0.95;
             font-weight: 300;
+            color: white;
+            max-width: 450px;
+            margin: 0 auto;
         }
 
         /* Right Side - Form Section */
@@ -120,14 +133,14 @@
         }
 
         .logo-image {
-            width: 36px;
+            width: 29px;
             height: 36px;
         }
 
         .brand-name {
             font-size: 20px;
             font-weight: 600;
-            color: #1a202c;
+            color: #1e40af;
         }
 
         .form-header {
@@ -136,11 +149,10 @@
 
         .form-title {
             font-size: 48px;
-            font-weight: 400;
-            color: #000000;
+            font-weight: 600;
+            color: #1e40af;
             margin-bottom: 12px;
             letter-spacing: -1px;
-            font-family: 'Playfair Display', Georgia, serif;
         }
 
         .form-description {
@@ -157,7 +169,7 @@
             display: block;
             font-size: 14px;
             font-weight: 500;
-            color: #1a202c;
+            color: #1e40af;
             margin-bottom: 8px;
         }
 
@@ -173,7 +185,7 @@
 
         .form-input:focus {
             background: white;
-            border-color: #000000;
+            border-color: #1e40af;
             outline: none;
         }
 
@@ -190,7 +202,7 @@
             font-size: 16px;
             font-weight: 600;
             border-radius: 8px;
-            background: #000000;
+            background: #f97316;
             border: none;
             color: white;
             cursor: pointer;
@@ -198,7 +210,7 @@
         }
 
         .signin-button:hover {
-            background: #1a1a1a;
+            background: #ea580c;
             transform: translateY(-1px);
         }
 
@@ -219,9 +231,10 @@
             }
 
             .main-title {
-                font-size: 64px;
+                font-size: 48px;
             }
         }
+        
         .spinner {
             width: 16px;
             height: 16px;
@@ -237,20 +250,15 @@
         }
     </style>
 
-    <!-- Left Side - Gradient Background -->
+    <!-- Left Side - Modern Blue Background -->
     <div class="gradient-section">
-        <div class="gradient-overlay"></div>
-        
         <div class="gradient-content">
-            <div class="quote-label">A WISE QUOTE</div>
-            
+            <span class="small-label">Start planning your</span>
             <div class="main-text">
-                <h1 class="main-title">Get</h1>
-                <h1 class="main-title">Everything</h1>
-                <h1 class="main-title">You Want</h1>
+                <h1 class="main-title">Journey</h1>
             </div>
             
-            <p class="sub-text">You can get everything you want if you work hard.</p>
+            <p class="sub-text">Streamline your logistics operations with our comprehensive management platform</p>
         </div>
     </div>
 
@@ -310,9 +318,9 @@
                 <button type="submit" class="signin-button" wire:loading.attr="disabled" wire:loading.class="opacity-50 cursor-not-allowed">
                     <span wire:loading.remove>Sign In</span>
                     <span wire:loading>
-                        <div class="inline-flex items-center gap-3">  <!-- Increased gap for more spacing -->
+                        <div class="inline-flex items-center gap-3">
                             Signing In...
-                            <div class="spinner"></div>  <!-- Moved spinner after text -->
+                            <div class="spinner"></div>
                         </div>
                     </span>
                 </button>

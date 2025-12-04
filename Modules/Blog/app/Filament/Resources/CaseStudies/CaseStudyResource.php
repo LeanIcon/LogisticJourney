@@ -27,6 +27,8 @@ final class CaseStudyResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Content';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?int $navigationSort = 20;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
