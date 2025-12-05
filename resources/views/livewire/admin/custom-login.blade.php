@@ -1,351 +1,164 @@
 <div class="custom-login-wrapper">
     <style>
-        [x-cloak] { display: none !important; }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        @font-face {font-family:'Gilroy';src:url('/fonts/gilroy/Gilroy-Regular.ttf') format('truetype');font-weight:400;font-display:swap;}
+        @font-face {font-family:'Gilroy';src:url('/fonts/gilroy/Gilroy-Medium.ttf') format('truetype');font-weight:500;font-display:swap;}
+        @font-face {font-family:'Gilroy';src:url('/fonts/gilroy/Gilroy-SemiBold.ttf') format('truetype');font-weight:600;font-display:swap;}
+        @font-face {font-family:'Gilroy';src:url('/fonts/gilroy/Gilroy-Bold.ttf') format('truetype');font-weight:700;font-display:swap;}
+
+        *,*::before,*::after {font-family:'Gilroy',sans-serif !important;}
+        body{overflow:hidden;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        .fi-simple-page,.fi-simple-main,.fi-simple-main > *:not(.custom-login-wrapper){display:none !important;}
+
+        .custom-login-wrapper{
+            display:grid;grid-template-columns:1fr 1fr;
+            min-height:100vh;position:fixed;inset:0;z-index:9999;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            overflow: hidden;
+        /* LEFT SIDE — EXACTLY LIKE YOUR IMAGE */
+        .gradient-section{
+            background:linear-gradient(180deg,#0d47a1 0%,#1976d2 50%,#42a5f5 100%);
+            padding:90px 100px 0 100px;
+            position:relative;
+            overflow:hidden;
+            display:flex;
+            flex-direction:column;
         }
 
-        /* Hide default Filament login */
-        .fi-simple-page,
-        .fi-simple-main,
-        .fi-simple-main > *:not(.custom-login-wrapper) {
-            display: none !important;
+        .gradient-section::before{
+            content:'';position:absolute;
+            bottom:-150px;right:-150px;
+            width:700px;height:700px;
+            background:#5e35b1;border-radius:50%;
+            opacity:0.7;
         }
 
-        .custom-login-wrapper {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr;
-            min-height: 100vh;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 9999;
+        .hero-content{
+            position:relative;
+            z-index:10;
         }
 
-        /* Left Side - Modern Blue Section */
-        .gradient-section {
-            position: relative;
-            background: linear-gradient(180deg, #0d47a1 0%, #1976d2 50%, #42a5f5 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 80px 60px;
-            overflow: hidden;
+        .small-text{
+            font-size:22px;
+            color:rgba(255,255,255,0.8);
+            margin-bottom:20px;
+            font-weight:500;
         }
 
-        .gradient-section::before {
-            content: '';
-            position: absolute;
-            bottom: -20%;
-            left: -10%;
-            width: 600px;
-            height: 600px;
-            background: #5e35b1;
-            border-radius: 50%;
-            opacity: 0.6;
-            z-index: 1;
+        .play-btn{
+            width:40px;height:40px;
+            background:#f97316;
+            border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            box-shadow:0 25px 50px rgba(249,115,22,0.5);
+            margin-top:120px 
         }
 
-        .gradient-section::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right: -15%;
-            width: 500px;
-            height: 500px;
-            background: #1565c0;
-            border-radius: 50%;
-            opacity: 0.4;
-            z-index: 1;
+        .play-btn svg{
+            width:30px;height:30px;
+            fill:white;
         }
 
-        .gradient-content {
-            position: relative;
-            z-index: 10;
-            color: white;
-            max-width: 500px;
-            text-align: center;
+        .main-title{
+            font-size:25px;
+            font-weight:300;
+            line-height:0.9;
+            color:white;
+            margin-top: 120px;
+            margin-left: 20px;
         }
 
-        .main-text {
-            margin-bottom: 40px;
+        .journey{
+            color:#fb923c;
         }
 
-        .small-label {
-            font-size: 16px;
-            font-weight: 400;
-            letter-spacing: 1px;
-            margin-bottom: 24px;
-            opacity: 0.95;
-            display: block;
+        .journey2{
+            font-size: 72px;
         }
 
-        .main-title {
-            font-size: 90px;
-            font-weight: 600;
-            line-height: 1.1;
-            letter-spacing: -2px;
-            color: white;
-            margin-bottom: 0;
+        /* RIGHT SIDE */
+        .form-section{background:#fff;display:flex;align-items:center;justify-content:center;padding:40px;}
+        .form-container{max-width:440px;width:100%;}
+
+        .brand-logo{display:flex;align-items:center;gap:14px;margin-bottom:60px;}
+        .logo-image{width:36px;height:44px;}
+        .brand-name{font-size:26px;font-weight:600;color:#1e40af;}
+
+        .form-title{font-size:48px;font-weight:600;color:#1e40af;margin-bottom:12px;}
+        .form-description{font-size:15px;color:#64748b;margin-bottom:40px;}
+
+        .form-group{margin-bottom:24px;}
+        .form-label{font-size:14px;font-weight:500;color:#1e40af;margin-bottom:8px;display:block;}
+        .form-input{width:100%;padding:16px;border-radius:12px;border:1.5px solid #e2e8f0;background:#f8fafc;font-size:15px;transition:all .3s;}
+        .form-input:focus{background:white;border-color:#1e40af;outline:none;box-shadow:0 0 0 4px rgba(30,64,175,.1);}
+
+        .signin-button{
+            width:100%;padding:18px;font-size:16px;font-weight:600;
+            border-radius:12px;background:#f97316;color:white;border:none;
+            cursor:pointer;transition:all .3s;
         }
+        .signin-button:hover{background:#ea580c;transform:translateY(-2px);}
 
-        .sub-text {
-            font-size: 18px;
-            line-height: 1.7;
-            opacity: 0.95;
-            font-weight: 300;
-            color: white;
-            max-width: 450px;
-            margin: 0 auto;
-        }
+        .spinner{width:18px;height:18px;border:2.5px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;}
+        @keyframes spin{to{transform:rotate(360deg)}}
 
-        /* Right Side - Form Section */
-        .form-section {
-            background: #FFFFFF;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-            overflow-y: auto;
-        }
-
-        .form-container {
-            width: 100%;
-            max-width: 440px;
-        }
-
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 60px;
-        }
-
-        .logo-image {
-            width: 29px;
-            height: 36px;
-        }
-
-        .brand-name {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1e40af;
-        }
-
-        .form-header {
-            margin-bottom: 40px;
-        }
-
-        .form-title {
-            font-size: 48px;
-            font-weight: 600;
-            color: #1e40af;
-            margin-bottom: 12px;
-            letter-spacing: -1px;
-        }
-
-        .form-description {
-            font-size: 15px;
-            color: #64748b;
-            line-height: 1.6;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: #1e40af;
-            margin-bottom: 8px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px 16px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            font-size: 15px;
-            background: #f8fafc;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-            background: white;
-            border-color: #1e40af;
-            outline: none;
-        }
-
-        .error {
-            color: #ef4444;
-            font-size: 14px;
-            margin-top: 8px;
-            display: block;
-        }
-
-        .signin-button {
-            width: 100%;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 8px;
-            background: #f97316;
-            border: none;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .signin-button:hover {
-            background: #ea580c;
-            transform: translateY(-1px);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .custom-login-wrapper {
-                grid-template-columns: 1fr;
-            }
-
-            .gradient-section {
-                display: none;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .form-title {
-                font-size: 36px;
-            }
-
-            .main-title {
-                font-size: 48px;
-            }
-        }
-        
-        .spinner {
-            width: 16px;
-            height: 16px;
-            border: 2px solid #ffffff;
-            border-top: 2px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @media(max-width:1024px){
+            .custom-login-wrapper{grid-template-columns:1fr;}
+            .gradient-section{display:none;}
         }
     </style>
 
-    <!-- Left Side - Modern Blue Background -->
+    
     <div class="gradient-section">
-        <div class="gradient-content">
-            <span class="small-label">Start planning your</span>
-            <div class="main-text">
-                <h1 class="main-title">Journey</h1>
+        <div class="hero-content">
+            <div class="small-text">Start managing your<br>
+                <span class="journey2">Journey</span>
             </div>
-            
-            <p class="sub-text">Streamline your logistics operations with our comprehensive management platform</p>
+            <div class="flex">
+                <div class="play-btn">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+
+                <div class="main-title">
+                    Making Every Journey<br>
+                    <span class="journey">Count</span>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Right Side - Login Form -->
+    <!-- RIGHT SIDE — LOGIN FORM -->
     <div class="form-section">
         <div class="form-container">
-            <!-- Logo -->
             <div class="brand-logo">
-                <img src="{{ asset('images/LogisticsJourneyLogo.png') }}" alt="Logistic Journey" class="logo-image">
+                <img src="{{ asset('images/LogisticsJourneyLogo.png') }}" alt="Logo" class="logo-image">
                 <span class="brand-name">Logistic Journey</span>
             </div>
 
-            <!-- Welcome Text -->
-            <div class="form-header">
-                <h2 class="form-title">Welcome Back</h2>
-                <p class="form-description">Enter your email and password to access your account</p>
-            </div>
+            <h2 class="form-title">Welcome Back</h2>
+            <p class="form-description">Enter your email and password to access your account</p>
 
-            <!-- Login Form -->
             <form wire:submit="authenticate">
                 @csrf
-                
-                <!-- Email -->
                 <div class="form-group">
-                    <label for="email" class="form-label">Email</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        wire:model="email"
-                        class="form-input" 
-                        placeholder="Enter your email"
-                        required 
-                        autofocus
-                    >
-                    @error('email') 
-                        <span class="error">{{ $message }}</span> 
-                    @enderror
+                    <label class="form-label">Email</label>
+                    <input type="email" wire:model="email" class="form-input" placeholder="Enter your email" required autofocus>
+                    @error('email') <span class="error text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                 </div>
 
-                <!-- Password -->
                 <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        wire:model="password"
-                        class="form-input" 
-                        placeholder="Enter your password"
-                        required
-                    >
-                    @error('password') 
-                        <span class="error">{{ $message }}</span> 
-                    @enderror
+                    <label class="form-label">Password</label>
+                    <input type="password" wire:model="password" class="form-input" placeholder="Enter your password" required>
+                    @error('password') <span class="error text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                 </div>
 
-                <!-- Sign In Button -->
-                <button type="submit" class="signin-button" wire:loading.attr="disabled" wire:loading.class="opacity-50 cursor-not-allowed">
+                <button type="submit" class="signin-button" wire:loading.attr="disabled">
                     <span wire:loading.remove>Sign In</span>
-                    <span wire:loading>
-                        <div class="inline-flex items-center gap-3">
-                            Signing In...
-                            <div class="spinner"></div>
-                        </div>
+                    <span wire:loading class="flex items-center justify-center gap-3">
+                        Signing In... <div class="spinner"></div>
                     </span>
                 </button>
             </form>
         </div>
     </div>
-
-    <script>
-        // Optional: Hide any conflicting Filament elements on load
-        document.addEventListener('DOMContentLoaded', function() {
-            const filamentForms = document.querySelectorAll('form:not(.custom-login-wrapper form)');
-            filamentForms.forEach(form => {
-                if (!form.closest('.custom-login-wrapper')) {
-                    form.style.display = 'none';
-                }
-            });
-            
-            const simplePage = document.querySelector('.fi-simple-page');
-            if (simplePage && !simplePage.querySelector('.custom-login-wrapper')) {
-                Array.from(simplePage.children).forEach(child => {
-                    if (!child.classList.contains('custom-login-wrapper')) {
-                        child.style.display = 'none';
-                    }
-                });
-            }
-        });
-    </script>
 </div>
