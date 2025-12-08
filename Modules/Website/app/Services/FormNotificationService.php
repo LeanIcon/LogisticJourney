@@ -19,16 +19,16 @@ class FormNotificationService
 
     public function __construct()
     {
-        $this->smtpHost = env('SMTP_HOST', 'smtp-mail.outlook.com');
-        $this->smtpUsername = env('SMTP_USERNAME', 'sales@logisticjourney.com');
-        $this->smtpPassword = env('SMTP_PASSWORD', '#4HelloLogisticJourney2025!');
-        $this->smtpPort = env('SMTP_PORT', 587);
-        $this->smtpSecure = env('SMTP_SECURE', 'tls');
-        $this->mailFrom = env('MAIL_FROM', 'sales@logisticjourney.com');
-        $recipients = env('MAIL_RECIPIENTS', 'sales@logisticjourney.com');
+        $this->smtpHost = env('SMTP_HOST');
+        $this->smtpUsername = env('SMTP_USERNAME');
+        $this->smtpPassword = env('SMTP_PASSWORD');
+        $this->smtpPort = env('SMTP_PORT');
+        $this->smtpSecure = env('SMTP_SECURE');
+        $this->mailFrom = env('MAIL_FROM');
+        $recipients = env('MAIL_RECIPIENTS');
         $this->recipients = array_map('trim', explode(',', $recipients));
-        $this->recaptchaSecret = env('RECAPTCHA_SECRET', '6LcnxwwrAAAAANc9VvWS99KSrzKp0KR78AR1ASOH');
-        $this->localSavePath = env('CONTACTS_SAVE_PATH', '/home/logists9x5y7/secure-data/contacts.txt');
+        $this->recaptchaSecret = env('RECAPTCHA_SECRET');
+        $this->localSavePath = env('CONTACTS_SAVE_PATH');
 
         $this->mailer = new PHPMailer(true);
         $this->mailer->isSMTP();
