@@ -217,6 +217,14 @@
         display: block;
         margin: 8px 0;
       }
+      /* Fix for social links gap on mobile */
+      .social-links {
+        gap: 8px;
+      }
+      .social-link {
+        padding: 10px 14px;
+        font-size: 13px;
+      }
     }
   </style>
 </head>
@@ -253,7 +261,7 @@
           <a href="mailto:sales@logisticjourney.com" class="contact-link">sales@logisticjourney.com</a>
         </div>
 
-        <div class="contact-item gap-2">
+        <div class="contact-item">
           <div class="contact-label">Follow Us</div>
           <div class="social-links">
             <a href="https://www.linkedin.com/company/logisticjourney/" class="social-link">LinkedIn</a>
