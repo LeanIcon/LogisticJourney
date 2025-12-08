@@ -253,7 +253,7 @@
           <a href="mailto:sales@logisticjourney.com" class="contact-link">sales@logisticjourney.com</a>
         </div>
 
-        <div class="contact-item">
+        <div class="contact-item gap-2">
           <div class="contact-label">Follow Us</div>
           <div class="social-links">
             <a href="https://www.linkedin.com/company/logisticjourney/" class="social-link">LinkedIn</a>
@@ -289,11 +289,9 @@
       </div>
 
       <div class="footer-links">
-        <a href="#" class="footer-link">Privacy Policy</a>
+        <a href="https://staging.logisticjourney.com/policy" class="footer-link">Privacy Policy</a>
         <span style="color: #4a5568;">•</span>
-        <a href="#" class="footer-link">Terms of Service</a>
-        <span style="color: #4a5568;">•</span>
-        <a href="#" class="footer-link">Unsubscribe</a>
+        <a href="https://staging.logisticjourney.com/terms" class="footer-link">Terms of Service</a>
       </div>
 
       <div class="footer-copyright">
