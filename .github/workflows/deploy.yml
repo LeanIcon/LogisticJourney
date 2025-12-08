@@ -18,12 +18,15 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Create .env file locally
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+
       - name: Sync project files to VM
         run: |
           rsync -az --delete \
             --exclude 'storage/app/public/*' \
             --exclude 'storage/app/private/*' \
-            --exclude '.env' \
             --rsync-path="sudo rsync" \
             -e "ssh -o StrictHostKeyChecking=no" \
             ./ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_DIR }}
@@ -68,10 +71,7 @@ jobs:
               sudo sed -i '/http {/a \ \ \ \ client_max_body_size 1024M;\n\ \ \ \ client_body_timeout 1800s;\n\ \ \ \ client_header_timeout 1800s;' /etc/nginx/nginx.conf
             fi
 
-            echo "➤ Creating .env from GitHub secret..."
-            cat > .env << 'ENVEOF'
-            ${{ secrets.ENV_FILE }}
-            ENVEOF
+            echo "➤ Setting .env file permissions..."
             sudo chown www-data:www-data .env
             sudo chmod 640 .env
 
