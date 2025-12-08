@@ -68,8 +68,10 @@ jobs:
               sudo sed -i '/http {/a \ \ \ \ client_max_body_size 1024M;\n\ \ \ \ client_body_timeout 1800s;\n\ \ \ \ client_header_timeout 1800s;' /etc/nginx/nginx.conf
             fi
 
-            echo "➤ Using .env.example as .env..."
-            sudo cp .env.example .env
+            echo "➤ Creating .env from GitHub secret..."
+            echo "${{ secrets.ENV_FILE }}" | sudo tee .env > /dev/null
+            sudo chown www-data:www-data .env
+            sudo chmod 640 .env
 
             echo "➤ Setting directory permissions..."
             sudo chown -R www-data:www-data .
