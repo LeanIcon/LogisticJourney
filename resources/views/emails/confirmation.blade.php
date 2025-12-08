@@ -101,13 +101,13 @@
       text-decoration: underline;
     }
     .social-links {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      display: inline-block;
+      margin: -5px;
     }
     .social-link {
       display: inline-block;
       padding: 8px 16px;
+      margin: 5px;
       background-color: #667eea;
       color: #ffffff;
       text-decoration: none;
@@ -217,12 +217,9 @@
         display: block;
         margin: 8px 0;
       }
-      /* Fix for social links gap on mobile */
-      .social-links {
-        gap: 8px;
-      }
       .social-link {
         padding: 10px 14px;
+        margin: 4px;
         font-size: 13px;
       }
     }
