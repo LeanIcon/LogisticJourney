@@ -267,7 +267,7 @@
 
       <!-- CTA -->
       <div class="cta-section">
-        <a href="https://new.logisticjourney.com" class="cta-button">Visit Our Website</a>
+        <a href="https://staging.logisticjourney.com" class="cta-button">Visit Our Website</a>
       </div>
     </div>
 
