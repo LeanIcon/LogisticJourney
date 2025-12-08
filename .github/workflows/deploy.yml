@@ -69,7 +69,9 @@ jobs:
             fi
 
             echo "➤ Creating .env from GitHub secret..."
-            echo "${{ secrets.ENV_FILE }}" | sudo tee .env > /dev/null
+            cat > .env << 'ENVEOF'
+            ${{ secrets.ENV_FILE }}
+            ENVEOF
             sudo chown www-data:www-data .env
             sudo chmod 640 .env
 
