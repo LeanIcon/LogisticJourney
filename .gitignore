@@ -26,3 +26,16 @@ yarn-error.log
 /.junie
 /art
 /tmp
+
+# Security - never commit SSH keys
+github_action_deploy_key
+github_action_deploy_key.pub
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+
+# Database files
+*.sqlite
+*.sqlite-journal
+/database/*.sqlite*

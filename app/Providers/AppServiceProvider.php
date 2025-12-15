@@ -22,12 +22,8 @@ final class AppServiceProvider extends ServiceProvider
         // Force HTTPS detection when in production or when explicitly requested.
         // This makes Laravel treat requests as secure (so secure cookies are sent)
         // even when behind Cloudflare / Render which terminate TLS externally.
-        if ($this->app->environment('production') || env('FORCE_HTTPS', false)) {
+        if ($this->app->environment('production') || config('app.force_https', false)) {
             URL::forceScheme('https');
-            // Ensure the request object reports HTTPS so other code checks work.
-            if ($this->app->bound('request')) {
-               $this->app['request']->server->set('HTTPS', 'on');
-            }
         }
     }
 

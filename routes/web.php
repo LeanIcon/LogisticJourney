@@ -18,6 +18,7 @@ Route::redirect('/', '/app');
 |
 | Admin Panel: /app (Filament)
 | API Endpoints: /api/v1/* (RESTful API for frontend consumption)
+| Health Check: /up (Laravel 12 built-in)
 |
 */
 
