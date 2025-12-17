@@ -69,10 +69,10 @@ jobs:
             chmod +x scripts/*.sh || true
 
             echo "➤ Running setup (verify-first, non-destructive)"
-            ./setup.sh
+            bash setup.sh
 
             echo "➤ Running deploy (zero-downtime)"
-            ./deploy.sh
+            bash deploy.sh
 
             rm -f "$LOCK_FILE"
 
