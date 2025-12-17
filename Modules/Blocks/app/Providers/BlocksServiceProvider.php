@@ -6,6 +6,7 @@ namespace Modules\Blocks\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Log;
 use Modules\Blocks\Console\DiscoverBlocksCommand;
 use Modules\Blocks\Console\MakeBlockCommand;
 use Modules\Blocks\Interfaces\BlockRegistry;
@@ -36,13 +37,13 @@ final class BlocksServiceProvider extends ServiceProvider
 
         // 🧩 Auto-discover all blocks on boot
         $registry = app('blocks');
-        
+
         if (app()->environment('production')) {
             $registry->loadManifest();
-            
+
             // If manifest didn't load any blocks, fall back to auto-discovery
             if (empty($registry->all())) {
-                \Log::warning('Block manifest was empty or missing, running auto-discovery');
+                Log::warning('Block manifest was empty or missing, running auto-discovery');
                 $registry->autoDiscover();
             }
         } else {
