@@ -16,6 +16,12 @@ cd "$APP_DIR"
 # --------------------------------------------------
 # Deploy lock (prevent concurrent deploys)
 # --------------------------------------------------
+# Clean stale lock older than 30 minutes
+if [ -f "$LOCK_FILE" ] && find "$LOCK_FILE" -mmin +30 >/dev/null 2>&1; then
+  echo "⚠️ Removing stale deploy lock"
+  rm -f "$LOCK_FILE"
+fi
+
 if [ -f "$LOCK_FILE" ]; then
   echo "❌ Deploy already in progress"
   exit 1
@@ -32,7 +38,8 @@ rollback() {
   rm -f "$LOCK_FILE"
 }
 
-trap rollback ERR
+trap 'rollback; exit 1' ERR
+trap 'rm -f "$LOCK_FILE"' EXIT
 
 # --------------------------------------------------
 # Record current revision
@@ -53,7 +60,7 @@ echo "📦 Composer"
 composer install --no-dev --prefer-dist --optimize-autoloader
 
 echo "📦 Frontend build"
-npm ci && npm run build
+npm ci --no-audit --no-fund && npm run build
 
 # --------------------------------------------------
 # Database
