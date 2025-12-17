@@ -2,13 +2,12 @@
 set -e
 
 # ==============================================================
-# deploy.sh — Application deploy only (zero-downtime)
-# Depends on setup.sh having passed
+# deploy.sh — Production Baseline
+# Zero-downtime, rollback-safe
 # ==============================================================
 
 APP_NAME="logisticjourney"
 APP_DIR="/var/www/${APP_NAME}"
-BRANCH="staging"
 LOCK_FILE="$APP_DIR/.deploy.lock"
 PREV_SHA_FILE="$APP_DIR/.deploy.prev"
 
@@ -27,7 +26,7 @@ echo $$ > "$LOCK_FILE"
 rollback() {
   echo "⚠️ Deploy failed — rolling back"
   if [ -f "$PREV_SHA_FILE" ]; then
-    git reset --hard "$(cat $PREV_SHA_FILE)" || true
+    git reset --hard "$(cat "$PREV_SHA_FILE")" || true
     php artisan optimize:clear || true
   fi
   rm -f "$LOCK_FILE"
@@ -38,63 +37,64 @@ trap rollback ERR
 # --------------------------------------------------
 # Record current revision
 # --------------------------------------------------
-echo "➤ Recording current revision"
-git rev-parse HEAD > "$PREV_SHA_FILE"
+git rev-parse HEAD > "$PREV_SHA_FILE" || true
 
 # --------------------------------------------------
-# Update code (SSH-based Git)
+# Pull latest code (SSH remote required)
 # --------------------------------------------------
-echo "➤ Updating code"
-git fetch origin "$BRANCH"
-git reset --hard "origin/$BRANCH"
+echo "📥 Updating code"
+git fetch origin staging
+git reset --hard origin/staging
 
 # --------------------------------------------------
-# Backend dependencies
+# Dependencies & build
 # --------------------------------------------------
-echo "➤ Installing PHP dependencies"
+echo "📦 Composer"
 composer install --no-dev --prefer-dist --optimize-autoloader
 
-# --------------------------------------------------
-# Frontend build (only if applicable)
-# --------------------------------------------------
-if [ -f package.json ]; then
-  echo "➤ Building frontend assets"
-  npm ci || npm install
-  npm run build
-else
-  echo "ℹ️ No frontend detected — skipping build"
-fi
+echo "📦 Frontend build"
+npm ci && npm run build
 
 # --------------------------------------------------
-# Database migrations
+# Database
 # --------------------------------------------------
-echo "➤ Running migrations"
+echo "🗃️ Migrations"
 php artisan migrate --force
 
 # --------------------------------------------------
-# Laravel optimizations
+# Laravel optimization
 # --------------------------------------------------
-echo "➤ Optimizing application"
+echo "⚡ Optimizing"
 php artisan optimize:clear
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
 # --------------------------------------------------
-# Optional worker & PHP tuning
+# Queue worker (optional)
 # --------------------------------------------------
-[ -f scripts/ensure-worker.sh ] && sudo ./scripts/ensure-worker.sh || true
-[ -f scripts/php-fpm.sh ] && sudo ./scripts/php-fpm.sh || true
+if [ -f "$APP_DIR/scripts/ensure-worker.sh" ]; then
+  echo "👷 Queue worker"
+  sudo "$APP_DIR/scripts/ensure-worker.sh"
+else
+  echo "ℹ️ No queue worker script present"
+fi
 
 # --------------------------------------------------
-# Reload services (safe)
+# PHP-FPM tuning (optional)
 # --------------------------------------------------
-echo "➤ Reloading services"
+if [ -f "$APP_DIR/scripts/php-fpm.sh" ]; then
+  echo "🔧 PHP-FPM tuning"
+  sudo "$APP_DIR/scripts/php-fpm.sh"
+fi
+
+# --------------------------------------------------
+# Reload services (no restart)
+# --------------------------------------------------
+echo "🔄 Reloading services"
 sudo nginx -t && sudo systemctl reload nginx
-sudo systemctl reload php8.4-fpm
+sudo systemctl reload "php$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')-fpm"
 
-# --------------------------------------------------
-# Cleanup
-# --------------------------------------------------
 rm -f "$LOCK_FILE"
-echo "✅ Deploy completed successfully"
+
+echo "✅ Deployment completed successfully"

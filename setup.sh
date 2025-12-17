@@ -5,78 +5,95 @@ set -e
 # setup.sh — Production Baseline
 # Verify-first, idempotent, zero-downtime
 # Safe to run on EVERY deploy
-# ==============================================================\n
+# ==============================================================
+
 APP_NAME="logisticjourney"
 APP_DIR="/var/www/${APP_NAME}"
-PHP_VERSION="8.4"
 PROVISION_FLAG="/var/www/.${APP_NAME}_provisioned"
+
+# --------------------------------------------------
+# Detect PHP version dynamically (authoritative)
+# --------------------------------------------------
+PHP_VERSION=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;")
+PHP_FPM_SERVICE="php${PHP_VERSION}-fpm"
+PHP_FPM_SOCKET="/run/php/${PHP_FPM_SERVICE}.sock"
 
 MODE="verify"
 if [ ! -f "$PROVISION_FLAG" ]; then
   MODE="provision"
   echo "🚀 First-time provisioning mode"
 else
-  echo "ℹ️ Verify mode (no destructive changes)"
+  echo "ℹ️ Verify mode (non-destructive)"
 fi
 
 # --------------------------------------------------
-# Helpers
+# Helper: ensure command exists
 # --------------------------------------------------
 require_cmd() {
   command -v "$1" >/dev/null 2>&1 || {
-    echo "❌ Required command missing: $1";
-    exit 1;
+    echo "❌ Required command missing: $1"
+    exit 1
   }
 }
 
-install_if_missing() {
-  PKG="$1"
-  BIN="$2"
-
-  if ! command -v "$BIN" >/dev/null 2>&1; then
-    if [ "$MODE" = "provision" ]; then
-      echo "➤ Installing $PKG"
-      sudo apt-get update -y
-      sudo apt-get install -y "$PKG"
-    else
-      echo "❌ $BIN missing in verify mode"
-      exit 1
-    fi
-  fi
-}
-
 # --------------------------------------------------
-# Core system commands
+# Core runtime checks (always required)
 # --------------------------------------------------
 require_cmd nginx
 require_cmd php
 require_cmd git
 
 # --------------------------------------------------
-# Supervisor (required for queues)
+# PHP-FPM validation
 # --------------------------------------------------
-install_if_missing supervisor supervisorctl
-sudo systemctl enable supervisor >/dev/null 2>&1 || true
-sudo systemctl start supervisor >/dev/null 2>&1 || true
+if ! systemctl list-units --type=service | grep -q "$PHP_FPM_SERVICE"; then
+  echo "❌ $PHP_FPM_SERVICE not found (installed PHP: $PHP_VERSION)"
+  exit 1
+fi
 
-# --------------------------------------------------
-# PHP-FPM
-# --------------------------------------------------
-if ! systemctl list-units --type=service | grep -q "php${PHP_VERSION}-fpm"; then
-  echo "❌ php${PHP_VERSION}-fpm not found"
+if [ ! -S "$PHP_FPM_SOCKET" ]; then
+  echo "❌ PHP-FPM socket missing: $PHP_FPM_SOCKET"
   exit 1
 fi
 
 # --------------------------------------------------
-# Redis (ONLY if app requires it)
+# Supervisor (queues infrastructure)
+# --------------------------------------------------
+if ! command -v supervisorctl >/dev/null 2>&1; then
+  if [ "$MODE" = "provision" ]; then
+    echo "➤ Installing Supervisor"
+    sudo apt update -y
+    sudo apt install -y supervisor
+    sudo systemctl enable supervisor
+    sudo systemctl start supervisor
+  else
+    echo "❌ Supervisor missing in verify mode"
+    exit 1
+  fi
+fi
+
+sudo systemctl is-active supervisor >/dev/null 2>&1 || sudo systemctl start supervisor
+
+# --------------------------------------------------
+# Redis — ONLY if app requires it
 # --------------------------------------------------
 if grep -q "^QUEUE_CONNECTION=redis" "$APP_DIR/.env" 2>/dev/null; then
-  install_if_missing redis-server redis-cli
-  sudo systemctl enable redis-server >/dev/null 2>&1 || true
-  sudo systemctl start redis-server >/dev/null 2>&1 || true
+  if ! command -v redis-cli >/dev/null 2>&1; then
+    if [ "$MODE" = "provision" ]; then
+      echo "➤ Installing Redis"
+      sudo apt update -y
+      sudo apt install -y redis-server
+      sudo systemctl enable redis-server
+      sudo systemctl start redis-server
+    else
+      echo "❌ Redis required but not installed"
+      exit 1
+    fi
+  fi
+
   redis-cli ping | grep -q PONG || {
-    echo "❌ Redis configured but not responding";
-    exit 1;
+    echo "❌ Redis configured but not responding"
+    exit 1
   }
 else
   echo "ℹ️ Redis not required (QUEUE_CONNECTION != redis)"
@@ -105,7 +122,7 @@ sudo -u www-data mkdir -p \
   "$APP_DIR/bootstrap/cache"
 
 # --------------------------------------------------
-# Firewall (verify-safe)
+# Firewall (verify-only, no reloads)
 # --------------------------------------------------
 if command -v ufw >/dev/null 2>&1; then
   sudo ufw allow 80 >/dev/null 2>&1 || true
@@ -113,14 +130,14 @@ if command -v ufw >/dev/null 2>&1; then
 fi
 
 # --------------------------------------------------
-# Provision flag
+# Mark provisioning complete (once)
 # --------------------------------------------------
 if [ "$MODE" = "provision" ]; then
   sudo touch "$PROVISION_FLAG"
   sudo chmod 600 "$PROVISION_FLAG"
-  echo "✅ Initial provisioning completed"
+  echo "✅ Initial provisioning marked complete"
 else
-  echo "✅ Verification completed — system healthy"
+  echo "✅ Verification complete — no changes applied"
 fi
 
-echo "✅ setup.sh finished successfully"
+echo "✅ setup.sh completed safely (PHP ${PHP_VERSION})"
