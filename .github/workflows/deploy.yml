@@ -5,6 +5,10 @@ on:
     branches:
       - staging
 
+concurrency:
+  group: logisticjourney-deploy
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -20,16 +24,45 @@ jobs:
           script: |
             set -e
 
-            cd ${{ secrets.REMOTE_DIR }}
+            APP_DIR="${{ secrets.REMOTE_DIR }}"
+            LOCK_FILE="$APP_DIR/.deploy.lock"
+            PREV_SHA_FILE="$APP_DIR/.previous_deploy"
+
+            echo "➤ SSH preflight checks"
+            command -v git >/dev/null || { echo "❌ git missing"; exit 1; }
+            command -v php >/dev/null || { echo "❌ php missing"; exit 1; }
+            command -v composer >/dev/null || { echo "❌ composer missing"; exit 1; }
+
+            cd "$APP_DIR"
+
+            if [ -f "$LOCK_FILE" ]; then
+              echo "❌ Deploy already in progress. Exiting.";
+              exit 1
+            fi
+
+            echo "$$" > "$LOCK_FILE"
+            trap 'rm -f "$LOCK_FILE"' EXIT
+
+            echo "➤ Recording current revision for rollback"
+            git rev-parse HEAD > "$PREV_SHA_FILE" || true
+
+            rollback() {
+              echo "⚠️ Deploy failed — rolling back"
+              if [ -f "$PREV_SHA_FILE" ]; then
+                git reset --hard "$(cat $PREV_SHA_FILE)"
+                php artisan optimize:clear || true
+              fi
+            }
+            trap rollback ERR
 
             echo "➤ Ensuring scripts are executable"
-            sudo chmod +x setup.sh deploy.sh
-            sudo chmod +x scripts/*.sh || true
+            chmod +x setup.sh deploy.sh
+            chmod +x scripts/*.sh || true
 
             echo "➤ Running setup (verify-first, non-destructive)"
             ./setup.sh
 
-            echo "➤ Running deploy (zero-downtime)"
+            echo "➤ Running deploy"
             ./deploy.sh
 
             echo "✅ Deployment completed successfully"
