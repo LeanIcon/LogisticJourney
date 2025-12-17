@@ -1,34 +1,48 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Modules\Website\Services;
 
-use PHPMailer\PHPMailer\PHPMailer;
+use Illuminate\Support\Facades\Log;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
-class FormNotificationService
+final class FormNotificationService
 {
-    private $mailer;
-    private $smtpHost;
-    private $smtpUsername;
-    private $smtpPassword;
-    private $smtpPort;
-    private $smtpSecure;
-    private $mailFrom;
-    private $recipients;
-    private $recaptchaSecret;
-    private $localSavePath;
+    private PHPMailer $mailer;
+
+    private string $smtpHost;
+
+    private string $smtpUsername;
+
+    private string $smtpPassword;
+
+    private int $smtpPort;
+
+    private string $smtpSecure;
+
+    private string $mailFrom;
+
+    private array $recipients;
+
+    private string $recaptchaSecret;
+
+    private string $localSavePath;
 
     public function __construct()
     {
-        $this->smtpHost = env('SMTP_HOST');
-        $this->smtpUsername = env('SMTP_USERNAME');
-        $this->smtpPassword = env('SMTP_PASSWORD');
-        $this->smtpPort = env('SMTP_PORT');
-        $this->smtpSecure = env('SMTP_SECURE');
-        $this->mailFrom = env('MAIL_FROM');
-        $recipients = env('MAIL_RECIPIENTS');
-        $this->recipients = array_map('trim', explode(',', $recipients));
-        $this->recaptchaSecret = env('RECAPTCHA_SECRET');
-        $this->localSavePath = env('CONTACTS_SAVE_PATH');
+        $this->smtpHost = config('services.form_notifications.smtp_host');
+        $this->smtpUsername = config('services.form_notifications.smtp_username');
+        $this->smtpPassword = config('services.form_notifications.smtp_password');
+        $this->smtpPort = (int) config('services.form_notifications.smtp_port');
+        $this->smtpSecure = config('services.form_notifications.smtp_secure');
+        $this->mailFrom = config('services.form_notifications.mail_from');
+        $this->recaptchaSecret = config('services.recaptcha.secret');
+        $this->localSavePath = config('services.form_notifications.contacts_save_path');
+
+        $recipients = config('services.form_notifications.recipients') ?? '';
+        $this->recipients = array_filter(array_map('trim', explode(',', $recipients)));
 
         $this->mailer = new PHPMailer(true);
         $this->mailer->isSMTP();
@@ -39,181 +53,112 @@ class FormNotificationService
         $this->mailer->SMTPSecure = $this->smtpSecure;
         $this->mailer->Port = $this->smtpPort;
         $this->mailer->setFrom($this->mailFrom);
+
         foreach ($this->recipients as $recipient) {
             $this->mailer->addAddress($recipient);
         }
     }
 
-    public function verifyRecaptcha($token)
+    public function verifyRecaptcha(?string $token): bool
     {
-        $url = 'https://www.google.com/recaptcha/api/siteverify';
-        $data = [
-            'secret' => $this->recaptchaSecret,
-            'response' => $token
-        ];
-        $options = [
-            'http' => [
-                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method'  => 'POST',
-                'content' => http_build_query($data),
-            ],
-        ];
-        $context  = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
-        $response = json_decode($result, true);
-        \Log::info('reCAPTCHA response', ['result' => $result, 'response' => $response]);
-        return isset($response['success']) && $response['success'] === true;
+        if (! $token) {
+            return false;
+        }
+
+        $response = file_get_contents(
+            'https://www.google.com/recaptcha/api/siteverify',
+            false,
+            stream_context_create([
+                'http' => [
+                    'method' => 'POST',
+                    'header' => 'Content-type: application/x-www-form-urlencoded',
+                    'content' => http_build_query([
+                        'secret' => $this->recaptchaSecret,
+                        'response' => $token,
+                    ]),
+                ],
+            ])
+        );
+
+        $data = json_decode($response, true);
+        Log::info('reCAPTCHA response', $data ?? []);
+
+        return ($data['success'] ?? false) === true;
     }
 
-    public function saveContactData($data)
+    public function saveContactData(array $data): void
     {
-        $line = implode("|", $data) . "\n";
-        file_put_contents($this->localSavePath, $line, FILE_APPEND | LOCK_EX);
+        file_put_contents(
+            $this->localSavePath,
+            implode('|', $data).PHP_EOL,
+            FILE_APPEND | LOCK_EX
+        );
     }
 
-    public function sendNotification($subject, $body, $formData = null, $metadata = null)
-    {
+    public function sendNotification(
+        string $subject,
+        string $body,
+        ?array $formData = null,
+        ?array $metadata = null
+    ): bool {
         try {
             $this->mailer->Subject = $subject;
             $this->mailer->isHTML(true);
-            
-            // If formData is provided, use the template
-            if ($formData && is_array($formData)) {
+
+            if ($formData) {
                 $this->mailer->Body = $this->renderAdminNotificationTemplate($formData, $metadata);
-                $this->mailer->AltBody = $body; // Plain text fallback
+                $this->mailer->AltBody = $body;
             } else {
                 $this->mailer->Body = nl2br($body);
                 $this->mailer->AltBody = $body;
             }
-            
+
             $this->mailer->send();
+
             return true;
         } catch (Exception $e) {
-            \Log::error('Email sending failed', ['error' => $e->getMessage()]);
+            Log::error('Email sending failed', ['error' => $e->getMessage()]);
+
             return false;
         }
     }
 
-    private function renderAdminNotificationTemplate($formData, $metadata = null)
+    public function sendConfirmationToUser(string $email): bool
     {
-        $data = [
-            'formName' => $metadata['form_name'] ?? 'Form Submission',
-            'formSlug' => $metadata['form_slug'] ?? 'unknown',
-            'formData' => $formData,
-            'ipAddress' => $metadata['ip_address'] ?? 'Unknown',
-            'userAgent' => $metadata['user_agent'] ?? 'Unknown',
-            'timestamp' => $metadata['timestamp'] ?? now()->format('M d, Y h:i A'),
-            'dashboardUrl' => $metadata['dashboard_url'] ?? null,
-        ];
-        
-        // Try to use Laravel view if available
-        $viewPath = 'emails.admin-notification';
-        if (function_exists('view') && view()->exists($viewPath)) {
-            return view($viewPath, $data)->render();
-        }
-        
-        // Fallback to file-based template
-        $templatePath = base_path('resources/views/emails/admin-notification.blade.php');
-        if (file_exists($templatePath)) {
-            return $this->renderBladeTemplate($templatePath, $data);
-        }
-        
-        // If no template found, return basic HTML
-        return $this->generateBasicHtml($formData, $data);
-    }
-    
-    private function renderBladeTemplate($path, $data)
-    {
-        extract($data);
-        ob_start();
-        include $path;
-        return ob_get_clean();
-    }
-    
-    private function generateBasicHtml($formData, $data)
-    {
-        $fieldsHtml = '';
-        foreach ($formData as $key => $value) {
-            $label = ucwords(str_replace(['_', '-'], ' ', $key));
-            $displayValue = $this->formatFieldValue($value);
-            $fieldsHtml .= "<p><strong>{$label}:</strong> {$displayValue}</p>";
-        }
-        
-        return "
-        <html>
-        <body>
-            <h2>New Form Submission: {$data['formName']}</h2>
-            {$fieldsHtml}
-            <hr>
-            <p><strong>Form:</strong> {$data['formSlug']}</p>
-            <p><strong>Time:</strong> {$data['timestamp']}</p>
-            <p><strong>IP:</strong> {$data['ipAddress']}</p>
-        </body>
-        </html>";
-    }
-    
-    private function formatFieldValue($value)
-    {
-        if (is_array($value)) {
-            return htmlspecialchars(implode(', ', $value));
-        }
-        
-        if (is_bool($value)) {
-            return $value ? 'Yes' : 'No';
-        }
-        
-        if (is_null($value)) {
-            return '<em style="color: #a0aec0;">Not provided</em>';
-        }
-        
-        if (strlen($value) > 100) {
-            return nl2br(htmlspecialchars($value));
-        }
-        
-        return htmlspecialchars($value);
-    }
-
-    public function sendConfirmationToUser($userEmail)
-    {
-        $mail = new PHPMailer(true);
         try {
-            $mail->isSMTP();
-            $mail->Host = $this->smtpHost;
-            $mail->SMTPAuth = true;
-            $mail->Username = $this->smtpUsername;
-            $mail->Password = $this->smtpPassword;
-            $mail->SMTPSecure = $this->smtpSecure;
-            $mail->Port = $this->smtpPort;
-            $mail->setFrom($this->mailFrom, 'Logistic Journey');
-            $mail->addAddress($userEmail);
+            $mail = clone $this->mailer;
+            $mail->clearAddresses();
+            $mail->addAddress($email);
             $mail->Subject = 'Thank you for contacting Logistic Journey';
-            $mail->isHTML(true);
             $mail->Body = $this->getConfirmationHtmlBody();
-            $mail->AltBody = "Thank you for reaching out to us. We appreciate your interest and will get back to you shortly.";
+            $mail->AltBody = 'Thank you for reaching out to us.';
             $mail->send();
+
             return true;
         } catch (Exception $e) {
-            \Log::error('Confirmation email failed', ['error' => $e->getMessage()]);
+            Log::error('Confirmation email failed', ['error' => $e->getMessage()]);
+
             return false;
         }
     }
 
-    private function getConfirmationHtmlBody()
+    private function renderAdminNotificationTemplate(array $formData, ?array $metadata): string
     {
-        $greeting = "Hello,";
-        $viewPath = base_path('resources/views/emails/confirmation.blade.php');
-        if (function_exists('view')) {
-            return view('emails.confirmation', compact('greeting'))->render();
-        } elseif (file_exists($viewPath)) {
-            $template = file_get_contents($viewPath);
-            return str_replace('{{ greeting }}', $greeting, $template);
-        } else {
-            return "$greeting<br>Thank you for reaching out to us. We appreciate your interest and will get back to you shortly.";
-        }
+        return $this->generateBasicHtml($formData, $metadata ?? []);
     }
 
-    public function getRecaptchaSecret()
+    private function generateBasicHtml(array $formData, array $data): string
     {
-        return $this->recaptchaSecret;
+        $html = '';
+        foreach ($formData as $key => $value) {
+            $html .= '<p><strong>'.ucfirst($key).':</strong> '.e((string) $value).'</p>';
+        }
+
+        return "<html><body>{$html}</body></html>";
+    }
+
+    private function getConfirmationHtmlBody(): string
+    {
+        return 'Thank you for reaching out to us. We will respond shortly.';
     }
 }

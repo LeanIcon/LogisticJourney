@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Modules\Website\Http\Controllers;
 
+use App\Jobs\SendFormNotificationJob;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
-use Modules\Website\Services\FormNotificationService;
 use Modules\Website\Models\Form;
 use Modules\Website\Models\FormSubmission;
+use Modules\Website\Services\FormNotificationService;
 
 final class FormSubmissionController extends Controller
 {
@@ -40,13 +41,11 @@ final class FormSubmissionController extends Controller
      * @bodyParam message string required The message content. Example: I'd like more information about your services
      * @bodyParam captcha string required Google reCAPTCHA token (v2 or v3) from frontend widget. Example: 03AGdBq25hcBhpXPC...
      *
-     *
      * @response scenario=success status=201 {
      *   "status": "ok",
      *   "id": 123,
      *   "message": "Submission received"
      * }
-     *
      * @response status=422 scenario="validation_error" {
      *   "message": "Validation failed",
      *   "errors": {
@@ -55,12 +54,10 @@ final class FormSubmissionController extends Controller
      *     "message": ["The message field is required"]
      *   }dentifier. Example: contact-us
      * }
-     *
      * @response status=422 scenario="captcha_failed" {
      *   "status": "error",
      *   "message": "reCAPTCHA verification failed."
      * }
-     *
      * @response status=404 scenario="form_not_found" {
      *   "message": "Form not found"
      * }
@@ -92,30 +89,31 @@ final class FormSubmissionController extends Controller
 
         // Get reCAPTCHA token from request
         $recaptchaToken = $request->input('captcha');
-        
+
         // Verify reCAPTCHA token with Google's API
         $notificationService = new FormNotificationService();
-        if (!$notificationService->verifyRecaptcha($recaptchaToken)) {
+        if (! $notificationService->verifyRecaptcha($recaptchaToken)) {
             // Get the last reCAPTCHA response from the log (or re-verify to get details)
             $url = 'https://www.google.com/recaptcha/api/siteverify';
             $data = [
                 'secret' => $notificationService->getRecaptchaSecret(),
-                'response' => $recaptchaToken
+                'response' => $recaptchaToken,
             ];
             $options = [
                 'http' => [
-                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                    'method'  => 'POST',
+                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method' => 'POST',
                     'content' => http_build_query($data),
                 ],
             ];
-            $context  = stream_context_create($options);
+            $context = stream_context_create($options);
             $result = file_get_contents($url, false, $context);
             $response = json_decode($result, true);
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'reCAPTCHA verification failed.',
-                'recaptcha_response' => $response
+                'recaptcha_response' => $response,
             ], 422);
         }
 
@@ -138,23 +136,23 @@ final class FormSubmissionController extends Controller
         $notificationService->saveContactData($contactData);
 
         // Send formatted notification email to admin/team
-        $subject = 'New Form Submission: ' . ucwords(str_replace('-', ' ', $form->slug));
-        
+        $subject = 'New Form Submission: '.ucwords(str_replace('-', ' ', $form->slug));
+
         // Plain text fallback
-        $plainBody = "Form: {$form->slug}\n" .
-            "Fields: " . json_encode($validated, JSON_PRETTY_PRINT) . "\n" .
-            "IP: " . $request->ip() . "\n" .
-            "User Agent: " . $request->userAgent();
-        
+        $plainBody = "Form: {$form->slug}\n".
+            'Fields: '.json_encode($validated, JSON_PRETTY_PRINT)."\n".
+            'IP: '.$request->ip()."\n".
+            'User Agent: '.$request->userAgent();
+
         // Metadata for the email template
         $metadata = [
             'form_name' => $form->name ?? ucwords(str_replace('-', ' ', $form->slug)),
             'form_slug' => $form->slug,
             'timestamp' => now()->format('M d, Y h:i A'),
         ];
-        
-        // Send the formatted HTML email
-        $notificationService->sendNotification($subject, $plainBody, $validated, $metadata);
+
+        // Send the formatted HTML email (now queued)
+        SendFormNotificationJob::dispatch($subject, $plainBody, $validated, $metadata);
 
         // Send confirmation email to user if email field exists and is valid
         if (isset($validated['email']) && filter_var($validated['email'], FILTER_VALIDATE_EMAIL)) {

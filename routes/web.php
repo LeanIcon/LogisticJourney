@@ -1,31 +1,21 @@
 <?php
 
 declare(strict_types=1);
-
+use App\Http\Controllers\HealthController;
+use App\Livewire\Admin\CustomLogin;
+use App\Livewire\Admin\Documentation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/app');
+Route::get('/', CustomLogin::class)->name('login');
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes - LogisticJourney CMS
-|--------------------------------------------------------------------------
-|
-| This application uses Filament as the primary interface for content
-| management. All web routes redirect to the Filament admin panel for
-| streamlined user experience and centralized management.
-|
-| Admin Panel: /app (Filament)
-| API Endpoints: /api/v1/* (RESTful API for frontend consumption)
-| Health Check: /up (Laravel 12 built-in)
-|
-*/
+Route::get('/docs', Documentation::class)->name('app.docs');
 
-// Primary route: Redirect to Filament admin login
-Route::get('/', fn (): RedirectResponse => redirect('/app/login'));
+// Health check endpoint
+Route::get('/up', [HealthController::class, 'up']);
 
 // Common route redirects for better UX
-Route::get('/welcome', fn (): RedirectResponse => redirect('/app/login'));
-Route::get('/home', fn (): RedirectResponse => redirect('/app/login'));
-Route::get('/dashboard', fn (): RedirectResponse => redirect('/app/login'));
+Route::get('/welcome', fn (): RedirectResponse => redirect('/'));
+Route::get('/home', fn (): RedirectResponse => redirect('/'));
+Route::get('/dashboard', fn (): RedirectResponse => redirect('/app'));
+Route::get('/admin', fn (): RedirectResponse => redirect('/app'));

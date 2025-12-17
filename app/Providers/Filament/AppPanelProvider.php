@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Dashboard;
+use App\Livewire\Admin\CustomLogin;
 use Coolsam\Modules\ModulesPlugin;
 use Filament\Http\Middleware\Authenticate;
-use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use App\Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -21,7 +20,6 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use App\Livewire\Admin\CustomLogin;
 
 final class AppPanelProvider extends PanelProvider
 {
@@ -33,13 +31,20 @@ final class AppPanelProvider extends PanelProvider
             ->path('app')
             ->login(CustomLogin::class)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#052148', // Deep blue
+                'accent' => '#ff751f',  // Orange
             ])
             ->brandName('Logistic Journey')
+            ->brandLogo('<img src="'.asset('images/LogisticsJourneyLogo.png').'" alt="Logistics Journey Logo" class="h-8">')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
                 Dashboard::class,
+            ])
+            ->userMenuItems([
+                \Filament\Actions\Action::make('Documentation')
+                    ->url(\App\Livewire\Admin\Documentation::docsUrl(), true)
+                    ->icon('heroicon-o-book-open'),
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([

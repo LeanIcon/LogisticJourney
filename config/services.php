@@ -37,4 +37,24 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Form Notification Service (PHPMailer)
+    |--------------------------------------------------------------------------
+    */
+    'form_notifications' => [
+        'smtp_host' => env('SMTP_HOST'),
+        'smtp_username' => env('SMTP_USERNAME'),
+        'smtp_password' => env('SMTP_PASSWORD'),
+        'smtp_port' => env('SMTP_PORT', 587),
+        'smtp_secure' => env('SMTP_SECURE', 'tls'),
+        'mail_from' => env('MAIL_FROM'),
+        'recipients' => env('MAIL_RECIPIENTS'),
+        'contacts_save_path' => env('CONTACTS_SAVE_PATH'),
+    ],
+
+    'recaptcha' => [
+        'secret' => env('RECAPTCHA_SECRET'),
+    ],
+
 ];
