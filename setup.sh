@@ -34,7 +34,20 @@ ensure_cmd() {
 # --------------------------------------------------
 ensure_cmd nginx
 ensure_cmd php
-ensure_cmd redis-cli
+
+# --------------------------------------------------
+# Queue driver check if app uses Redis, skip otherwise
+# --------------------------------------------------
+if grep -q "^QUEUE_CONNECTION=redis" "$APP_DIR/.env" 2>/dev/null; then
+  ensure_cmd redis-cli
+  redis-cli ping | grep -q PONG || {
+    echo "❌ Redis configured but not responding"
+    exit 1
+  }
+else
+  echo "ℹ️ Redis not required (QUEUE_CONNECTION != redis)"
+fi
+
 ensure_cmd supervisorctl
 
 # --------------------------------------------------
