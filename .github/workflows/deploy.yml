@@ -1,79 +1,110 @@
-name: Deploy Laravel to VPS
+name: Deploy to VM
 
 on:
   push:
     branches:
       - staging
 
-concurrency:
-  group: logisticjourney-deploy
-  cancel-in-progress: false
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Create .env file locally
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+      - name: Sync project files to VM
+        run: |
+          rsync -az --delete \
+            --exclude 'storage/app/public/*' \
+            --exclude 'storage/app/private/*' \
+            --rsync-path="sudo rsync" \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            ./ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_DIR }}
+      - name: Run Laravel deployment on VM
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
             set -e
-
-            APP_DIR="${{ secrets.REMOTE_DIR }}"
-
-            echo "➤ SSH preflight checks"
-            command -v git >/dev/null || { echo "❌ git missing"; exit 1; }
-            command -v php >/dev/null || { echo "❌ php missing"; exit 1; }
-            command -v composer >/dev/null || { echo "❌ composer missing"; exit 1; }
-
-            cd "$APP_DIR"
-
-            # Ensure Git trusts this directory (Git 2.35+)
-            git config --global --add safe.directory "$APP_DIR"
-
-            LOCK_FILE="$APP_DIR/.deploy.lock"
-            PREV_SHA_FILE="$APP_DIR/.deploy.prev"
-
-            if [ -f "$LOCK_FILE" ]; then
-              echo "❌ Deploy already in progress. Exiting."
-              exit 1
+            cd ${{ secrets.REMOTE_DIR }}
+            echo "➤ Configuring PHP upload settings..."
+            # Configure PHP 8.3 FPM
+            echo "upload_max_filesize = 1024M" | sudo tee /etc/php/8.3/fpm/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "post_max_size = 1024M" | sudo tee -a /etc/php/8.3/fpm/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "memory_limit = 1024M" | sudo tee -a /etc/php/8.3/fpm/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "max_execution_time = 1800" | sudo tee -a /etc/php/8.3/fpm/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "max_input_time = 1800" | sudo tee -a /etc/php/8.3/fpm/conf.d/99-uploads.ini 2>/dev/null || true
+            
+            # Configure PHP 8.3 CLI (for testing)
+            echo "upload_max_filesize = 1024M" | sudo tee /etc/php/8.3/cli/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "post_max_size = 1024M" | sudo tee -a /etc/php/8.3/cli/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "memory_limit = 1024M" | sudo tee -a /etc/php/8.3/cli/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "max_execution_time = 1800" | sudo tee -a /etc/php/8.3/cli/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "max_input_time = 1800" | sudo tee -a /etc/php/8.3/cli/conf.d/99-uploads.ini 2>/dev/null || true
+            
+            # Configure PHP 8.4 if exists
+            echo "upload_max_filesize = 1024M" | sudo tee /etc/php/8.4/fpm/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "post_max_size = 1024M" | sudo tee -a /etc/php/8.4/fpm/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "memory_limit = 1024M" | sudo tee -a /etc/php/8.4/fpm/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "max_execution_time = 1800" | sudo tee -a /etc/php/8.4/fpm/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "max_input_time = 1800" | sudo tee -a /etc/php/8.4/fpm/conf.d/99-uploads.ini 2>/dev/null || true
+            
+            echo "upload_max_filesize = 1024M" | sudo tee /etc/php/8.4/cli/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "post_max_size = 1024M" | sudo tee -a /etc/php/8.4/cli/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "memory_limit = 1024M" | sudo tee -a /etc/php/8.4/cli/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "max_execution_time = 1800" | sudo tee -a /etc/php/8.4/cli/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "max_input_time = 1800" | sudo tee -a /etc/php/8.4/cli/conf.d/99-uploads.ini 2>/dev/null || true
+            echo "➤ Configuring Nginx for large uploads..."
+            # Check if client_max_body_size is already set in nginx.conf
+            if ! sudo grep -q "client_max_body_size" /etc/nginx/nginx.conf; then
+              sudo sed -i '/http {/a \ \ \ \ client_max_body_size 1024M;\n\ \ \ \ client_body_timeout 1800s;\n\ \ \ \ client_header_timeout 1800s;' /etc/nginx/nginx.conf
             fi
-
-            echo $$ > "$LOCK_FILE"
-
-            rollback() {
-              echo "⚠️ Deploy failed — rolling back"
-              if [ -f "$PREV_SHA_FILE" ]; then
-                git reset --hard "$(cat $PREV_SHA_FILE)" || true
-                php artisan optimize:clear || true
-              fi
-              rm -f "$LOCK_FILE"
-            }
-
-            trap rollback ERR
-
-            echo "➤ Recording current revision for rollback"
-            git rev-parse HEAD > "$PREV_SHA_FILE" || true
-
-            echo "➤ Pulling latest code"
-            git fetch origin staging
-            git reset --hard origin/staging
-
-            echo "➤ Ensuring scripts are executable"
-            chmod +x setup.sh deploy.sh || true
-            chmod +x scripts/*.sh || true
-
-            echo "➤ Running setup (verify-first, non-destructive)"
-            bash setup.sh
-
-            echo "➤ Running deploy (zero-downtime)"
-            bash deploy.sh
-
-            rm -f "$LOCK_FILE"
-
-            echo "✅ Deployment completed successfully"
+            echo "➤ Setting .env file permissions..."
+            sudo chown www-data:www-data .env
+            sudo chmod 640 .env
+            echo "➤ Setting directory permissions..."
+            sudo chown -R www-data:www-data .
+            sudo find . -type d -exec chmod 775 {} \;
+            sudo find . -type f -exec chmod 664 {} \;
+            echo "➤ Fixing permissions for storage and cache..."
+            sudo chown -R www-data:www-data storage bootstrap/cache
+            sudo chmod -R ug+rwx storage bootstrap/cache
+            echo "➤ Ensuring required directories and log file..."
+            sudo -u www-data mkdir -p storage/logs bootstrap/cache
+            sudo -u www-data touch storage/logs/laravel.log
+            echo "➤ Installing composer dependencies..."
+            export COMPOSER_ALLOW_SUPERUSER=1
+            sudo -u www-data composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+            echo "➤ Running Laravel artisan commands..."
+            sudo -u www-data php artisan config:clear || true
+            sudo -u www-data php artisan route:clear || true
+            sudo -u www-data php artisan view:clear || true
+            
+            sudo -u www-data php artisan storage:link
+            sudo -u www-data php artisan route:cache
+            sudo -u www-data php artisan view:cache
+            sudo -u www-data php artisan migrate --force
+            echo "➤ Preparing .npm folder..."
+            sudo mkdir -p /var/www/.npm
+            sudo chown -R www-data:www-data /var/www/.npm
+            echo "➤ Fixing .npm permissions..."
+            sudo chown -R www-data:www-data /var/www/.npm || true
+            echo "➤ Installing Node dependencies..."
+            sudo -u www-data npm ci || sudo -u www-data npm install
+            echo "➤ Building frontend..."
+            sudo -u www-data npm run build
+            echo "➤ Restarting services..."
+            sudo systemctl restart php8.3-fpm 2>/dev/null || true
+            sudo systemctl restart php8.4-fpm 2>/dev/null || true
+            sudo systemctl restart nginx || true
+            echo "➤ Verifying PHP configuration..."
+            php -i | grep -E "(upload_max_filesize|post_max_size|max_execution_time|memory_limit)" || true
+            
+          EOF

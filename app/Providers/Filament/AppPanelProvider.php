@@ -35,7 +35,8 @@ final class AppPanelProvider extends PanelProvider
                 'accent' => '#ff751f',  // Orange
             ])
             ->brandName('Logistic Journey')
-            ->brandLogo('<img src="'.asset('images/LogisticsJourneyLogo.png').'" alt="Logistics Journey Logo" class="h-8">')
+            ->brandLogo(asset('images/LogisticsJourneyLogo.png'))
+            ->brandLogoHeight('2rem')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
