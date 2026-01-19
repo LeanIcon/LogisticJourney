@@ -81,7 +81,9 @@ jobs:
             sudo -u www-data touch storage/logs/laravel.log
             echo "➤ Installing composer dependencies..."
             export COMPOSER_ALLOW_SUPERUSER=1
-            sudo -u www-data composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+            sudo -u www-data composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+            echo "➤ Discovering packages..."
+            sudo -u www-data php artisan package:discover --ansi || true
             echo "➤ Running Laravel artisan commands..."
             sudo -u www-data php artisan config:clear || true
             sudo -u www-data php artisan route:clear || true
