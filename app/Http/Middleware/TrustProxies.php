@@ -17,6 +17,7 @@ final class TrustProxies extends Middleware
      *
      * @var array|string|null
      */
+    /** @var array<int, string>|string|null */
     protected $proxies = '*';
 
     /**
@@ -24,8 +25,6 @@ final class TrustProxies extends Middleware
      *
      * Use the explicit X-Forwarded_* flags so Cloudflare / Render forwarded
      * headers are honored for scheme and client IP detection.
-     *
-     * @var int|null
      */
     protected $headers =
         Request::HEADER_X_FORWARDED_FOR |

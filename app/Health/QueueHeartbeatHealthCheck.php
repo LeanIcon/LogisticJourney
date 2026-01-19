@@ -4,35 +4,30 @@ declare(strict_types=1);
 
 namespace App\Health;
 
-use Illuminate\Foundation\Configuration\Health;
 use Illuminate\Support\Facades\Cache;
 
 final class QueueHeartbeatHealthCheck
 {
     private const MAX_STALE_SECONDS = 120;
 
-    public function __invoke(Health $health): void
+    /**
+     * Check queue heartbeat status.
+     * Returns true if healthy, false if stale or missing.
+     */
+    public function __invoke(): bool
     {
         if (config('queue.default') === 'sync') {
-            $health->ok('queue', 'Queue disabled (sync)');
-
-            return;
+            return true;
         }
 
         $lastBeat = Cache::get('queue:heartbeat');
 
         if (! $lastBeat) {
-            $health->fail('queue', 'No heartbeat recorded');
-
-            return;
+            return false;
         }
 
-        if ((time() - (int) $lastBeat) > self::MAX_STALE_SECONDS) {
-            $health->fail('queue', 'Worker heartbeat stale');
+        $lastBeatTime = is_numeric($lastBeat) ? (int) $lastBeat : 0;
 
-            return;
-        }
-
-        $health->ok('queue');
+        return (time() - $lastBeatTime) <= self::MAX_STALE_SECONDS;
     }
 }

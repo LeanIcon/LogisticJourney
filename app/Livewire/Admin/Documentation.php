@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Livewire\Admin;
 
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+#[Layout('layouts.custom-login')]
 final class Documentation extends Component
 {
     /**
@@ -18,8 +20,6 @@ final class Documentation extends Component
 
     public function render(): \Illuminate\View\View
     {
-        // Use the custom-login layout for consistent styling and to avoid layout errors
-        return view('livewire.admin.documentation')
-            ->layout('layouts.custom-login');
+        return view('livewire.admin.documentation');
     }
 }

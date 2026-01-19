@@ -24,10 +24,19 @@ final class SendFormNotificationJob implements ShouldQueue
 
     public string $body;
 
-    public ?array $formData;
+    /** @var array<string, mixed>|null */
+    public ?array $formData = null;
 
-    public ?array $metadata;
+    /** @var array<string, mixed>|null */
+    public ?array $metadata = null;
 
+    /**
+     * @param  array<string, mixed>|null  $formData
+     * @param  array<string, mixed>|null  $metadata
+     *
+     * @phpstan-param array<string, mixed>|null $formData
+     * @phpstan-param array<string, mixed>|null $metadata
+     */
     public function __construct(
         string $subject,
         string $body,
@@ -36,10 +45,13 @@ final class SendFormNotificationJob implements ShouldQueue
     ) {
         $this->subject = $subject;
         $this->body = $body;
+        /** @var array<string, mixed>|null $formData */
         $this->formData = $formData;
+        /** @var array<string, mixed>|null $metadata */
         $this->metadata = $metadata;
     }
 
+    /** @return array<int> */
     public function backoff(): array
     {
         return [10, 30, 60];

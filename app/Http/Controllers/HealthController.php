@@ -33,7 +33,7 @@ final class HealthController
             if (! $lastBeat) {
                 $results['queue'] = ['ok' => false, 'error' => 'No heartbeat recorded'];
                 $status = 500;
-            } elseif ((time() - (int) $lastBeat) > 120) {
+            } elseif (is_numeric($lastBeat) && (time() - (int) $lastBeat) > 120) {
                 $results['queue'] = ['ok' => false, 'error' => 'Worker heartbeat stale'];
                 $status = 500;
             } else {

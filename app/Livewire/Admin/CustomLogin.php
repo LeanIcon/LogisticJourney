@@ -1,26 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
+use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
-use Filament\Facades\Filament; 
+use Illuminate\View\View;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
 
-class CustomLogin extends Component
+#[Layout('layouts.custom-login')]
+final class CustomLogin extends Component
 {
-    public $email = '';
-    public $password = '';
-    public $isLoading = false;  
+    public string $email = '';
 
-    protected $rules = [
+    public string $password = '';
+
+    public bool $isLoading = false;
+
+    /** @var array<string, array<int|string, string>> */
+    protected array $rules = [
         'email' => ['required', 'email'],
         'password' => ['required', 'string', 'min:8'],
     ];
 
-    public function authenticate()
+    public function authenticate(): void
     {
         $this->validate();
-        $this->isLoading = true;  // Start loading
+        $this->isLoading = true;
 
         $credentials = [
             'email' => $this->email,
@@ -29,16 +37,17 @@ class CustomLogin extends Component
 
         if (Auth::attempt($credentials, true)) {
             session()->regenerate();
-            return redirect()->intended(Filament::getUrl());  // Now uses correct Filament facade
+            $this->redirect(Filament::getUrl());
+
+            return;
         }
 
         $this->addError('email', 'The provided credentials do not match our records.');
-        $this->isLoading = false;  // Stop loading on error
+        $this->isLoading = false;
     }
 
-    public function render()
+    public function render(): View
     {
-        return view('livewire.admin.custom-login')
-            ->layout('layouts.custom-login');
+        return view('livewire.admin.custom-login');
     }
 }

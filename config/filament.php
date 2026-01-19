@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
 
     /*
@@ -118,9 +120,9 @@ return [
     'system_route_prefix' => 'filament',
 
     'auth' => [
-    'pages' => [
-        'login' => \App\Http\Livewire\Admin\CustomLogin::class,
-        // 'register' => ...  // optional if you have registration
+        'pages' => [
+            'login' => App\Livewire\Admin\CustomLogin::class,
+            // 'register' => ...  // optional if you have registration
         ],
     ],
 

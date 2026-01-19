@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace App\Health;
 
-use Illuminate\Foundation\Configuration\Health;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
 final class DatabaseHealthCheck
 {
-    public function __invoke(Health $health): void
+    /**
+     * Check database connectivity.
+     * Returns true if healthy, false if failed.
+     */
+    public function __invoke(): bool
     {
         try {
             DB::select('select 1');
-            $health->ok('database');
+
+            return true;
         } catch (Throwable $e) {
-            $health->fail('database', 'Database connection failed');
+            return false;
         }
     }
 }

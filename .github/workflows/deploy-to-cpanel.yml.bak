@@ -1,0 +1,82 @@
+name: Laravel Build and Deploy to cPanel
+
+on:
+  push:
+    branches:
+      - main # Trigger only when changes are pushed to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # --- 1. Setup PHP and Composer ---
+      - name: Setup PHP (8.x)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.x"
+          extensions: mbstring, pdo_mysql, bcmath
+          tools: composer:v2
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install PHP dependencies
+        # Install without development dependencies to minimize files
+        run: composer install --prefer-dist --no-interaction --no-dev
+
+      # --- 2. Setup Node and Build Assets ---
+      - name: Setup Node.js (LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cache Node Modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install NPM dependencies (ci)
+        run: npm ci
+
+      - name: Build production assets (npm run build)
+        # Use 'build' for production assets (e.g., Mix/Vite output)
+        run: npm run build
+
+      # --- 3. Deploy to cPanel via FTP ---
+      - name: Check required FTP secrets
+        run: |
+          if [ -z "${{ secrets.CP_SERVER }}" ] || [ -z "${{ secrets.CPANEL_USER }}" ] || [ -z "${{ secrets.CPANEL_FTP_PASSWORD }}" ]; then
+            echo "Missing required FTP secrets: CP_SERVER, CPANEL_USER, CPANEL_FTP_PASSWORD"
+            echo "Please add them to repository or organization secrets before running this workflow."
+            exit 1
+          fi
+
+      - name: Deploy entire project to /cms/ via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.CP_SERVER }}
+          username: ${{ secrets.CPANEL_USER }}
+          password: ${{ secrets.CPANEL_FTP_PASSWORD }}
+          protocol: ftp # Using FTP/FTPS as per your preference (Port 21 is default for FTP)
+          port: 21
+          local-dir: ./ # Source: Deploy ALL contents of the current workspace
+          server-dir: /cms/ # Destination: Target directory as requested
+          # IMPORTANT: Exclude sensitive files and temporary directories
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .env              # Prevents overwriting your server's existing .env file
+            .github
+            .github/**
