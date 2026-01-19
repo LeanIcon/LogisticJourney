@@ -1,4 +1,4 @@
-name: Deploy to VM(Update)
+name: Deploy to VM
 
 on:
   push:
