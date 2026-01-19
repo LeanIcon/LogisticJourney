@@ -41,6 +41,7 @@ final class FormSubmissionsTable
                     ->searchable()
                     ->toggleable(),
             ])
+            ->defaultSorting('created_at', 'desc')
             ->filters([
                 SelectFilter::make('form_id')
                     ->label('Form')
