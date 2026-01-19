@@ -21,6 +21,9 @@ jobs:
       - name: Create .env file locally
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
+          # Fix unquoted values with spaces
+          sed -i 's/^APP_NAME=Logistic Journey$/APP_NAME="Logistic Journey"/' .env
+          sed -i 's/^MAIL_FROM_NAME=Logistic Journey$/MAIL_FROM_NAME="Logistic Journey"/' .env
       - name: Sync project files to VM
         run: |
           rsync -az --delete \
