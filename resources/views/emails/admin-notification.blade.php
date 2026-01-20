@@ -10,7 +10,7 @@
         
         <!-- Header -->
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; text-align: center; color: white;">
-            <h1 style="margin: 0 0 8px 0; font-size: 28px; font-weight: 700;">📬 New Form Submission</h1>
+            <h1 style="margin: 0 0 8px 0; font-size: 28px; font-weight: 700;"><img src="{{ asset('images/LogisticsJourneyLogo.png') }}" style="height: 32px; width: auto; margin-right: 8px; vertical-align: middle;"> New Form Submission</h1>
             <p style="margin: 0; font-size: 16px; opacity: 0.9;">{{ $formName }}</p>
         </div>
         

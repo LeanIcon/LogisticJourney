@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Modules\Website\Services\FormNotificationService;
 
 final class SendFormNotificationJob implements ShouldQueue
@@ -50,11 +51,22 @@ final class SendFormNotificationJob implements ShouldQueue
         // Update heartbeat (every job execution)
         Cache::put('queue:heartbeat', now()->timestamp, now()->addMinutes(5));
 
-        $notificationService->sendNotification(
+        Log::info('Processing SendFormNotificationJob', [
+            'subject' => $this->subject,
+            'has_form_data' => ! empty($this->formData),
+            'has_metadata' => ! empty($this->metadata),
+        ]);
+
+        $result = $notificationService->sendNotification(
             $this->subject,
             $this->body,
             $this->formData,
             $this->metadata
         );
+
+        Log::info('SendFormNotificationJob completed', [
+            'subject' => $this->subject,
+            'success' => $result,
+        ]);
     }
 }

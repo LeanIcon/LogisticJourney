@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Website\Http\Controllers;
 
-use App\Jobs\SendFormNotificationJob;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
@@ -146,17 +145,54 @@ final class FormSubmissionController extends Controller
 
         // Metadata for the email template
         $metadata = [
-            'form_name' => $form->name ?? ucwords(str_replace('-', ' ', $form->slug)),
-            'form_slug' => $form->slug,
+            'formName' => $form->name ?? ucwords(str_replace('-', ' ', $form->slug)),
+            'formSlug' => $form->slug,
             'timestamp' => now()->format('M d, Y h:i A'),
         ];
 
-        // Send the formatted HTML email (now queued)
-        SendFormNotificationJob::dispatch($subject, $plainBody, $validated, $metadata);
+        Log::info('Form submission processing', [
+            'form_slug' => $form->slug,
+            'submission_id' => $submission->id,
+            'user_email' => $validated['email'] ?? 'not_provided',
+            'status' => 'sending_emails',
+        ]);
+
+        // Send admin notification email
+        Log::info('Sending admin notification email', [
+            'submission_id' => $submission->id,
+            'form_slug' => $form->slug,
+        ]);
+
+        $adminEmailSent = $notificationService->sendNotification(
+            $subject,
+            $plainBody,
+            $validated,
+            $metadata
+        );
+
+        Log::info('Admin notification email result', [
+            'submission_id' => $submission->id,
+            'sent' => $adminEmailSent,
+        ]);
 
         // Send confirmation email to user if email field exists and is valid
         if (isset($validated['email']) && filter_var($validated['email'], FILTER_VALIDATE_EMAIL)) {
-            $notificationService->sendConfirmationToUser($validated['email']);
+            Log::info('Sending confirmation email to user', [
+                'submission_id' => $submission->id,
+                'user_email' => $validated['email'],
+            ]);
+
+            $confirmationSent = $notificationService->sendConfirmationToUser($validated['email']);
+
+            Log::info('User confirmation email result', [
+                'submission_id' => $submission->id,
+                'user_email' => $validated['email'],
+                'sent' => $confirmationSent,
+            ]);
+        } else {
+            Log::warning('Skipping confirmation email - no valid email provided', [
+                'submission_id' => $submission->id,
+            ]);
         }
 
         // Log submission for debugging/auditing

@@ -5,23 +5,11 @@ declare(strict_types=1);
 namespace Modules\Website\Services;
 
 use Illuminate\Support\Facades\Log;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\PHPMailer;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\View\View;
 
 final class FormNotificationService
 {
-    private PHPMailer $mailer;
-
-    private string $smtpHost;
-
-    private string $smtpUsername;
-
-    private string $smtpPassword;
-
-    private int $smtpPort;
-
-    private string $smtpSecure;
-
     private string $mailFrom;
 
     private array $recipients;
@@ -32,31 +20,12 @@ final class FormNotificationService
 
     public function __construct()
     {
-        $this->smtpHost = config('services.form_notifications.smtp_host');
-        $this->smtpUsername = config('services.form_notifications.smtp_username');
-        $this->smtpPassword = config('services.form_notifications.smtp_password');
-        $this->smtpPort = (int) config('services.form_notifications.smtp_port');
-        $this->smtpSecure = config('services.form_notifications.smtp_secure');
         $this->mailFrom = config('services.form_notifications.mail_from');
         $this->recaptchaSecret = config('services.recaptcha.secret');
         $this->localSavePath = config('services.form_notifications.contacts_save_path');
 
         $recipients = config('services.form_notifications.recipients') ?? '';
         $this->recipients = array_filter(array_map('trim', explode(',', $recipients)));
-
-        $this->mailer = new PHPMailer(true);
-        $this->mailer->isSMTP();
-        $this->mailer->Host = $this->smtpHost;
-        $this->mailer->SMTPAuth = true;
-        $this->mailer->Username = $this->smtpUsername;
-        $this->mailer->Password = $this->smtpPassword;
-        $this->mailer->SMTPSecure = $this->smtpSecure;
-        $this->mailer->Port = $this->smtpPort;
-        $this->mailer->setFrom($this->mailFrom);
-
-        foreach ($this->recipients as $recipient) {
-            $this->mailer->addAddress($recipient);
-        }
     }
 
     public function verifyRecaptcha(?string $token): bool
@@ -102,22 +71,42 @@ final class FormNotificationService
         ?array $metadata = null
     ): bool {
         try {
-            $this->mailer->Subject = $subject;
-            $this->mailer->isHTML(true);
-
-            if ($formData) {
-                $this->mailer->Body = $this->renderAdminNotificationTemplate($formData, $metadata);
-                $this->mailer->AltBody = $body;
-            } else {
-                $this->mailer->Body = nl2br($body);
-                $this->mailer->AltBody = $body;
+            if (empty($this->recipients)) {
+                Log::warning('No recipients configured for form notifications');
+                return false;
             }
 
-            $this->mailer->send();
+            Log::info('Sending admin notification email', [
+                'subject' => $subject,
+                'recipients' => $this->recipients,
+                'from' => $this->mailFrom,
+                'form_slug' => $metadata['formSlug'] ?? 'unknown',
+            ]);
+
+            Mail::send('emails.admin-notification', [
+                'formData' => $formData ?? [],
+                'formName' => $metadata['formName'] ?? 'Form Submission',
+                'formSlug' => $metadata['formSlug'] ?? 'unknown',
+                'timestamp' => $metadata['timestamp'] ?? now()->format('Y-m-d H:i:s'),
+            ], function ($message) use ($subject) {
+                $message->subject($subject)
+                    ->from($this->mailFrom)
+                    ->to($this->recipients);
+            });
+
+            Log::info('Admin notification email sent successfully', [
+                'recipients' => $this->recipients,
+                'subject' => $subject,
+            ]);
 
             return true;
-        } catch (Exception $e) {
-            Log::error('Email sending failed', ['error' => $e->getMessage()]);
+        } catch (\Exception $e) {
+            Log::error('Admin notification email sending failed', [
+                'error' => $e->getMessage(),
+                'recipients' => $this->recipients,
+                'subject' => $subject,
+                'exception' => get_class($e),
+            ]);
 
             return false;
         }
@@ -126,39 +115,32 @@ final class FormNotificationService
     public function sendConfirmationToUser(string $email): bool
     {
         try {
-            $mail = clone $this->mailer;
-            $mail->clearAddresses();
-            $mail->addAddress($email);
-            $mail->Subject = 'Thank you for contacting Logistic Journey';
-            $mail->Body = $this->getConfirmationHtmlBody();
-            $mail->AltBody = 'Thank you for reaching out to us.';
-            $mail->send();
+            Log::info('Sending user confirmation email', [
+                'to' => $email,
+                'from' => $this->mailFrom,
+            ]);
+
+            Mail::send('emails.confirmation', [], function ($message) use ($email) {
+                $message->subject('Thank you for contacting Logistic Journey')
+                    ->from($this->mailFrom)
+                    ->to($email);
+            });
+
+            Log::info('User confirmation email sent successfully', [
+                'to' => $email,
+                'subject' => 'Thank you for contacting Logistic Journey',
+            ]);
 
             return true;
-        } catch (Exception $e) {
-            Log::error('Confirmation email failed', ['error' => $e->getMessage()]);
+        } catch (\Exception $e) {
+            Log::error('User confirmation email failed', [
+                'to' => $email,
+                'error' => $e->getMessage(),
+                'exception' => get_class($e),
+            ]);
 
             return false;
         }
     }
 
-    private function renderAdminNotificationTemplate(array $formData, ?array $metadata): string
-    {
-        return $this->generateBasicHtml($formData, $metadata ?? []);
-    }
-
-    private function generateBasicHtml(array $formData, array $data): string
-    {
-        $html = '';
-        foreach ($formData as $key => $value) {
-            $html .= '<p><strong>'.ucfirst($key).':</strong> '.e((string) $value).'</p>';
-        }
-
-        return "<html><body>{$html}</body></html>";
-    }
-
-    private function getConfirmationHtmlBody(): string
-    {
-        return 'Thank you for reaching out to us. We will respond shortly.';
-    }
 }
