@@ -151,12 +151,39 @@ final class FormSubmissionController extends Controller
             'timestamp' => now()->format('M d, Y h:i A'),
         ];
 
+        Log::info('Form submission processing', [
+            'form_slug' => $form->slug,
+            'submission_id' => $submission->id,
+            'user_email' => $validated['email'] ?? 'not_provided',
+            'status' => 'dispatching_notification_job',
+        ]);
+
         // Send the formatted HTML email (now queued)
         SendFormNotificationJob::dispatch($subject, $plainBody, $validated, $metadata);
 
+        Log::info('Form notification job dispatched', [
+            'submission_id' => $submission->id,
+            'job' => 'SendFormNotificationJob',
+        ]);
+
         // Send confirmation email to user if email field exists and is valid
         if (isset($validated['email']) && filter_var($validated['email'], FILTER_VALIDATE_EMAIL)) {
-            $notificationService->sendConfirmationToUser($validated['email']);
+            Log::info('Sending confirmation email to user', [
+                'submission_id' => $submission->id,
+                'user_email' => $validated['email'],
+            ]);
+
+            $confirmationSent = $notificationService->sendConfirmationToUser($validated['email']);
+
+            Log::info('User confirmation email result', [
+                'submission_id' => $submission->id,
+                'user_email' => $validated['email'],
+                'sent' => $confirmationSent,
+            ]);
+        } else {
+            Log::warning('Skipping confirmation email - no valid email provided', [
+                'submission_id' => $submission->id,
+            ]);
         }
 
         // Log submission for debugging/auditing
