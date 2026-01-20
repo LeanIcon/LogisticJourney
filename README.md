@@ -1,20 +1,3 @@
-- Blade (this project) version: **[github.com/nunomaduro/laravel-starter-kit](https://github.com/nunomaduro/laravel-starter-kit)**
-- Inertia & React version: **[github.com/nunomaduro/laravel-starter-kit-inertia-react](https://github.com/nunomaduro/laravel-starter-kit-inertia-react)**
-
-
-<p align="center">
-    <a href="https://youtu.be/VhzP0XWGTC4" target="_blank">
-        <img src="/art/banner.png" alt="Overview Laravel Starter Kit" style="width:70%;">
-    </a>
-</p>
-
-<p>
-    <a href="https://github.com/nunomaduro/laravel-starter-kit/actions"><img src="https://github.com/nunomaduro/laravel-starter-kit/actions/workflows/tests.yml/badge.svg" alt="Build Status"></a>
-    <a href="https://packagist.org/packages/nunomaduro/laravel-starter-kit"><img src="https://img.shields.io/packagist/dt/nunomaduro/laravel-starter-kit" alt="Total Downloads"></a>
-    <a href="https://packagist.org/packages/nunomaduro/laravel-starter-kit"><img src="https://img.shields.io/packagist/v/nunomaduro/laravel-starter-kit" alt="Latest Stable Version"></a>
-    <a href="https://packagist.org/packages/nunomaduro/laravel-starter-kit"><img src="https://img.shields.io/packagist/l/nunomaduro/laravel-starter-kit" alt="License"></a>
-</p>
-
 # 🚀 LogisticJourney - Advanced Laravel Application
 
 **LogisticJourney** is a sophisticated, production-ready Laravel application built with enterprise-grade architecture featuring a revolutionary **modular block-based content management system**. This application demonstrates modern Laravel development practices with **Laravel 12**, **PHP 8.4**, **Filament v4**, and a custom **API-driven block system**.
@@ -22,25 +5,29 @@
 ## 🌟 Key Features
 
 ### 🧱 **Advanced Block System**
+
 - **Modular Block Architecture**: Create reusable content blocks with unique schemas
-- **Filament Block Builder Integration**: Visual block management with drag-and-drop interface  
+- **Filament Block Builder Integration**: Visual block management with drag-and-drop interface
 - **API-Driven Content**: Headless CMS approach for any frontend framework
 - **Auto-Discovery**: Automatic block registration from modules
 - **Type-Safe Mutations**: Clean, validated API responses with data transformations
 
 ### 🎨 **Modern Admin Interface**
+
 - **Filament v4 Admin Panel**: Beautiful, responsive admin interface
 - **Module-Based Organization**: Clean separation of concerns across features
 - **Real-Time Form Validation**: Dynamic schemas per block type
 - **File Management**: Integrated media handling for blocks
 
 ### 🚀 **Production-Ready API**
+
 - **RESTful Pages API**: Complete CRUD operations with filtering and search
 - **Multiple Access Patterns**: Access by ID, slug, type, or search query
 - **Pagination & Performance**: Optimized queries with Laravel pagination
 - **Documentation**: Comprehensive API documentation with examples
 
 ### 🏗️ **Enterprise Architecture**
+
 - **Modular Design**: Blog, Website, Pricing, Blocks modules
 - **Service Registry Pattern**: Auto-discovering block registry system
 - **Clean Code Standards**: 100% PHP 8.4 strict typing with Pint formatting
@@ -49,15 +36,17 @@
 ## 🔥 What Makes This Special?
 
 ### **Revolutionary Block System**
+
 Unlike traditional CMS systems, our block architecture allows:
 
 - **Different Structures Per Block**: Each block type has completely unique schemas
-- **Frontend Agnostic**: Same API works with React, Vue, Next.js, Angular, or mobile apps  
+- **Frontend Agnostic**: Same API works with React, Vue, Next.js, Angular, or mobile apps
 - **Developer Friendly**: Simple artisan commands to generate new block types
 - **Content Flexibility**: Multiple pages can share block types but with different content
 - **Type Safety**: Filament forms validate data according to each block's specific schema
 
 ### **Modern Laravel Stack**
+
 - **Laravel 12.34.0** with **PHP 8.4.13**
 - **Strict typing** throughout the entire codebase
 - **Final classes** where appropriate for better performance
@@ -70,21 +59,24 @@ Unlike traditional CMS systems, our block architecture allows:
 ### 📦 Installation
 
 1. **Clone the repository**:
+
 ```bash
 git clone https://github.com/LeanIcon/LogisticJourney.git
 cd LogisticJourney
 ```
 
 2. **Install dependencies**:
+
 ```bash
 # Install PHP dependencies
 composer install
 
-# Install Node dependencies  
+# Install Node dependencies
 npm install
 ```
 
 3. **Environment setup**:
+
 ```bash
 # Copy environment file
 cp .env.example .env
@@ -97,6 +89,7 @@ php artisan migrate
 ```
 
 4. **Build assets**:
+
 ```bash
 npm run build
 ```
@@ -125,7 +118,7 @@ Run the complete test suite:
 
 ```bash
 composer test               # Full test suite
-composer test:unit          # Unit tests only  
+composer test:unit          # Unit tests only
 composer test:lint          # Code style checks
 composer test:types         # Static analysis
 ```
@@ -147,8 +140,9 @@ The **Block System** is the cornerstone of LogisticJourney's content architectur
 **👉 [View Comprehensive Blocks Documentation](./Modules/Blocks/ReadMe.md)**
 
 The complete guide covers:
+
 - **Architecture & Design Patterns** - Core concepts and implementation
-- **Development Workflow** - Creating blocks with artisan commands  
+- **Development Workflow** - Creating blocks with artisan commands
 - **Schema Examples** - Simple FAQ to complex Hero blocks
 - **API Integration** - Frontend consumption patterns
 - **Filament Admin** - Visual block management interface
@@ -172,12 +166,12 @@ GET /api/v1/pages/{slug-or-id}
 
 ### **🏗️ Current Block Types**
 
-| Block | Module | Purpose | Complexity |
-|-------|--------|---------|------------|
-| `HeroBlock` | Website | Landing headers | **Advanced** (CTAs, media, overlays) |
-| `TestimonialBlock` | Website | Social proof | **Complex** (repeaters, ratings, layouts) |
-| `NewsLetterSubscription` | Website | Email capture | **Intermediate** (forms, validation) |
-| `FaqsBlock` | Website | Q&A sections | **Simple** (text repeaters) |
+| Block                    | Module  | Purpose         | Complexity                                |
+| ------------------------ | ------- | --------------- | ----------------------------------------- |
+| `HeroBlock`              | Website | Landing headers | **Advanced** (CTAs, media, overlays)      |
+| `TestimonialBlock`       | Website | Social proof    | **Complex** (repeaters, ratings, layouts) |
+| `NewsLetterSubscription` | Website | Email capture   | **Intermediate** (forms, validation)      |
+| `FaqsBlock`              | Website | Q&A sections    | **Simple** (text repeaters)               |
 
 ## 📖 API Documentation
 
@@ -185,37 +179,37 @@ Complete API documentation is available at: **[Website Module API Docs](./Module
 
 ### 🔗 Key API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/pages` | GET | List all pages with pagination and search |
-| `/api/v1/pages/{slug}` | GET | Get specific page by slug |
-| `/api/v1/pages/type/{type}` | GET | Get pages by type (home, about, etc.) |
+| Endpoint                    | Method | Description                               |
+| --------------------------- | ------ | ----------------------------------------- |
+| `/api/v1/pages`             | GET    | List all pages with pagination and search |
+| `/api/v1/pages/{slug}`      | GET    | Get specific page by slug                 |
+| `/api/v1/pages/type/{type}` | GET    | Get pages by type (home, about, etc.)     |
 
 ### 📋 Example API Response
 
 ```json
 {
-  "data": {
-    "id": 1,
-    "title": "Homepage", 
-    "slug": "home",
-    "blocks": [
-      {
-        "type": "HeroBlock",
-        "data": {
-          "headline": "Welcome to Our Platform",
-          "background": {
-            "image": "/images/hero.jpg",
-            "overlay": "dark"
-          },
-          "cta": {
-            "text": "Get Started",
-            "url": "/signup"
-          }
-        }
-      }
-    ]
-  }
+    "data": {
+        "id": 1,
+        "title": "Homepage",
+        "slug": "home",
+        "blocks": [
+            {
+                "type": "HeroBlock",
+                "data": {
+                    "headline": "Welcome to Our Platform",
+                    "background": {
+                        "image": "/images/hero.jpg",
+                        "overlay": "dark"
+                    },
+                    "cta": {
+                        "text": "Get Started",
+                        "url": "/signup"
+                    }
+                }
+            }
+        ]
+    }
 }
 ```
 
@@ -226,7 +220,7 @@ Complete API documentation is available at: **[Website Module API Docs](./Module
 ```
 Modules/
 ├── Blocks/          # Core block system and registry
-├── Blog/            # Blog functionality  
+├── Blog/            # Blog functionality
 ├── Pricing/         # Pricing and plans
 └── Website/         # Pages, forms, and content management
 ```
@@ -234,7 +228,7 @@ Modules/
 ### 🔄 How It Works
 
 1. **Content Creation**: Editors use Filament admin to create pages with blocks
-2. **Block Registration**: System auto-discovers blocks from module directories  
+2. **Block Registration**: System auto-discovers blocks from module directories
 3. **API Consumption**: Frontend applications consume clean, structured JSON
 4. **Data Mutation**: Each block type transforms its data before API response
 5. **Frontend Rendering**: Any frontend framework renders blocks based on type
@@ -242,16 +236,19 @@ Modules/
 ## 🛠️ Available Commands
 
 ### 🧱 Block Commands
+
 - `php artisan make:block {name} --module={module}` - Create new block
 - `php artisan blocks:discover` - Refresh block registry
 
 ### 🧪 Testing & Quality
+
 - `composer test` - Complete test suite (6 tests, 31 assertions)
 - `composer lint` - Code formatting (215 files passing)
 - `composer test:unit` - Unit tests with coverage
 - `composer test:types` - Static analysis with PHPStan
 
 ### 🚀 Development
+
 - `composer dev` - Start full development stack
 - `npm run dev` - Frontend asset compilation
 - `php artisan serve` - Laravel development server
@@ -261,25 +258,27 @@ Modules/
 This API works seamlessly with any frontend framework:
 
 ### ⚛️ React/Next.js
-```javascript
-const { data: page } = await fetch('/api/v1/pages/home').then(r => r.json());
 
-page.blocks.forEach(block => {
-  switch(block.type) {
-    case 'HeroBlock':
-      return <HeroComponent {...block.data} />;
-    case 'TestimonialBlock': 
-      return <TestimonialsComponent {...block.data} />;
-  }
+```javascript
+const { data: page } = await fetch("/api/v1/pages/home").then((r) => r.json());
+
+page.blocks.forEach((block) => {
+    switch (block.type) {
+        case "HeroBlock":
+            return <HeroComponent {...block.data} />;
+        case "TestimonialBlock":
+            return <TestimonialsComponent {...block.data} />;
+    }
 });
 ```
 
 ### 🖖 Vue/Nuxt
+
 ```vue
 <template>
-  <div v-for="block in page.blocks" :key="block.type">
-    <component :is="getBlockComponent(block.type)" :data="block.data" />
-  </div>
+    <div v-for="block in page.blocks" :key="block.type">
+        <component :is="getBlockComponent(block.type)" :data="block.data" />
+    </div>
 </template>
 ```
 
@@ -299,7 +298,7 @@ The application includes GitHub Actions workflows for:
 ```bash
 # Production optimizations
 php artisan config:cache
-php artisan route:cache  
+php artisan route:cache
 php artisan view:cache
 
 # Build production assets
@@ -310,13 +309,13 @@ npm run build
 
 ## 🎯 Performance & Quality
 
-| Metric | Status | Details |
-|--------|--------|---------|
-| **Test Coverage** | ✅ 100% | 6 tests passing, 31 assertions |
-| **Code Quality** | ✅ Perfect | 215 files passing Pint standards |
-| **Type Safety** | ✅ Strict | PHP 8.4 strict typing throughout |
-| **Performance** | ✅ Optimized | Auto-discovery caching, Laravel optimization |
-| **Security** | ✅ Enterprise | Filament authentication, input validation |
+| Metric            | Status        | Details                                      |
+| ----------------- | ------------- | -------------------------------------------- |
+| **Test Coverage** | ✅ 100%       | 6 tests passing, 31 assertions               |
+| **Code Quality**  | ✅ Perfect    | 215 files passing Pint standards             |
+| **Type Safety**   | ✅ Strict     | PHP 8.4 strict typing throughout             |
+| **Performance**   | ✅ Optimized  | Auto-discovery caching, Laravel optimization |
+| **Security**      | ✅ Enterprise | Filament authentication, input validation    |
 
 ## 🤝 Contributing
 
@@ -329,7 +328,7 @@ npm run build
 ### 📝 Development Guidelines
 
 - **Strict typing**: All new code must use PHP 8.4 strict types
-- **Block patterns**: Follow existing block structure for consistency  
+- **Block patterns**: Follow existing block structure for consistency
 - **API standards**: Maintain RESTful patterns and comprehensive documentation
 - **Testing**: Add tests for all new functionality
 - **Performance**: Consider caching and optimization from the start
@@ -386,6 +385,7 @@ type .\github_action_deploy_key.pub | ssh root@158.175.167.56 "mkdir -p ~/.ssh &
 5. Push to the `staging` branch or trigger the workflow using `workflow_dispatch` in the Actions tab.
 
 Notes and security:
+
 - The workflow tries to use `SSH_PRIVATE_KEY` (recommended). If it's empty and `SSH_PASSWORD` is set the workflow will fall back to password-based upload and execution — this is less secure and not recommended for production.
 - Rotate or revoke credentials after giving access for CI if they were temporary. Do not leave plain passwords in commit history.
 - Ensure the target VM has `php`, `composer`, and necessary system packages installed. The remote script (`scripts/remote-deploy.sh`) runs `composer install` and artisan commands — customize it if your target environment differs.
