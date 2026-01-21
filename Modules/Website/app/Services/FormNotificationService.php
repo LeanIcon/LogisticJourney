@@ -12,6 +12,8 @@ final class FormNotificationService
 {
     private string $mailFrom;
 
+    private string $mailFromName;
+
     private array $recipients;
 
     private string $recaptchaSecret;
@@ -21,6 +23,7 @@ final class FormNotificationService
     public function __construct()
     {
         $this->mailFrom = config('services.form_notifications.mail_from');
+        $this->mailFromName = config('mail.from.name', 'Logistic Journey');
         $this->recaptchaSecret = config('services.recaptcha.secret');
         $this->localSavePath = config('services.form_notifications.contacts_save_path');
 
@@ -90,7 +93,7 @@ final class FormNotificationService
                 'timestamp' => $metadata['timestamp'] ?? now()->format('Y-m-d H:i:s'),
             ], function ($message) use ($subject) {
                 $message->subject($subject)
-                    ->from($this->mailFrom)
+                    ->from($this->mailFrom, $this->mailFromName)
                     ->to($this->recipients);
             });
 
@@ -122,7 +125,7 @@ final class FormNotificationService
 
             Mail::send('emails.confirmation', [], function ($message) use ($email) {
                 $message->subject('Thank you for contacting Logistic Journey')
-                    ->from($this->mailFrom)
+                    ->from($this->mailFrom, $this->mailFromName)
                     ->to($email);
             });
 
