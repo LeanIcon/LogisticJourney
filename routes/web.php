@@ -11,6 +11,17 @@ Route::get('/', CustomLogin::class)->name('login');
 
 Route::get('/docs', Documentation::class)->name('app.docs');
 
+// Local README viewer (renders project README.md)
+Route::get('/docs/readme', function () {
+    $path = base_path('README.md');
+    if (! file_exists($path)) {
+        abort(404);
+    }
+    $markdown = Illuminate\Support\Str::markdown(file_get_contents($path));
+
+    return view('docs.readme', ['content' => $markdown]);
+})->name('docs.readme');
+
 // Health check endpoint
 Route::get('/up', [HealthController::class, 'up']);
 
