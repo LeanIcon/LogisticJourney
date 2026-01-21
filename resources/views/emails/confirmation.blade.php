@@ -272,7 +272,7 @@
 
       <!-- CTA -->
       <div class="cta-section">
-        <a href="https://staging.logisticjourney.com" class="cta-button">Visit Our Website</a>
+        <a href="https://logisticjourney.com" class="cta-button">Visit Our Website</a>
       </div>
     </div>
 
@@ -294,9 +294,9 @@
       </div>
 
       <div class="footer-links">
-        <a href="https://staging.logisticjourney.com/policy" class="footer-link">Privacy Policy</a>
+        <a href="https://logisticjourney.com/policy" class="footer-link">Privacy Policy</a>
         <span style="color: #4a5568;">•</span>
-        <a href="https://staging.logisticjourney.com/terms" class="footer-link">Terms of Service</a>
+        <a href="https://logisticjourney.com/terms" class="footer-link">Terms of Service</a>
       </div>
 
       <div class="footer-copyright">
