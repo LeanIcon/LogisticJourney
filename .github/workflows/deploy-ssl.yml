@@ -68,8 +68,8 @@ jobs:
             NGINX_CONFIG_FB="$(grep -rl "ssl_certificate " /etc/nginx/sites-available/ | head -n 1 || echo "/etc/nginx/sites-available/default")"
             
             echo "Updating certificate paths in $NGINX_CONFIG_FB..."
-            sudo sed -i 's|/etc/ssl/certs/_.logisticjourney-ssl.com.pem|/etc/letsencrypt/live/logisticjourney.com/fullchain.pem|g' "$NGINX_CONFIG_FB"
-            sudo sed -i 's|/etc/ssl/private/logisticjourney-privatekey.key|/etc/letsencrypt/live/logisticjourney.com/privkey.pem|g' "$NGINX_CONFIG_FB"
+            sudo sed -i 's|/etc/ssl/certs/_.logisticjourney-ssl.com.pem|/etc/letsencrypt/live/cms.logisticjourney.com/fullchain.pem|g' "$NGINX_CONFIG_FB"
+            sudo sed -i 's|/etc/ssl/private/logisticjourney-privatekey.key|/etc/letsencrypt/live/cms.logisticjourney.com/privkey.pem|g' "$NGINX_CONFIG_FB"
 
             echo "Testing configuration changes..."
             if sudo nginx -t; then
