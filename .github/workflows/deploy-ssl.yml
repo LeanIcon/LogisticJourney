@@ -56,48 +56,48 @@ jobs:
             
             echo "➤ Step 4: Emergency Rollback Automation"
             cat << 'SCRIPT_EOF' > /root/fallback-certbot-nginx.sh
-            #!/bin/bash
-            # Emergency rollback script to Certbot (Nginx)
+#!/bin/bash
+# Emergency rollback script to Certbot (Nginx)
 
-            echo "Initiating emergency fallback to Certbot for Nginx..."
+echo "Initiating emergency fallback to Certbot for Nginx..."
 
-            echo "Restoring Certbot automated systemd timers..."
-            sudo systemctl enable certbot.timer
-            sudo systemctl start certbot.timer
+echo "Restoring Certbot automated systemd timers..."
+sudo systemctl enable certbot.timer
+sudo systemctl start certbot.timer
 
-            NGINX_CONFIG_FB="$(grep -rl "ssl_certificate " /etc/nginx/sites-available/ | head -n 1 || echo "/etc/nginx/sites-available/default")"
-            
-            echo "Updating certificate paths in $NGINX_CONFIG_FB..."
-            sudo sed -i 's|/etc/ssl/certs/_.logisticjourney-ssl.com.pem|/etc/letsencrypt/live/cms.logisticjourney.com/fullchain.pem|g' "$NGINX_CONFIG_FB"
-            sudo sed -i 's|/etc/ssl/private/logisticjourney-privatekey.key|/etc/letsencrypt/live/cms.logisticjourney.com/privkey.pem|g' "$NGINX_CONFIG_FB"
+NGINX_CONFIG_FB="$(grep -rl "ssl_certificate " /etc/nginx/sites-available/ | head -n 1 || echo "/etc/nginx/sites-available/default")"
 
-            echo "Testing configuration changes..."
-            if sudo nginx -t; then
-                echo "Nginx configuration valid. Reloading web server..."
-                sudo systemctl reload nginx
-                echo "Fallback successfully completed. Certbot is now active."
-            else
-                echo "Critical Error: Nginx configuration test failed. Reverting changes."
-                exit 1
-            fi
-            SCRIPT_EOF
+echo "Updating certificate paths in $NGINX_CONFIG_FB..."
+sudo sed -i 's|/etc/ssl/certs/_.logisticjourney-ssl.com.pem|/etc/letsencrypt/live/cms.logisticjourney.com/fullchain.pem|g' "$NGINX_CONFIG_FB"
+sudo sed -i 's|/etc/ssl/private/logisticjourney-privatekey.key|/etc/letsencrypt/live/cms.logisticjourney.com/privkey.pem|g' "$NGINX_CONFIG_FB"
+
+echo "Testing configuration changes..."
+if sudo nginx -t; then
+    echo "Nginx configuration valid. Reloading web server..."
+    sudo systemctl reload nginx
+    echo "Fallback successfully completed. Certbot is now active."
+else
+    echo "Critical Error: Nginx configuration test failed. Reverting changes."
+    exit 1
+fi
+SCRIPT_EOF
             sudo chmod +x /root/fallback-certbot-nginx.sh
             
             echo "➤ Step 5: Draft cron job script for RapidSSL expiration monitoring"
             cat << 'CRON_EOF' > /root/check-ssl-expiry.sh
-            #!/bin/bash
-            CERT_FILE="/etc/ssl/certs/_.logisticjourney-ssl.com.pem"
-            if [ -f "$CERT_FILE" ]; then
-                EXPIRY_DATE=$(openssl x509 -enddate -noout -in "$CERT_FILE" | cut -d= -f2)
-                EXPIRY_EPOCH=$(date -d "$EXPIRY_DATE" +%s)
-                CURRENT_EPOCH=$(date +%s)
-                DAYS_LEFT=$(( ($EXPIRY_EPOCH - $CURRENT_EPOCH) / 86400 ))
-                
-                if [ $DAYS_LEFT -le 14 ]; then
-                    echo "WARNING: RapidSSL Certificate will expire in $DAYS_LEFT days on $EXPIRY_DATE!" | wall
-                fi
-            fi
-            CRON_EOF
+#!/bin/bash
+CERT_FILE="/etc/ssl/certs/_.logisticjourney-ssl.com.pem"
+if [ -f "$CERT_FILE" ]; then
+    EXPIRY_DATE=$(openssl x509 -enddate -noout -in "$CERT_FILE" | cut -d= -f2)
+    EXPIRY_EPOCH=$(date -d "$EXPIRY_DATE" +%s)
+    CURRENT_EPOCH=$(date +%s)
+    DAYS_LEFT=$(( ($EXPIRY_EPOCH - $CURRENT_EPOCH) / 86400 ))
+    
+    if [ $DAYS_LEFT -le 14 ]; then
+        echo "WARNING: RapidSSL Certificate will expire in $DAYS_LEFT days on $EXPIRY_DATE!" | wall
+    fi
+fi
+CRON_EOF
             sudo chmod +x /root/check-ssl-expiry.sh
             
             (sudo crontab -l 2>/dev/null | grep -v "/root/check-ssl-expiry.sh"; echo "0 0 * * * /root/check-ssl-expiry.sh") | sudo crontab -
