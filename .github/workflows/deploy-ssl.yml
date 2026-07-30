@@ -17,7 +17,7 @@ jobs:
         run: |
           mkdir -p ssl
           echo "${{ secrets.SSL_CERT }}" > ssl/_.logisticjourney-ssl.com.pem
-          echo "${{ secrets.SSL_PRIVATE_KEY }}" > ssl/logisticjourney-privatekey.key
+          echo "${{ secrets.SSL_SSH_PRIVATE_KEY }}" > ssl/logisticjourney-privatekey.key
           chmod 600 ssl/logisticjourney-privatekey.key
 
       - name: Transfer SSL Certificates
