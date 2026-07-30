@@ -8,13 +8,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Create SSL files from Secrets
+        run: |
+          mkdir -p ssl
+          echo "${{ secrets.SSL_CERT }}" > ssl/_.logisticjourney-ssl.com.pem
+          echo "${{ secrets.SSL_PRIVATE_KEY }}" > ssl/logisticjourney-privatekey.key
+          chmod 600 ssl/logisticjourney-privatekey.key
 
       - name: Transfer SSL Certificates
         run: |
@@ -33,7 +37,6 @@ jobs:
             sudo chmod 600 /etc/ssl/private/logisticjourney-privatekey.key
             
             echo "➤ Step 2: Update Nginx Configuration"
-            # Find the active config file containing ssl_certificate
             NGINX_CONFIG=$(grep -rl "ssl_certificate " /etc/nginx/sites-available/ | head -n 1 || echo "/etc/nginx/sites-available/default")
             
             if [ -f "$NGINX_CONFIG" ]; then
@@ -97,7 +100,6 @@ jobs:
             CRON_EOF
             sudo chmod +x /root/check-ssl-expiry.sh
             
-            # Remove any old cron job for this and add the new one (runs at midnight)
             (sudo crontab -l 2>/dev/null | grep -v "/root/check-ssl-expiry.sh"; echo "0 0 * * * /root/check-ssl-expiry.sh") | sudo crontab -
             
           EOF
