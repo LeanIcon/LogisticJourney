@@ -394,3 +394,51 @@ If you want, I can also:
 
 - Add a small check-run job to validate the workflow YAML syntax
 - Create a short `Makefile` or GH Action matrix to deploy to multiple environments (staging/production) with different secrets
+
+## 🔒 SSL Certificate Deployment & Automation
+
+The application uses an automated GitHub Action workflow (`.github/workflows/deploy-ssl.yml`) to seamlessly deploy custom SSL certificates (like RapidSSL) to your VM, configure Nginx, and manage Let's Encrypt (Certbot) gracefully.
+
+### Setting up Custom SSL (RapidSSL / DigiCert)
+
+To deploy your custom SSL certificate without exposing it in the codebase:
+
+1. In your GitHub repository, go to **Settings → Security → Secrets and variables → Actions**.
+2. Add a new secret named `SSL_CERT` and paste the full contents of your public certificate (`.pem` or `.crt`).
+3. Add another secret named `SSL_SSH_PRIVATE_KEY` and paste the full contents of your private key (`.key`).
+4. Go to the **Actions** tab in GitHub, select the **Deploy SSL Certificate** workflow, and click **Run workflow**.
+
+The workflow will automatically:
+- Securely transfer the certificates to `/etc/ssl/certs/` and `/etc/ssl/private/`.
+- Update your Nginx configuration to point to the new custom certificates.
+- Deactivate the background `certbot.timer` to prevent Let's Encrypt from overwriting your custom setup.
+- Install a daily cron job (`/root/check-ssl-expiry.sh`) to alert you 14 days before the custom certificate expires.
+- Generate an emergency rollback script at `/root/fallback-certbot-nginx.sh`.
+
+### Falling Back to Let's Encrypt (Emergency Rollback)
+
+If your custom SSL certificate expires and you need to immediately get the site back online using a free Let's Encrypt certificate:
+
+1. SSH into your server as root:
+   ```bash
+   ssh root@your-server-ip
+   ```
+2. Execute the automated rollback script:
+   ```bash
+   bash /root/fallback-certbot-nginx.sh
+   ```
+This script will automatically reconfigure Nginx to use Let's Encrypt and turn the automated `certbot.timer` back on.
+
+### Idempotent Let's Encrypt Auto-Renewal (Zero-Downtime)
+
+To ensure Let's Encrypt can renew automatically in the background without needing to stop Nginx (which would cause downtime), Certbot should be configured to use the Nginx plugin rather than standalone mode.
+
+If you are using Let's Encrypt, configure it once with:
+```bash
+sudo certbot reconfigure --cert-name cms.logisticjourney.com --nginx
+```
+
+To verify that the automated renewals will work flawlessly in the future:
+```bash
+sudo certbot renew --dry-run
+```
