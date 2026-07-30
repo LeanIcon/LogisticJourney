@@ -1,0 +1,103 @@
+name: Deploy SSL Certificate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-ssl:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Transfer SSL Certificates
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "mkdir -p /tmp/ssl_transfer"
+          scp -o StrictHostKeyChecking=no ssl/_.logisticjourney-ssl.com.pem ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/tmp/ssl_transfer/_.logisticjourney-ssl.com.pem
+          scp -o StrictHostKeyChecking=no ssl/logisticjourney-privatekey.key ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/tmp/ssl_transfer/logisticjourney-privatekey.key
+
+      - name: Configure Server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+            set -e
+            
+            echo "➤ Step 1: Securely Deploy Your Certificate Files"
+            sudo cp /tmp/ssl_transfer/_.logisticjourney-ssl.com.pem /etc/ssl/certs/_.logisticjourney-ssl.com.pem
+            sudo cp /tmp/ssl_transfer/logisticjourney-privatekey.key /etc/ssl/private/logisticjourney-privatekey.key
+            sudo chmod 600 /etc/ssl/private/logisticjourney-privatekey.key
+            
+            echo "➤ Step 2: Update Nginx Configuration"
+            # Find the active config file containing ssl_certificate
+            NGINX_CONFIG=$(grep -rl "ssl_certificate " /etc/nginx/sites-available/ | head -n 1 || echo "/etc/nginx/sites-available/default")
+            
+            if [ -f "$NGINX_CONFIG" ]; then
+                sudo sed -i -E 's|ssl_certificate\s+/etc/letsencrypt/live/.*|ssl_certificate /etc/ssl/certs/_.logisticjourney-ssl.com.pem;|g' "$NGINX_CONFIG"
+                sudo sed -i -E 's|ssl_certificate_key\s+/etc/letsencrypt/live/.*|ssl_certificate_key /etc/ssl/private/logisticjourney-privatekey.key;|g' "$NGINX_CONFIG"
+                sudo nginx -t && sudo systemctl reload nginx
+            else
+                echo "Nginx config not found at $NGINX_CONFIG"
+            fi
+            
+            echo "➤ Step 3: Deactivate Certbot and Set it to Inactive Backup Mode"
+            sudo systemctl stop certbot.timer || true
+            sudo systemctl disable certbot.timer || true
+            if [ -f /etc/cron.d/certbot ]; then
+                sudo sed -i 's/^[^#]/#&/g' /etc/cron.d/certbot
+            fi
+            
+            echo "➤ Step 4: Emergency Rollback Automation"
+            cat << 'SCRIPT_EOF' > /root/fallback-certbot-nginx.sh
+            #!/bin/bash
+            # Emergency rollback script to Certbot (Nginx)
+
+            echo "Initiating emergency fallback to Certbot for Nginx..."
+
+            echo "Restoring Certbot automated systemd timers..."
+            sudo systemctl enable certbot.timer
+            sudo systemctl start certbot.timer
+
+            NGINX_CONFIG_FB="$(grep -rl "ssl_certificate " /etc/nginx/sites-available/ | head -n 1 || echo "/etc/nginx/sites-available/default")"
+            
+            echo "Updating certificate paths in $NGINX_CONFIG_FB..."
+            sudo sed -i 's|/etc/ssl/certs/_.logisticjourney-ssl.com.pem|/etc/letsencrypt/live/logisticjourney.com/fullchain.pem|g' "$NGINX_CONFIG_FB"
+            sudo sed -i 's|/etc/ssl/private/logisticjourney-privatekey.key|/etc/letsencrypt/live/logisticjourney.com/privkey.pem|g' "$NGINX_CONFIG_FB"
+
+            echo "Testing configuration changes..."
+            if sudo nginx -t; then
+                echo "Nginx configuration valid. Reloading web server..."
+                sudo systemctl reload nginx
+                echo "Fallback successfully completed. Certbot is now active."
+            else
+                echo "Critical Error: Nginx configuration test failed. Reverting changes."
+                exit 1
+            fi
+            SCRIPT_EOF
+            sudo chmod +x /root/fallback-certbot-nginx.sh
+            
+            echo "➤ Step 5: Draft cron job script for RapidSSL expiration monitoring"
+            cat << 'CRON_EOF' > /root/check-ssl-expiry.sh
+            #!/bin/bash
+            CERT_FILE="/etc/ssl/certs/_.logisticjourney-ssl.com.pem"
+            if [ -f "$CERT_FILE" ]; then
+                EXPIRY_DATE=$(openssl x509 -enddate -noout -in "$CERT_FILE" | cut -d= -f2)
+                EXPIRY_EPOCH=$(date -d "$EXPIRY_DATE" +%s)
+                CURRENT_EPOCH=$(date +%s)
+                DAYS_LEFT=$(( ($EXPIRY_EPOCH - $CURRENT_EPOCH) / 86400 ))
+                
+                if [ $DAYS_LEFT -le 14 ]; then
+                    echo "WARNING: RapidSSL Certificate will expire in $DAYS_LEFT days on $EXPIRY_DATE!" | wall
+                fi
+            fi
+            CRON_EOF
+            sudo chmod +x /root/check-ssl-expiry.sh
+            
+            # Remove any old cron job for this and add the new one (runs at midnight)
+            (sudo crontab -l 2>/dev/null | grep -v "/root/check-ssl-expiry.sh"; echo "0 0 * * * /root/check-ssl-expiry.sh") | sudo crontab -
+            
+          EOF
